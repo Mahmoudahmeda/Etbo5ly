@@ -1,2 +1,4 @@
-.idea/caches/deviceStreaming.xml
-.idea/deviceManager.xml
+/app/build
+.gradle/
+.idea/
+.kotlin/
