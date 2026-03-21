@@ -19,7 +19,7 @@ The project is developed using modern Android standards and libraries:
 
 * **Language**: Kotlin.
 * **UI Framework**: Jetpack Compose following Material Design principles.
-* **Architecture**: MVVM or MVI pattern.
+* **Architecture**: MVVM pattern.
 * **Networking**: Retrofit for communication with The MealDB API.
 * **Local Persistence**: Room Database for offline storage and Favorites management.
 * **Reactive Programming**: Kotlin Coroutines and Flow.
