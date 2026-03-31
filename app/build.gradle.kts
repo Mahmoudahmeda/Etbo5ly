@@ -59,4 +59,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.gson)
+    implementation(libs.coil.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
 }

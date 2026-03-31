@@ -25,11 +25,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.etbo5ly.R
+import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun MealOfDayCard(onClick: ()-> Unit) {
+fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,11 +40,10 @@ fun MealOfDayCard(onClick: ()-> Unit) {
         shape = RoundedCornerShape(16.dp)
     ) {
         Box {
-
             //Background Image
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = null,
+            AsyncImage(
+                model = meal.strMealThumb,
+                contentDescription = meal.strMeal,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
@@ -80,7 +81,7 @@ fun MealOfDayCard(onClick: ()-> Unit) {
 
                 // Category
                 Text(
-                    text = "Chicken",
+                    text = meal.strCategory,
                     modifier = Modifier
                         .background(
                             color = Color.Black.copy(alpha = 0.5f),
@@ -100,7 +101,7 @@ fun MealOfDayCard(onClick: ()-> Unit) {
             ) {
 
                 Text(
-                    text = "Grilled Chicken",
+                    text = meal.strMeal,
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White
                 )
@@ -108,7 +109,7 @@ fun MealOfDayCard(onClick: ()-> Unit) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Italian",
+                    text = meal.strArea,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -139,6 +140,6 @@ fun MealOfDayCard(onClick: ()-> Unit) {
 @Composable
 fun PreviewMealOfDayCard(){
     Etbo5lyTheme {
-        MealOfDayCard({})
+       // MealOfDayCard({})
     }
 }

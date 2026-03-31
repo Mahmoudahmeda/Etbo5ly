@@ -8,7 +8,6 @@ object ApiClient {
 
     private val gson = GsonBuilder().serializeNulls().create()
 
-
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://www.themealdb.com/api/json/v1/1/")
         .addConverterFactory(GsonConverterFactory.create(gson))

@@ -1,11 +1,8 @@
-package com.example.etbo5ly.data.network
+package com.example.etbo5ly.data.repository
 
 import com.example.etbo5ly.data.dto.MealResponse
 import retrofit2.Response
-import retrofit2.http.GET
 
-interface ApiService {
-
-    @GET("random.php")
+interface IMealRepository {
     suspend fun getAMeal() : Response<MealResponse>
 }

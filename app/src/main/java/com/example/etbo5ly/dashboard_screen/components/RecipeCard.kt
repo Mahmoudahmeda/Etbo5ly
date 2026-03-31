@@ -28,11 +28,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.etbo5ly.R
+import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
+fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: Meal) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,9 +44,9 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
     ) {
         Box {
             //Background Image
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = null,
+            AsyncImage(
+                model = meal.strMealThumb,
+                contentDescription = meal.strMeal,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
@@ -58,7 +60,7 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
 
             //TOP RIGHT (Category)
             Text(
-                text = "Chicken",
+                text = meal.strCategory,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(10.dp)
@@ -89,7 +91,7 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
                 ) {
 
                     Text(
-                        text = "Grilled Chicken",
+                        text = meal.strMeal,
                         color = MaterialTheme.colorScheme.onTertiary,
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -105,7 +107,7 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
                         Text(
                             modifier = Modifier
                                 .padding(),
-                            text = "Italian",
+                            text = meal.strArea,
                             color = MaterialTheme.colorScheme.onTertiary,
                             style = MaterialTheme.typography.bodySmall,
                         )
@@ -134,6 +136,6 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean) {
 @Composable
 fun PreviewRecipeCard(){
     Etbo5lyTheme {
-        RecipeCard({},true)
+       // RecipeCard({},true)
     }
 }
