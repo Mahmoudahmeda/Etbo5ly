@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Etbo5ly</string>
+    <string name="image_of_chef">Image of Chef</string>
+    <string name="Signin_screen_text_1">Welcome Chef!</string>
+    <string name="Signin_screen_text_2">Discover tour next meal today</string>
+    <string name="Email">Email</string>
+    <string name="password">Password</string>
+    <string name="facebook_app_id">2996016137456438</string>
+    <string name="fb_login_protocol_scheme">fb2996016137456438</string>
+    <string name="facebook_client_token">8655e84b505c0468d3e4fd68501ea60c</string>
 </resources>
