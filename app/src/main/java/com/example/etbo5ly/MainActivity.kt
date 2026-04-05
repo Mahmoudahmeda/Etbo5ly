@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.example.etbo5ly.splash_screen.Food_factory
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,9 +17,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             Etbo5lyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Food_factory(
+
+
+                    AppNavigation(
                         modifier = Modifier.padding(innerPadding)
                     )
+
                 }
             }
         }
