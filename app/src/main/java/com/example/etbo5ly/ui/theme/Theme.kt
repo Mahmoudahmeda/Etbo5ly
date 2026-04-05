@@ -13,6 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
+    primary = AppBarColor,
+    secondary = AppBarColorShade,
+    tertiary = CardBottom,
+    background = BackgroundDark,
+    onPrimary = AppBarText,
+    onSecondary = ProductTitle,
+    onBackground = Subtitle,
+    onTertiary = Subtitle,
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80,
@@ -55,7 +63,7 @@ fun Etbo5lyTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = DarkColorScheme,
         typography = Typography,
         content = content
     )
