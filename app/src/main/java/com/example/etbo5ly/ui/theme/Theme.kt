@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
+
     primary = AppBarColor,
     secondary = AppBarColorShade,
     tertiary = CardBottom,
@@ -21,12 +22,6 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = ProductTitle,
     onBackground = Subtitle,
     onTertiary = Subtitle,
-//    primary = Purple80,
-//    secondary = PurpleGrey80,
-//    tertiary = Pink80,
-//
-//    background = Color(0xFF171A1F),
-    surface = Color(0xFF171A1F)
 )
 
 private val LightColorScheme = lightColorScheme(
