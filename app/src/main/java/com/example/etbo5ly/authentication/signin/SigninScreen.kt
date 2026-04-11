@@ -1,13 +1,15 @@
 package com.example.etbo5ly.authentication.signin
 
-import android.util.Log
-import android.widget.Toast
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import com.example.etbo5ly.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,10 +21,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -52,11 +57,12 @@ import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.etbo5ly.authentication.facebokk_login.facebook
-import com.example.etbo5ly.authentication.google_signin.requestResult
+import com.example.etbo5ly.authentication.google_signin.google
 import com.facebook.login.LoginManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import com.example.etbo5ly.authentication.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -87,6 +93,8 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
     val facebookActivityLauncher = rememberLauncherForActivityResult(
         LoginManager.getInstance()
             .createLogInActivityResultContract(facebookAuth.callbackManager)){}
+    val scroll = rememberScrollState()
+
     LaunchedEffect(Unit, key2 = loginstate) {
         if (FirebaseAuth.getInstance().currentUser != null ) {
             navController.navigate("home") {
@@ -118,7 +126,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             facebookAuth.unregistercallback()
         }
     }
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().verticalScroll(scroll)) {
 
         TopAppBar(
             {
@@ -126,10 +134,10 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             },
             actions = {
                 Button(
-                    {navController.navigate("signup") },
-                    content = { Text("Signup",fontSize = 15.sp, fontWeight = FontWeight.Bold) },
+                    { navController.navigate("signup") },
+                    content = { Text("Signup", fontSize = 15.sp, fontWeight = FontWeight.Bold) },
                     colors = buttoncolor
-                    )
+                )
             }
         )
 
@@ -161,20 +169,23 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             placeholder = {
                 Text(
                     text = stringResource(R.string.Email)
-                )},
+                )
+            },
             shape = RoundedCornerShape(25.dp),
             colors = TextFieldDefaults.colors(
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent
             ),
-            leadingIcon = {Icon(
-                imageVector = Icons.Outlined.Email,
-                contentDescription = "Email icon",
-                tint = Color.Gray
-            )},
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Email,
+                    contentDescription = "Email icon",
+                    tint = Color.Gray
+                )
+            },
             modifier = Modifier
                 .padding(start = 50.dp, end = 30.dp, bottom = 5.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
         )
 
         TextField(
@@ -190,17 +201,19 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 .padding(start = 50.dp, top = 7.dp, end = 30.dp, bottom = 5.dp)
                 .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
-            leadingIcon = {Icon(
-                imageVector = Icons.Outlined.Lock,
-                contentDescription = "Password Field",
-                tint = Color.Gray
-            )}
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Lock,
+                    contentDescription = "Password Field",
+                    tint = Color.Gray
+                )
+            }
 
         )
 
         Button(
-            {viewModel.LoginWithEmail(email,password)},
-            content = { Text("Sign In",fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+            { viewModel.LoginWithEmail(email, password) },
+            content = { Text("Sign In", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
             modifier = Modifier
                 .padding(
                     top = 7.dp,
@@ -213,25 +226,27 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
         )
 
         TextButton(
-            content = {Text(
-                text = "Forget Password ?",
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.End,
-                color = Color.Cyan,
-            )},
+            content = {
+                Text(
+                    text = "Forget Password ?",
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.End,
+                    color = Color.Cyan,
+                )
+            },
             modifier = Modifier.padding(
                 end = 10.dp,
                 start = 260.dp
             ),
-            onClick = {},
+            onClick = { navController.navigate("emailscreen")},
         )
 
         Row(
             Modifier.padding(bottom = 15.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             HorizontalDivider(
                 Modifier.weight(1f),
                 thickness = 1.dp,
@@ -254,23 +269,23 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             Modifier.fillMaxWidth(),
             Arrangement.Center,
             Alignment.CenterVertically
-        ){
+        ) {
             Button(
                 onClick = {
                     credentialScope.launch {
                         val googleIdOption = GetGoogleIdOption.Builder()
-                            .setServerClientId(getString(context,R.string.default_web_client_id))
+                            .setServerClientId(getString(context, R.string.default_web_client_id))
                             .setFilterByAuthorizedAccounts(false)
                             .build()
 
                         val request = GetCredentialRequest.Builder()
                             .addCredentialOption(googleIdOption)
                             .build()
-                        val result = credentialManager.getCredential(context,request)
-                        requestResult(result,viewModel)
+                        val result = credentialManager.getCredential(context, request)
+                        google(result, viewModel)
                     }
                 },
-                content= {
+                content = {
                     Row(Modifier) {
                         Icon(
                             painter = painterResource(R.drawable.google_logo),
@@ -284,64 +299,70 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                         )
                     }
                 },
-                modifier = Modifier.padding(start=15.dp, end= 10.dp),
+                modifier = Modifier.padding(start = 15.dp, end = 10.dp),
                 border = BorderStroke(1.dp, color = Color.Gray),
                 colors = ButtonColors(
                     Color.Transparent,
                     Color.Gray,
                     Color.Transparent,
-                    Color.Gray),
+                    Color.Gray
+                ),
                 shape = RoundedCornerShape(8.dp)
             )
 
             Button(
                 onClick = {
-                    facebookActivityLauncher.launch(listOf(
-                        "email",
-                        "public_profile"
-                    ))
+                    facebookActivityLauncher.launch(
+                        listOf(
+                            "email",
+                            "public_profile"
+                        )
+                    )
                 },
                 content = {
-                    Row(Modifier){
+                    Row(Modifier) {
                         Icon(
                             painter = painterResource(R.drawable.facebook_logo),
                             contentDescription = "Facebook Logo",
-                            modifier = Modifier.padding(top=4.dp,end=15.dp)
+                            modifier = Modifier.padding(top = 4.dp, end = 15.dp)
                         )
                         Text(
                             text = "Facebook",
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp
-                        )}
-                    },
-                modifier = Modifier.padding(start= 10.dp),
+                        )
+                    }
+                },
+                modifier = Modifier.padding(start = 10.dp),
                 border = BorderStroke(1.dp, color = Color.Gray),
                 colors = ButtonColors(
                     Color.Transparent,
                     Color.Gray,
                     Color.Transparent,
-                    Color.Gray),
+                    Color.Gray
+                ),
                 shape = RoundedCornerShape(8.dp),
             )
         }
 
-        TextButton(
-            content = {Text(
-                text = "Continue as a Guest",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Cyan,
-            )},
-            modifier = Modifier
-                .padding(
-                    top=15.dp,
-                    end = 10.dp,
-                    start = 210.dp
-                ),
-            onClick = {viewModel.LoginasgGuest()},
+        BottomAppBar({
+                TextButton(
+                    content = {
+                        Text(
+                            text = "Continue as a Guest",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Cyan,
+                        )
+                    },
+                    onClick = { viewModel.LoginasgGuest() },
+                )
+            },
+            contentPadding = PaddingValues(
+                end = 0.dp,
+                start = 210.dp
+            ),
+            containerColor = Color.Transparent
         )
     }
 }
-
-
-

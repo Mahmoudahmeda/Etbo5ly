@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.example.etbo5ly.data.remote.RetrofitInstance
 import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.categories.Category
+import com.example.etbo5ly.dashboard_screen.DashboardScreen
 
 @Composable
 fun DashboardScreen(modifier: Modifier = Modifier) {
@@ -35,6 +36,7 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
+        DashboardScreen()
         CategoriesSection(categories)
         Spacer(modifier = Modifier.weight(1f))
         BottomNavBar(

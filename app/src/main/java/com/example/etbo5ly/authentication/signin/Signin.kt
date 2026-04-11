@@ -1,6 +1,6 @@
 package com.example.etbo5ly.authentication.signin
 
-import android.util.Log
+import com.example.etbo5ly.authentication.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.authentication.AuthenticationRepo
@@ -9,13 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class Signin(
-    private val repo: AuthenticationRepo = AuthenticationRepo()
-) : ViewModel() {
-
-    val isLoggedIn: Boolean = repo.isUserLoggedIn()
-    val isLoggedDestination: String = if (isLoggedIn) "home" else "login"
-
+class Signin() : ViewModel() {
+    private val repo: AuthenticationRepo by lazy {AuthenticationRepo()}
     private val _state = MutableStateFlow<State>(State.Idle)
     var status: StateFlow<State> = _state.asStateFlow()
     fun LoginWithEmail(Email: String, Pass: String) {
@@ -68,9 +63,4 @@ class Signin(
     }
 }
 
-sealed class State{
-    object Idle: State()
-    object Loading: State()
-    object Success: State()
-    data class Fail(val msg: String): State()
-}
+

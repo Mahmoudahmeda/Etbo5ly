@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +25,10 @@ import com.example.etbo5ly.data.network.RemoteDataSource
 import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.etbo5ly.ui.categories.CategoriesSection
+import com.example.etbo5ly.ui.categories.Category
+import com.example.etbo5ly.ui.dashboard.BottomNavBar
+import com.example.etbo5ly.ui.dashboard.DashboardScreen
 
 @Composable
 fun DashboardScreen(
@@ -40,6 +47,8 @@ fun DashboardScreen(
     val recipes by viewModel.recipes.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
+    val category by viewModel.category.collectAsState()
+    val selectedItem by viewModel.selectedItem.collectAsState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -93,24 +102,7 @@ fun DashboardScreen(
 
                     // Categories Section
                     item {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "Categories",
-                            color = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            for (n in listOf("Breakfast", "Desserts", "Vegan", "Seafood", "Pasta")) {
-                                Text(
-                                    text = n,
-                                    modifier = Modifier.padding(end = 8.dp),
-                                    color = MaterialTheme.colorScheme.onBackground
-                                )
-                            }
-                        }
+                        CategoriesSection(category)
                     }
 
                     // Trending Now Header
@@ -139,8 +131,18 @@ fun DashboardScreen(
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
+
                 }
             }
+        }
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            BottomNavBar(
+                selectedItem = selectedItem,
+                onItemClick = { viewModel.selectItem(it) }
+            )
         }
     }
 }

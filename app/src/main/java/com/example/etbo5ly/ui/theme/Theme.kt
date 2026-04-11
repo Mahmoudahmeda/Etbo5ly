@@ -21,11 +21,11 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = ProductTitle,
     onBackground = Subtitle,
     onTertiary = Subtitle,
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-
-    background = Color(0xFF171A1F),
+//    primary = Purple80,
+//    secondary = PurpleGrey80,
+//    tertiary = Pink80,
+//
+//    background = Color(0xFF171A1F),
     surface = Color(0xFF171A1F)
 )
 

@@ -20,11 +20,11 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun Food_factory(modifier: Modifier, navController: NavController, signin: Signin){
+fun Food_factory(modifier: Modifier, navController: NavController, destination:String){
     val splash by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.factory))
     LaunchedEffect(Unit) {
         delay(5000L)
-        navController.navigate(signin.isLoggedDestination) {
+        navController.navigate(destination) {
             popUpTo("splash") {
                 inclusive = true
             }
