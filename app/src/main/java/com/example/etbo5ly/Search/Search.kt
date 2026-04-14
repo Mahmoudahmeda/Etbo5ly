@@ -2,7 +2,6 @@ package com.example.etbo5ly.Search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.etbo5ly.data.dto.MealXXX
 import com.example.etbo5ly.data.dto.searchX
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
