@@ -10,9 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,14 +22,15 @@ import com.example.etbo5ly.data.network.RemoteDataSource
 import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.etbo5ly.ui.categories.CategoriesSection
-import com.example.etbo5ly.ui.categories.Category
 import com.example.etbo5ly.ui.dashboard.BottomNavBar
 import com.example.etbo5ly.ui.dashboard.DashboardScreen
 
 @Composable
 fun DashboardScreen(
     userName: String = "Guest",
+    navcontroller: NavController
 ) {
     val apiService = ApiClient.service
     val remoteDataSource = RemoteDataSource(apiService)
@@ -141,7 +139,10 @@ fun DashboardScreen(
             Spacer(modifier = Modifier.weight(1f))
             BottomNavBar(
                 selectedItem = selectedItem,
-                onItemClick = { viewModel.selectItem(it) }
+                onItemClick = {
+                    viewModel.selectItem(it)
+                    navcontroller.navigate(it)
+                }
             )
         }
     }
