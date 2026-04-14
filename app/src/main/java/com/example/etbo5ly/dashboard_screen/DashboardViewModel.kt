@@ -3,20 +3,18 @@ package com.example.etbo5ly.dashboard_screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.Meal
-import com.example.etbo5ly.data.dto.MealResponse
 import com.example.etbo5ly.data.repository.IMealRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class DashboardViewModel(
-    private val repository : IMealRepository
+    private val repository: IMealRepository
 ) : ViewModel() {
 
     private val _meal = MutableStateFlow<Meal?>(null)
-    val meal : StateFlow<Meal?> = _meal
+    val meal: StateFlow<Meal?> = _meal
 
     private val _recipes = MutableStateFlow<List<Meal>>(emptyList())
     val recipes: StateFlow<List<Meal>> = _recipes
@@ -28,16 +26,14 @@ class DashboardViewModel(
     val error: StateFlow<String?> = _error
 
     init {
-        // Load data when ViewModel is created
         getRandomMeal()
         getRecipes()
     }
 
-    fun getRandomMeal(){
+    fun getRandomMeal() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             _error.value = null
-
             try {
                 val response = repository.getAMeal()
                 if (response.isSuccessful) {
@@ -57,7 +53,6 @@ class DashboardViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             _error.value = null
-
             try {
                 val mealsList = mutableListOf<Meal>()
                 for (i in 1..count) {
