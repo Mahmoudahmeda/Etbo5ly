@@ -11,17 +11,19 @@ composeBom = "2024.09.00"
 lottie = "6.7.1"
 retrofit = "3.0.0"
 gson = "2.13.2"
-coil = "2.5.0"
-lifecycle-viewmodel-compose= "2.7.0"
-googleGmsGoogleServices = "4.4.4"
-firebaseAuth = "24.0.1"
-credentials = "1.5.0"
-credentialsPlayServicesAuth = "1.5.0"
+coil = "2.7.0"
+lifecycle-viewmodel-compose= "2.8.7"
+googleGmsGoogleServices = "4.4.2"
+firebaseBom = "34.12.0"
+facebook = "18.2.3"
+credentials = "1.6.0"
 googleid = "1.2.0"
+navigationCompose = "2.8.8"
+firebaseAuth = "24.0.1"
+credentialsPlayServicesAuth = "1.5.0"
 nav_version = "2.7.6"
 playServicesAuth = "21.5.1"
 viewmodel = "2.8.0"
-facebook= "latest.release"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +54,10 @@ navigation = { group= "androidx.navigation", name= "navigation-compose", version
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 viewmodel = {group= "androidx.lifecycle", name= "lifecycle-viewmodel", version.ref= "viewmodel"}
 facebook = {group= "com.facebook.android", name= "facebook-login", version.ref= "facebook"}
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-common = { group = "com.google.firebase", name = "firebase-common-ktx" }
+facebook-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", version.ref = "facebook" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
