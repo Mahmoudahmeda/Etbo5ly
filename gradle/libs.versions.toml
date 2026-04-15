@@ -24,6 +24,8 @@ credentialsPlayServicesAuth = "1.5.0"
 nav_version = "2.7.6"
 playServicesAuth = "21.5.1"
 viewmodel = "2.8.0"
+youtube-ref = "12.1.0"
+ui = "1.10.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,6 +60,8 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-common = { group = "com.google.firebase", name = "firebase-common-ktx" }
 facebook-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", version.ref = "facebook" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+youtube = {group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref= "youtube-ref"}
+androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.etbo5ly.RecipeDetailsScreen
 import com.example.etbo5ly.Search.SearchScreen
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
@@ -44,7 +45,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
         composable("signup"){
             SignUpScreen(SignUpViewModel(),navController)
         }
-        composable("home"){
+        composable("Home"){
             DashboardScreen(navcontroller = navController)
         }
         composable("emailscreen"){
@@ -54,7 +55,11 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             val oobCode = backStack.arguments?.getString("Code")
             ChangePasswordScreen(navController, oobCode)
         }
-        composable("search"){
+        composable("details/{Id}") { id ->
+            val mealId = id.arguments?.getString("Id")
+            RecipeDetailsScreen(navController, mealId)
+        }
+        composable("Search"){
             SearchScreen(navController)
         }
         composable("Calendar"){

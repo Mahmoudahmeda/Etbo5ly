@@ -1,5 +1,6 @@
 package com.example.etbo5ly.data.network
 
+import com.example.etbo5ly.data.dto.MealDetails
 import com.example.etbo5ly.data.dto.MealResponse
 import com.example.etbo5ly.data.dto.searchX
 import retrofit2.Response
@@ -11,6 +12,9 @@ class RemoteDataSource(
         return apiClient.getAMeal()
     }
 
+    override suspend fun getMealDetails(i: String?): Response<MealDetails> {
+        return apiClient.getMealDetails(i)
+    }
     override suspend fun search(query: String): Response<searchX> {
         return apiClient.Search(query)
     }

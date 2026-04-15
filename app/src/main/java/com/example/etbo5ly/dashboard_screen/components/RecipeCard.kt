@@ -28,19 +28,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: Meal) {
+fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: Meal, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(280.dp)
             .padding(16.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        onClick = { navController.navigate("details/${meal.idMeal}")}
     ) {
         Box {
             //Background Image
