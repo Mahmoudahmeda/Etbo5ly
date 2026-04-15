@@ -1,3 +1,5 @@
 ../.gradle/
 .idea/
 .kotlin/
+/google-services.json
+/src/main/res/values/sercret.xml

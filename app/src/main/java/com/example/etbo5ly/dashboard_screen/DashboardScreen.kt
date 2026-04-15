@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,13 +22,14 @@ import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
 import com.example.etbo5ly.data.dto.CategoryDto
 import com.example.etbo5ly.data.repository.MealRepository
+import com.example.etbo5ly.ui.theme.Etbo5lyTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.etbo5ly.ui.categories.CategoriesSection
-import com.example.etbo5ly.ui.categories.Category
 import com.example.etbo5ly.ui.dashboard.BottomNavBar
 
 @Composable
 fun DashboardScreen(
-    modifier: Modifier = Modifier,
     userName: String = "Guest",
     navcontroller: NavController
 ) {
@@ -162,5 +164,25 @@ fun DashboardScreen(
                 }
             }
         }
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            BottomNavBar(
+                selectedItem = selectedItem,
+                onItemClick = {
+                    viewModel.selectItem(it)
+                    navcontroller.navigate(it)
+                }
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun DashboardPreview() {
+    Etbo5lyTheme {
+        DashboardScreen()
     }
 }

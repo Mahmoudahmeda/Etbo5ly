@@ -1,6 +1,6 @@
 package com.example.etbo5ly.data.dto
 
-data class MealX(
+data class MealXْْ(
     val idMeal: String,
     val strArea: String,
     val strCategory: String,

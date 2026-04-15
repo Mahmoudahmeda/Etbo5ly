@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.etbo5ly.RecipeDetailsScreen
+import com.example.etbo5ly.Search.SearchScreen
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
 import com.example.etbo5ly.authentication.signup.SignUpScreen
@@ -57,6 +58,14 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
         composable("details/{Id}"){ id ->
             val mealId = id.arguments?.getString("Id")
             RecipeDetailsScreen(navController,mealId)
+        composable("search"){
+            SearchScreen(navController)
+        }
+        composable("Calendar"){
+            SearchScreen(navController)
+        }
+        composable("Profile"){
+            SearchScreen(navController)
         }
     }
 }

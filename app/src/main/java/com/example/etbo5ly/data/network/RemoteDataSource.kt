@@ -2,6 +2,7 @@ package com.example.etbo5ly.data.network
 
 import com.example.etbo5ly.data.dto.MealDetails
 import com.example.etbo5ly.data.dto.MealResponse
+import com.example.etbo5ly.data.dto.searchX
 import retrofit2.Response
 
 class RemoteDataSource(
@@ -13,5 +14,20 @@ class RemoteDataSource(
 
     override suspend fun getMealDetails(i: String?): Response<MealDetails> {
         return apiClient.getMealDetails(i)
+   
+    override suspend fun search(query: String): Response<searchX> {
+        return apiClient.Search(query)
+    }
+
+    override suspend fun FilterByCategory(query: String): Response<searchX> {
+        return apiClient.SearchByCategory(query)
+    }
+
+    override suspend fun FilterByCountry(query: String): Response<searchX> {
+        return apiClient.SearchByCountry(query)
+    }
+
+    override suspend fun FilterByIngredient(query: String): Response<searchX> {
+        return apiClient.SearchByIngredient(query)
     }
 }
