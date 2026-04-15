@@ -10,19 +10,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.etbo5ly.data.remote.RetrofitInstance
 import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.categories.Category
 import com.example.etbo5ly.dashboard_screen.DashboardScreen
+import com.example.etbo5ly.data.network.ApiClient
+import com.example.etbo5ly.data.network.RemoteDataSource
+import com.google.android.gms.common.api.Api
 
 @Composable
 fun DashboardScreen(modifier: Modifier = Modifier) {
     var categories by remember { mutableStateOf<List<Category>>(emptyList()) }
     var selectedItem by remember { mutableStateOf("Home") }
-
+    val apiclient = ApiClient.service
     LaunchedEffect(Unit) {
         try {
-            val response = RetrofitInstance.api.getCategories()
+            val response = apiclient.getCategories()
             categories = response.categories.map {
                 Category(
                     name = it.strCategory,
