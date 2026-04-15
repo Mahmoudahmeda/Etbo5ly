@@ -12,17 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.data.dto.MealX
 
 @Composable
-fun ResponseMealCard(meal: MealX) {
+fun ResponseMealCard(
+    meal: MealX,
+    navcontroller: NavController
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(0.8f),
         shape = RoundedCornerShape(12),
-        onClick = {}
+        onClick = {navcontroller.navigate("details/${meal.idMeal}")}
     ) {
         Column() {
             AsyncImage(

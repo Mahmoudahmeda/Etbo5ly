@@ -116,7 +116,7 @@ fun SearchScreen(navcontroller: NavController, search: Search = Search()){
             }
             val meals = result?.meals ?: emptyList()
             items(meals) { meal ->
-                ResponseMealCard(meal)
+                ResponseMealCard(meal,navcontroller)
             }
         }
 

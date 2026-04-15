@@ -14,7 +14,7 @@ class RemoteDataSource(
 
     override suspend fun getMealDetails(i: String?): Response<MealDetails> {
         return apiClient.getMealDetails(i)
-   
+    }
     override suspend fun search(query: String): Response<searchX> {
         return apiClient.Search(query)
     }

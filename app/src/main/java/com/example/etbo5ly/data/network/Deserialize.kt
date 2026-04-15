@@ -21,12 +21,12 @@ class Deserialize: JsonDeserializer<MealX> {
         }
 
         return MealX(
-            idMeal = jsonObject.get("idMeal").asString,
-            strMeal = jsonObject.get("strMeal").asString,
-            strCategory = jsonObject.get("strCategory").asString,
-            strArea = jsonObject.get("strArea").asString,
-            strInstructions = jsonObject.get("strInstructions").asString,
-            strMealThumb = jsonObject.get("strMealThumb").asString,
+            idMeal = jsonObject.get("idMeal")?.takeIf { !it.isJsonNull }?.asString ?: "",
+            strMeal = jsonObject.get("strMeal")?.takeIf { !it.isJsonNull }?.asString ?: "",
+            strCategory = jsonObject.get("strCategory")?.takeIf { !it.isJsonNull }?.asString ?: "",
+            strArea = jsonObject.get("strArea")?.takeIf { !it.isJsonNull }?.asString ?: "",
+            strInstructions = jsonObject.get("strInstructions")?.takeIf { !it.isJsonNull }?.asString ?: "",
+            strMealThumb = jsonObject.get("strMealThumb")?.takeIf { !it.isJsonNull }?.asString ?: "",
             strTags = jsonObject.get("strTags")?.takeIf { !it.isJsonNull }?.asString ?: "",
             strYoutube = jsonObject.get("strYoutube")?.takeIf { !it.isJsonNull }?.asString ?: "",
             ingredients = ingredientsList,

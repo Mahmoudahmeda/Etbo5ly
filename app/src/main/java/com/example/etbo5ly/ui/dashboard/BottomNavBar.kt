@@ -17,11 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
 fun BottomNavBar(
     selectedItem: String,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    navController: NavController
 ) {
     val context = LocalContext.current
     val items = listOf("Home", "Search", "Calendar", "Profile")
@@ -51,6 +53,7 @@ fun BottomNavBar(
                     modifier = Modifier
                         .clickable {
                             onItemClick(item)
+                            navController.navigate(item)
                             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                         }
                         .padding(horizontal = 8.dp)

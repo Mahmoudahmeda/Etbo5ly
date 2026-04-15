@@ -45,7 +45,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
         composable("signup"){
             SignUpScreen(SignUpViewModel(),navController)
         }
-        composable("home"){
+        composable("Home"){
             DashboardScreen(navcontroller = navController)
         }
         composable("emailscreen"){
@@ -55,10 +55,11 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             val oobCode = backStack.arguments?.getString("Code")
             ChangePasswordScreen(navController, oobCode)
         }
-        composable("details/{Id}"){ id ->
+        composable("details/{Id}") { id ->
             val mealId = id.arguments?.getString("Id")
-            RecipeDetailsScreen(navController,mealId)
-        composable("search"){
+            RecipeDetailsScreen(navController, mealId)
+        }
+        composable("Search"){
             SearchScreen(navController)
         }
         composable("Calendar"){

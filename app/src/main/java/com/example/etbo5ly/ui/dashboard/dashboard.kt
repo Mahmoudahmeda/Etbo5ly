@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.categories.Category
 import com.example.etbo5ly.dashboard_screen.DashboardScreen
@@ -18,7 +19,7 @@ import com.example.etbo5ly.data.network.RemoteDataSource
 import com.google.android.gms.common.api.Api
 
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun DashboardScreen(modifier: Modifier = Modifier, navcontroller: NavController) {
     var categories by remember { mutableStateOf<List<Category>>(emptyList()) }
     var selectedItem by remember { mutableStateOf("Home") }
     val apiclient = ApiClient.service
@@ -38,12 +39,17 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        DashboardScreen()
+        DashboardScreen(
+            modifier = Modifier,
+            userName = "Guest",
+            navcontroller = navcontroller
+        )
         CategoriesSection(categories)
         Spacer(modifier = Modifier.weight(1f))
         BottomNavBar(
             selectedItem = selectedItem,
-            onItemClick = { selectedItem = it }
+            onItemClick = { selectedItem = it },
+            navController = navcontroller
         )
     }
 }
