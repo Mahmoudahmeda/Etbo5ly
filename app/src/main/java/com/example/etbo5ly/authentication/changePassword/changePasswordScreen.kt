@@ -54,7 +54,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
     LaunchedEffect(state) {
         when (state) {
             is State.Success -> {
-                Toast.makeText(context, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.password_updated), Toast.LENGTH_SHORT).show()
                 navController.navigate("login") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -67,7 +67,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
     }
     Column() {
         TopAppBar(
-            { Text("New Password") }
+            { Text(stringResource(R.string.new_password)) }
         )
         TextField(
             value = password,
@@ -85,7 +85,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Password Field",
+                    contentDescription = stringResource(R.string.password_field),
                     tint = Color.Gray
                 )
             }
@@ -107,7 +107,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Password Field",
+                    contentDescription = stringResource(R.string.password_field),
                     tint = Color.Gray
                 )
             }
@@ -115,7 +115,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
 
         Button(
             { changePass.changePassword(code,password,repassword) },
-            content = { Text("Change", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+            content = { Text(stringResource(R.string.change), fontSize = 25.sp, fontWeight = FontWeight.Bold) },
             modifier = Modifier
                 .padding(
                     top = 7.dp,

@@ -15,8 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.etbo5ly.R
 
 @Composable
 fun BottomNavBar(
@@ -24,7 +26,12 @@ fun BottomNavBar(
     onItemClick: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val items = listOf("Home", "Search", "Calendar", "Profile")
+    val items = listOf(
+        stringResource(R.string.home),
+        stringResource(R.string.search),
+        stringResource(R.string.calendar),
+        stringResource(R.string.profile)
+    )
 
     Box(
         modifier = Modifier
@@ -57,9 +64,9 @@ fun BottomNavBar(
                 ) {
                     Icon(
                         imageVector = when (item) {
-                            "Home"     -> Icons.Default.Home
-                            "Search"   -> Icons.Default.Search
-                            "Calendar" -> Icons.Default.DateRange
+                            stringResource(R.string.home)     -> Icons.Default.Home
+                            stringResource(R.string.search)   -> Icons.Default.Search
+                            stringResource(R.string.calendar) -> Icons.Default.DateRange
                             else       -> Icons.Default.Person
                         },
                         contentDescription = item,
