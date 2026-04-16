@@ -1,5 +1,6 @@
 package com.example.etbo5ly.authentication.signin
 
+import android.util.Log
 import com.example.etbo5ly.authentication.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,15 +41,22 @@ class Signin() : ViewModel() {
     }
 
     fun LoginWithFacebook(tokenId: String){
-        viewModelScope.launch {
-            val success = repo.facebooksingIn(tokenId)
+        try {
+            viewModelScope.launch {
+                val success = repo.facebooksingIn(tokenId)
 
-            if (success) {
-                _state.value = State.Success
-            } else {
-                _state.value = State.Fail("Login Failed")
+                if (success) {
+                    _state.value = State.Success
+                    Log.d("FFF","worked")
+                } else {
+                    _state.value = State.Fail("Login Failed")
+                    Log.d("FFF","Error")
+                }
             }
+        }catch (e: Exception){
+            Log.d("FFF",e.printStackTrace().toString())
         }
+
     }
 
     fun LoginasgGuest(){

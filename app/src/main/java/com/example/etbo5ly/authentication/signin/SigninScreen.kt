@@ -5,8 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import com.example.etbo5ly.R
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -96,26 +94,10 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
     val scroll = rememberScrollState()
 
     LaunchedEffect(Unit, key2 = loginstate) {
-        if (FirebaseAuth.getInstance().currentUser != null ) {
-            navController.navigate("home") {
-                popUpTo("login") {
-                    inclusive = true
-                }
-            }
-        }
-        if (loginstate is State.Success) {
-            navController.navigate("home") {
-                popUpTo("login") {
-                    inclusive = true
-                }
-            }
-        }
         viewModel.status.collect { state ->
-            if(state is State.Success){
+            if (state is State.Success || FirebaseAuth.getInstance().currentUser != null) {
                 navController.navigate("home") {
-                    popUpTo("login") {
-                        inclusive = true
-                    }
+                    popUpTo("login") { inclusive = true }
                 }
             }
         }
