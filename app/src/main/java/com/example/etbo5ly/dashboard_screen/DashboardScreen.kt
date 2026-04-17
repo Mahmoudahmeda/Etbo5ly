@@ -119,7 +119,7 @@ fun DashboardScreen(
                         // Meal of the Day Card
                         meal?.let { currentMeal ->
                             MealOfDayCard(
-                                onClick = { },
+                                onClick = { navcontroller.navigate("details/${meal?.idMeal}")},
                                 meal = currentMeal,
                                 modifier = Modifier
                             )

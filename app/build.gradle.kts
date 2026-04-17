@@ -72,4 +72,7 @@ dependencies {
     implementation(libs.viewmodel)
     implementation(libs.facebook)
     implementation(libs.youtube)
+    implementation(libs.facebook.sdk)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.androidx.navigation.compose)
 }
