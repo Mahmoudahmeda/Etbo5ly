@@ -13,12 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
+import com.example.etbo5ly.data.dto.CategoryDto
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
-import com.example.etbo5ly.data.remote.CategoryDto
 import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.categories.Category
@@ -27,7 +28,8 @@ import com.example.etbo5ly.ui.dashboard.BottomNavBar
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    userName: String = "Guest"
+    userName: String = "Guest",
+    navcontroller: NavController
 ) {
     // Networking Setup
     val apiService = ApiClient.service
@@ -50,7 +52,7 @@ fun DashboardScreen(
     // Load Categories
     LaunchedEffect(Unit) {
         try {
-            val response = ApiClient.mealApi.getCategories()
+            val response = ApiClient.service.getCategories()
             categories = response.categories.map { categoryDto: CategoryDto ->
                 Category(
                     name = categoryDto.strCategory,
@@ -72,7 +74,8 @@ fun DashboardScreen(
             // Bottom Navigation Bar
             BottomNavBar(
                 selectedItem = selectedNavItem,
-                onItemClick = { selectedNavItem = it }
+                onItemClick = { selectedNavItem = it },
+                navController = navcontroller
             )
         }
     ) { innerPadding ->
@@ -116,7 +119,7 @@ fun DashboardScreen(
                         // Meal of the Day Card
                         meal?.let { currentMeal ->
                             MealOfDayCard(
-                                onClick = { },
+                                onClick = { navcontroller.navigate("details/${meal?.idMeal}")},
                                 meal = currentMeal,
                                 modifier = Modifier
                             )
@@ -149,7 +152,8 @@ fun DashboardScreen(
                             },
                             isFavorite = false,
                             modifier = Modifier,
-                            meal = recipe
+                            meal = recipe,
+                            navController = navcontroller
                         )
                     }
 
