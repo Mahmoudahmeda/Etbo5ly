@@ -44,7 +44,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             SignUpScreen(SignUpViewModel(),navController)
         }
         composable("home"){
-            DashboardScreen()
+            DashboardScreen(navController = navController)
         }
         composable("emailscreen"){
             EmailVerificationScreen()

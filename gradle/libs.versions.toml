@@ -24,6 +24,7 @@ credentialsPlayServicesAuth = "1.5.0"
 nav_version = "2.7.6"
 playServicesAuth = "21.5.1"
 viewmodel = "2.8.0"
+datastore = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,6 +59,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-common = { group = "com.google.firebase", name = "firebase-common-ktx" }
 facebook-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", version.ref = "facebook" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

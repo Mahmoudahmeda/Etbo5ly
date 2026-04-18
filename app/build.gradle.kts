@@ -70,4 +70,5 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.viewmodel)
     implementation(libs.facebook)
+    implementation(libs.datastore.preferences)
 }
