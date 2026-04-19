@@ -75,4 +75,5 @@ dependencies {
     implementation(libs.facebook.sdk)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
 }

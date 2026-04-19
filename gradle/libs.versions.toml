@@ -26,6 +26,7 @@ playServicesAuth = "21.5.1"
 viewmodel = "2.8.0"
 youtube-ref = "12.1.0"
 ui = "1.10.6"
+material-icons-extended = "1.7.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,7 @@ facebook-sdk = { group = "com.facebook.android", name = "facebook-android-sdk", 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 youtube = {group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref= "youtube-ref"}
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

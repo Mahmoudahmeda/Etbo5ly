@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.etbo5ly.Search.components.ResponseMealCard
 import com.example.etbo5ly.ui.theme.AppBarColor
 import com.example.etbo5ly.ui.theme.AppBarColorShade
 
@@ -116,7 +117,7 @@ fun SearchScreen(navcontroller: NavController, search: Search = Search()){
             }
             val meals = result?.meals ?: emptyList()
             items(meals) { meal ->
-                ResponseMealCard(meal,navcontroller)
+                ResponseMealCard(meal, navcontroller)
             }
         }
 
