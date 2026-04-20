@@ -53,11 +53,13 @@ fun DashboardScreen(
     LaunchedEffect(Unit) {
         try {
             val response = ApiClient.service.getCategories()
-            categories = response.categories.map { categoryDto: CategoryDto ->
-                Category(
-                    name = categoryDto.strCategory,
-                    image = categoryDto.strCategoryThumb
-                )
+            if (response.isSuccessful) {
+                categories = response.body()?.categories?.map { categoryDto: CategoryDto ->
+                    Category(
+                        name = categoryDto.strCategory,
+                        image = categoryDto.strCategoryThumb
+                    )
+                } ?: emptyList()
             }
         } catch (e: Exception) {
             e.printStackTrace()

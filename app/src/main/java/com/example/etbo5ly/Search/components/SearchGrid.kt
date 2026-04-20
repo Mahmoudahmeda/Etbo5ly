@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 fun <T> SearchGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    columns: Int = 2,
+    columns: Int,
     itemContent: @Composable (T) -> Unit
 ) {
     LazyVerticalGrid(

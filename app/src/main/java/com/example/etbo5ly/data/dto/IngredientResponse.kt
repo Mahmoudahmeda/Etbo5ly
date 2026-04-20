@@ -2,7 +2,7 @@ package com.example.etbo5ly.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class AreaListResponse(
+data class IngredientResponse(
     @SerializedName("meals")
-    val areaList: List<Area>
+    val ingredientList: List<Ingredient>
 )
