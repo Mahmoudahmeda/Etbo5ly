@@ -8,7 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.etbo5ly.RecipeDetailsScreen
-import com.example.etbo5ly.Search.SearchScreen
+import com.example.etbo5ly.Search.MainSearch
+import com.example.etbo5ly.Search.SearchResult
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
 import com.example.etbo5ly.authentication.signup.SignUpScreen
@@ -60,13 +61,18 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             RecipeDetailsScreen(navController, mealId)
         }
         composable("Search"){
-            SearchScreen(navController)
+            MainSearch(navController)
+        }
+        composable("searchResult/{filterType}/{selectedItem}"){
+            val filterType = it.arguments?.getString("filterType")
+            val selectedItem = it.arguments?.getString("selectedItem")
+            SearchResult(navController, filterType, selectedItem)
         }
         composable("Calendar"){
-            SearchScreen(navController)
+            MainSearch(navController)
         }
         composable("Profile"){
-            SearchScreen(navController)
+            MainSearch(navController)
         }
     }
 }

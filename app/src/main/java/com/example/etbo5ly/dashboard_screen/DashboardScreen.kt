@@ -131,7 +131,7 @@ fun DashboardScreen(
                     item {
                         // Categories Section
                         Spacer(modifier = Modifier.height(12.dp))
-                        CategoriesSection(categories)
+                        CategoriesSection(categories, navcontroller)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 

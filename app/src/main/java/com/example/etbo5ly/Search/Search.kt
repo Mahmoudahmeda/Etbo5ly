@@ -28,6 +28,12 @@ class Search(): ViewModel() {
     private val _Ingredients = MutableStateFlow<List<Ingredient>>(emptyList())
     val ingredients = _Ingredients.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error = _error.asStateFlow()
+
     private val apiInstance = ApiClient.service
     private val datasource = RemoteDataSource(apiInstance)
 
@@ -36,44 +42,90 @@ class Search(): ViewModel() {
     }
 
     fun fetchCategories() {
+        if (_Categories.value.isNotEmpty()) return
         viewModelScope.launch {
-            val response = datasource.getCategories()
-            if (response.isSuccessful) {
-                _Categories.value = response.body()?.categories ?: emptyList()
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val response = datasource.getCategories()
+                if (response.isSuccessful) {
+                    _Categories.value = response.body()?.categories ?: emptyList()
+                } else {
+                    _error.value = "Failed to load categories"
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
     fun fetchAreas() {
+        if (_Areas.value.isNotEmpty()) return
         viewModelScope.launch {
-            val response = datasource.getAreas()
-            if (response.isSuccessful) {
-                _Areas.value = response.body()?.areaList ?: emptyList()
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val response = datasource.getAreas()
+                if (response.isSuccessful) {
+                    _Areas.value = response.body()?.areaList ?: emptyList()
+                } else {
+                    _error.value = "Failed to load countries"
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
     fun fetchIngredients() {
+        if (_Ingredients.value.isNotEmpty()) return
         viewModelScope.launch {
-            val response = datasource.getIngredients()
-            if (response.isSuccessful) {
-                _Ingredients.value = response.body()?.ingredientList ?: emptyList()
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val response = datasource.getIngredients()
+                if (response.isSuccessful) {
+                    _Ingredients.value = response.body()?.ingredientList ?: emptyList()
+                } else {
+                    _error.value = "Failed to load ingredients"
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
-    fun search(filter: String) {
+    fun search(filter: String, query: String) {
         viewModelScope.launch {
-            val query = _SearchQ.value
-            val response = when (filter) {
-                "Categories" -> datasource.FilterByCategory(query)
-                "Countries" -> datasource.FilterByCountry(query)
-                "Ingredients" -> datasource.FilterByIngredient(query)
-                else -> datasource.search(query)
-            }
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val response = when (filter) {
+                    "category" -> datasource.FilterByCategory(query)
+                    "country" -> datasource.FilterByCountry(query)
+                    "ingredient" -> datasource.FilterByIngredient(query)
+                    else -> datasource.search(query)
+                }
 
-            if (response.isSuccessful) {
-                _Result.value = response.body()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    _Result.value = body
+                    if (body?.meals.isNullOrEmpty()) {
+                        _error.value = "No results found for '$query'"
+                    }
+                } else {
+                    _error.value = "Network error"
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
             }
         }
     }

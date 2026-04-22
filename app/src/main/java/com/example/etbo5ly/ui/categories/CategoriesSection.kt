@@ -1,8 +1,6 @@
 package com.example.etbo5ly.ui.categories
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,13 +21,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.ui.platform.LocalContext
-@Composable
-fun CategoriesSection(categories: List<Category>) {
+import androidx.navigation.NavController
 
-    val context = LocalContext.current
+@Composable
+fun CategoriesSection(
+    categories: List<Category>,
+    navController: NavController
+) {
 
     Column(
         modifier = Modifier
@@ -50,7 +49,10 @@ fun CategoriesSection(categories: List<Category>) {
             Text(
                 text = "View All",
                 fontSize = 13.sp,
-                color = Color(0xFF51FBFB)
+                color = Color(0xFF51FBFB),
+                modifier = Modifier.clickable {
+                    navController.navigate("Search")
+                }
             )
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -62,11 +64,7 @@ fun CategoriesSection(categories: List<Category>) {
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .clickable {
-                            Toast.makeText(
-                                context,
-                                category.name,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            navController.navigate("searchResult/category/${category.name}")
                         }
                 ) {
                     AsyncImage(

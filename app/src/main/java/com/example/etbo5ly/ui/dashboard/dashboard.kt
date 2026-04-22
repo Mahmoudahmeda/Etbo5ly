@@ -44,7 +44,7 @@ fun DashboardScreen(modifier: Modifier = Modifier, navcontroller: NavController)
             userName = "Guest",
             navcontroller = navcontroller
         )
-        CategoriesSection(categories)
+        CategoriesSection(categories, navcontroller)
         Spacer(modifier = Modifier.weight(1f))
         BottomNavBar(
             selectedItem = selectedItem,

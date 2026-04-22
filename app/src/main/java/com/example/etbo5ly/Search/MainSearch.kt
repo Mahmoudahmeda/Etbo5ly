@@ -1,8 +1,10 @@
 package com.example.etbo5ly.Search
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +13,7 @@ import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Egg
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,10 +26,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -43,13 +47,14 @@ import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 data class FilterOption(val name: String, val icon: ImageVector)
 
-//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainSearch(
     navController: NavController,
     viewModel: Search = Search()
 ) {
     val searchQ by viewModel.searchQ.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
     
     val categories by viewModel.categories.collectAsState()
     val areas by viewModel.areas.collectAsState()
@@ -120,52 +125,76 @@ fun MainSearch(
                 }
             }
 
-            // 3. Dynamic Grid based on Selection with Local Filtering
-            when (selectedFilter) {
-                "Categories" -> {
-                    val filteredCategories = categories.filter { 
-                        it.strCategory.contains(searchQ, ignoreCase = true) 
+            // 3. Conditional Content: Loading, Error, or Grid
+            Box(modifier = Modifier.weight(1f)) {
+                if (isLoading) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = AppBarColor)
                     }
-                    SearchGrid(
-                        items = filteredCategories,
-                        columns = 2,
-                        modifier = Modifier.weight(1f)
-                    ) { category ->
-                        CategoryCard(category = category, onClick = {
-                            navController.navigate("searchResults/category/${category.strCategory}")
-                        })
+                } else if (error != null) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = error ?: "An error occurred",
+                            color = Color.Gray,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(16.dp)
+                        )
                     }
-                }
-                "Countries" -> {
-                    val filteredAreas = areas.filter { 
-                        it.strArea.contains(searchQ, ignoreCase = true) 
-                    }
-                    SearchGrid(
-                        items = filteredAreas,
-                        columns = 3,
-                        modifier = Modifier.weight(1f)
-                    ) { area ->
-                        CountryCard(area = area, onClick = {
-                            navController.navigate("searchResults/country/${area.strArea}")
-                        })
-                    }
-                }
-                "Ingredients" -> {
-                    val filteredIngredients = ingredients.filter { 
-                        it.strIngredient.contains(searchQ, ignoreCase = true) 
-                    }
-                    SearchGrid(
-                        items = filteredIngredients,
-                        columns = 3,
-                        modifier = Modifier.weight(1f)
-                    ) { ingredient ->
-                        IngredientCard(ingredient = ingredient, onClick = {
-                            navController.navigate("searchResults/ingredient/${ingredient.strIngredient}")
-                        })
+                } else {
+                    // Dynamic Grid based on Selection with Local Filtering
+                    when (selectedFilter) {
+                        "Categories" -> {
+                            val filteredList = categories.filter { it.strCategory.contains(searchQ, ignoreCase = true) }
+                            if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
+                                EmptyState(searchQ)
+                            } else {
+                                SearchGrid(items = filteredList, columns = 2) { category ->
+                                    CategoryCard(category = category, onClick = {
+                                        navController.navigate("searchResult/category/${category.strCategory}")
+                                    })
+                                }
+                            }
+                        }
+                        "Countries" -> {
+                            val filteredList = areas.filter { it.strArea.contains(searchQ, ignoreCase = true) }
+                            if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
+                                EmptyState(searchQ)
+                            } else {
+                                SearchGrid(items = filteredList, columns = 3) { area ->
+                                    CountryCard(area = area, onClick = {
+                                        navController.navigate("searchResult/country/${area.strArea}")
+                                    })
+                                }
+                            }
+                        }
+                        "Ingredients" -> {
+                            val filteredList = ingredients.filter { it.strIngredient.contains(searchQ, ignoreCase = true) }
+                            if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
+                                EmptyState(searchQ)
+                            } else {
+                                SearchGrid(items = filteredList, columns = 3) { ingredient ->
+                                    IngredientCard(ingredient = ingredient, onClick = {
+                                        navController.navigate("searchResult/ingredient/${ingredient.strIngredient}")
+                                    })
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun EmptyState(query: String) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "No matches found for '$query'",
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
