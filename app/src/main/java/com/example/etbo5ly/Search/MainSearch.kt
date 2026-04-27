@@ -34,23 +34,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.etbo5ly.Search.components.CategoryCard
 import com.example.etbo5ly.Search.components.CountryCard
 import com.example.etbo5ly.Search.components.FilterButton
 import com.example.etbo5ly.Search.components.IngredientCard
+import com.example.etbo5ly.Search.components.ResponseMealCard
 import com.example.etbo5ly.Search.components.SearchGrid
 import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 import com.example.etbo5ly.ui.theme.AppBarColor
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
+import kotlinx.coroutines.delay
 
 data class FilterOption(val name: String, val icon: ImageVector)
 
 @Composable
 fun MainSearch(
     navController: NavController,
-    viewModel: Search = Search()
+    viewModel: Search = viewModel()
 ) {
     val searchQ by viewModel.searchQ.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -59,19 +62,26 @@ fun MainSearch(
     val categories by viewModel.categories.collectAsState()
     val areas by viewModel.areas.collectAsState()
     val ingredients by viewModel.ingredients.collectAsState()
+    val general by viewModel.general.collectAsState()
 
-    var selectedFilter by remember { mutableStateOf("Categories") }
+    var selectedFilter by remember { mutableStateOf("General") }
     val filters = listOf(
         FilterOption("Categories", Icons.Default.Restaurant),
         FilterOption("Countries", Icons.Default.Public),
         FilterOption("Ingredients", Icons.Outlined.Egg)
     )
 
-    LaunchedEffect(selectedFilter) {
+    LaunchedEffect(selectedFilter,searchQ) {
         when (selectedFilter) {
             "Categories" -> viewModel.fetchCategories()
             "Countries" -> viewModel.fetchAreas()
             "Ingredients" -> viewModel.fetchIngredients()
+            "General" -> {
+                if (searchQ.isNotBlank()) {
+                    delay(500)
+                    viewModel.searchGeneral(searchQ)
+                }
+            }
         }
     }
 
@@ -118,7 +128,7 @@ fun MainSearch(
                         option = filter,
                         isSelected = isSelected,
                         onClick = { 
-                            selectedFilter = filter.name
+                            selectedFilter = if (isSelected) "General" else filter.name
                         },
                         modifier = Modifier.weight(1f)
                     )
@@ -127,11 +137,7 @@ fun MainSearch(
 
             // 3. Conditional Content: Loading, Error, or Grid
             Box(modifier = Modifier.weight(1f)) {
-                if (isLoading) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(color = AppBarColor)
-                    }
-                } else if (error != null) {
+                if (error != null) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
                             text = error ?: "An error occurred",
@@ -176,6 +182,19 @@ fun MainSearch(
                                     IngredientCard(ingredient = ingredient, onClick = {
                                         navController.navigate("searchResult/ingredient/${ingredient.strIngredient}")
                                     })
+                                }
+                            }
+                        }
+                        "General" -> {
+                            if (isLoading) {
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    CircularProgressIndicator(color = AppBarColor)
+                                }
+                            } else if (general.isEmpty() && searchQ.isNotEmpty()) {
+                                EmptyState(searchQ)
+                            } else {
+                                SearchGrid(general, columns = 2) { meal ->
+                                    ResponseMealCard(meal, navController)
                                 }
                             }
                         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.Area
 import com.example.etbo5ly.data.dto.CategoryDto
 import com.example.etbo5ly.data.dto.Ingredient
+import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.data.dto.searchX
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
@@ -18,6 +19,9 @@ class Search(): ViewModel() {
     
     private val _Result = MutableStateFlow<searchX?>(null)
     val result = _Result.asStateFlow()
+
+    private val _GeneralSearch = MutableStateFlow<List<MealX>>(emptyList())
+    val general = _GeneralSearch.asStateFlow()
 
     private val _Categories = MutableStateFlow<List<CategoryDto>>(emptyList())
     val categories = _Categories.asStateFlow()
@@ -100,7 +104,30 @@ class Search(): ViewModel() {
             }
         }
     }
+    fun searchGeneral(query: String) {
+        if (query.isBlank()) {
+            _GeneralSearch.value = emptyList()
+            return
+        }
 
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+            try {
+                val response = datasource.search(query) // Use your general search API
+                if (response.isSuccessful) {
+                    // Update the 'general' state flow
+                    _GeneralSearch.value = response.body()?.meals ?: emptyList()
+                } else {
+                    _error.value = "Failed to fetch results"
+                }
+            } catch (e: Exception) {
+                _error.value = e.message
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
     fun search(filter: String, query: String) {
         viewModelScope.launch {
             _isLoading.value = true
