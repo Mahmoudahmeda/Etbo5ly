@@ -26,12 +26,12 @@ fun DashboardScreen(modifier: Modifier = Modifier, navcontroller: NavController)
     LaunchedEffect(Unit) {
         try {
             val response = apiclient.getCategories()
-            categories = response.categories.map {
+            categories = response.body()?.categories?.map {
                 Category(
                     name = it.strCategory,
                     image = it.strCategoryThumb
                 )
-            }
+            } ?: emptyList()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -44,7 +44,7 @@ fun DashboardScreen(modifier: Modifier = Modifier, navcontroller: NavController)
             userName = "Guest",
             navcontroller = navcontroller
         )
-        CategoriesSection(categories)
+        CategoriesSection(categories, navcontroller)
         Spacer(modifier = Modifier.weight(1f))
         BottomNavBar(
             selectedItem = selectedItem,

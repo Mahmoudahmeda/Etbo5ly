@@ -71,10 +71,9 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.viewmodel)
     implementation(libs.facebook)
+    implementation(libs.youtube)
     implementation(libs.facebook.sdk)
-    implementation(libs.firebase.common)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.youtube)
-
+    implementation(libs.androidx.compose.material.icons.extended)
 }
