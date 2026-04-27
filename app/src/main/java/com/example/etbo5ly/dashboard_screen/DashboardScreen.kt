@@ -53,11 +53,13 @@ fun DashboardScreen(
     LaunchedEffect(Unit) {
         try {
             val response = ApiClient.service.getCategories()
-            categories = response.categories.map { categoryDto: CategoryDto ->
-                Category(
-                    name = categoryDto.strCategory,
-                    image = categoryDto.strCategoryThumb
-                )
+            if (response.isSuccessful) {
+                categories = response.body()?.categories?.map { categoryDto: CategoryDto ->
+                    Category(
+                        name = categoryDto.strCategory,
+                        image = categoryDto.strCategoryThumb
+                    )
+                } ?: emptyList()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -129,7 +131,7 @@ fun DashboardScreen(
                     item {
                         // Categories Section
                         Spacer(modifier = Modifier.height(12.dp))
-                        CategoriesSection(categories)
+                        CategoriesSection(categories, navcontroller)
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 

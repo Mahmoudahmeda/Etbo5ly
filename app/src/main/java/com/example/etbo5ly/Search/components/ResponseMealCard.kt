@@ -1,4 +1,4 @@
-package com.example.etbo5ly.Search
+package com.example.etbo5ly.Search.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
