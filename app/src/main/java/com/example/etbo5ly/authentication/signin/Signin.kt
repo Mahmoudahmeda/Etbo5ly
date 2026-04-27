@@ -28,14 +28,22 @@ class Signin() : ViewModel() {
     fun LoginWithGoogle(TokenId: String?){
         if(TokenId == null){
             _state.value = State.Fail("Login Failed")
+            Log.d("Google","Fail")
             return
         }
         viewModelScope.launch {
             _state.value = State.Loading
+            Log.d("Google","Loading ${TokenId}")
             if (repo.GooglesignIn(TokenId)) {
-                _state.value = State.Success
+                try {
+                    _state.value = State.Success
+                    Log.d("Google","worked")
+                }catch (e: Exception){
+                    Log.d("Google",e.printStackTrace().toString())
+                }
             } else {
                 _state.value = State.Fail("Login Failed")
+                Log.d("Google","Error")
             }
         }
     }
@@ -47,10 +55,10 @@ class Signin() : ViewModel() {
 
                 if (success) {
                     _state.value = State.Success
-                    Log.d("FFF","worked")
+                    Log.d("FaceBook","worked")
                 } else {
                     _state.value = State.Fail("Login Failed")
-                    Log.d("FFF","Error")
+                    Log.d("FaceBook","Error")
                 }
             }
         }catch (e: Exception){
@@ -63,6 +71,16 @@ class Signin() : ViewModel() {
         viewModelScope.launch {
             _state.value = State.Loading
             if (repo.guestSignIn()) {
+                _state.value = State.Success
+            } else {
+                _state.value = State.Fail("Login Failed")
+            }
+        }
+    }
+
+    fun Logout(){
+        viewModelScope.launch {
+            if (repo.logout()){
                 _state.value = State.Success
             } else {
                 _state.value = State.Fail("Login Failed")

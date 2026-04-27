@@ -24,7 +24,7 @@ credentialsPlayServicesAuth = "1.5.0"
 nav_version = "2.7.6"
 playServicesAuth = "21.5.1"
 viewmodel = "2.8.0"
-youtube-ref = "12.1.0"
+youtube-ref = "13.0.0"
 ui = "1.10.6"
 
 [libraries]

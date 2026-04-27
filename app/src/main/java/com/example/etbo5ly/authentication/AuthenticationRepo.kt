@@ -46,8 +46,10 @@ class AuthenticationRepo() {
         return try {
             val credential = GoogleAuthProvider.getCredential(TokenId, null)
             auth.signInWithCredential(credential).await()
+            Log.d("Google","Auth ${TokenId}")
             true
         } catch (e: Exception) {
+            Log.d("Google",e.printStackTrace().toString())
             false
         }
     }
@@ -96,6 +98,14 @@ class AuthenticationRepo() {
     suspend fun createUser(username:String ,email: String, pass: String): Boolean {
         return try {
             auth.createUserWithEmailAndPassword(email, pass).await()
+            true
+        }catch (e: Exception){
+            false
+        }
+    }
+    fun logout(): Boolean {
+        return try {
+            auth.signOut()
             true
         }catch (e: Exception){
             false

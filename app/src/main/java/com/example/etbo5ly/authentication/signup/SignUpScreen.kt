@@ -72,7 +72,9 @@ fun SignUpScreen(
                 modifier = Modifier.weight(1f)
             )
             TextButton(
-                onClick = { },
+                onClick = { navController.navigate("login"){
+                    popUpTo("signup") {inclusive= true  }
+                } },
                 modifier = Modifier
                     .background(Color(0xFF232832), CircleShape)
                     .padding(horizontal = 16.dp, vertical = 6.dp)
@@ -172,7 +174,7 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Divider(color = Color.DarkGray)
+                HorizontalDivider(color = Color.DarkGray)
 
                 Text(
                     text = "OR CONTINUE WITH",
@@ -192,7 +194,7 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 TextButton(
-                    onClick = { },
+                    onClick = {viewModel.LoginasgGuest()},
                     modifier = Modifier.padding(bottom = 8.dp)
                 ) {
                     Text(

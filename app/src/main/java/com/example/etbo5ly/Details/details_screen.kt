@@ -1,6 +1,10 @@
 package com.example.etbo5ly
 
-import android.content.Intent
+import android.util.Log
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,9 +33,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.Details.detailsScreenViewModel
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 // Inter font sizes — all in range 14-22sp
@@ -48,8 +52,7 @@ fun RecipeDetailsScreen(
     viewmodel: detailsScreenViewModel = viewModel()
 ) {
     val mealData by viewmodel.meal.collectAsState()
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
+
 
     // Instructions expand/collapse state
     var instructionsExpanded by remember { mutableStateOf(false) }
@@ -232,41 +235,9 @@ fun RecipeDetailsScreen(
 
                 // ── Watch Recipe / YouTube ──────────────────────────────
                 if (!meal.strYoutube.isNullOrBlank()) {
-                    val videoId = viewmodel.getVideoId(meal.strYoutube)
-
-                    if (videoId.isNotBlank()) {
-                        Text(
-                            text = "Watch Recipe",
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = SectionSize,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-
-                        Spacer(Modifier.height(12.dp))
-
-                        AndroidView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(220.dp)
-                                .padding(horizontal = 16.dp)
-                                .clip(RoundedCornerShape(24.dp)),
-                            factory = { ctx ->
-                                YouTubePlayerView(ctx).apply {
-                                    lifecycleOwner.lifecycle.addObserver(this)
-                                    addYouTubePlayerListener(
-                                        object : AbstractYouTubePlayerListener() {
-                                            override fun onReady(youTubePlayer: YouTubePlayer) {
-                                                youTubePlayer.cueVideo(videoId, 0f)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        )
-                    }
+//                    val videoId = viewmodel.getVideoId(meal.strYoutube)
+                    YoutubePlayer(meal.strYoutube)
                 }
-
                 Spacer(Modifier.height(32.dp))
             }
         }
@@ -324,5 +295,32 @@ private fun TagChip(label: String) {
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(horizontal = 12.dp, vertical = 4.dp)
+    )
+}
+
+@Composable
+fun YoutubePlayer(videoUrl: String) {
+    val videoId = remember(videoUrl) {
+        if (videoUrl.contains("v=")) {
+            videoUrl.split("v=")[1].split("&")[0]
+        } else {
+            videoUrl.split("/").last()
+        }
+    }
+
+    AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .clip(RoundedCornerShape(16.dp)),
+        factory = { context ->
+            YouTubePlayerView(context).apply {
+                addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(videoId, 0f)
+                    }
+                })
+            }
+        }
     )
 }

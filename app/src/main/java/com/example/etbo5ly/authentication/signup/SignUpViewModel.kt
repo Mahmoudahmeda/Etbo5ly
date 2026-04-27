@@ -45,4 +45,14 @@ class SignUpViewModel : ViewModel() {
             }
         }
     }
+    fun LoginasgGuest(){
+        viewModelScope.launch {
+            _state.value = State.Loading
+            if (repo.guestSignIn()) {
+                _state.value = State.Success
+            } else {
+                _state.value = State.Fail("Login Failed")
+            }
+        }
+    }
 }

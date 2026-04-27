@@ -4,16 +4,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.Search.Search
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
@@ -25,6 +30,7 @@ import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.categories.Category
 import com.example.etbo5ly.ui.dashboard.BottomNavBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
@@ -68,7 +74,7 @@ fun DashboardScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             // Top App Bar
-            DashboardAppBarComponent(userName)
+            DashboardAppBarComponent(userName, navcontroller = navcontroller)
         },
         bottomBar = {
             // Bottom Navigation Bar

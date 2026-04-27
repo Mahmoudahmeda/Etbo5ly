@@ -37,7 +37,8 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp)
             .height(250.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        onClick= onClick
     ) {
         Box {
             //Background Image
@@ -113,24 +114,6 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // View recipe button
-                Button(
-                    onClick = onClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                ) {
-                    Text(
-                        text = "View Recipe",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
             }
         }
     }
