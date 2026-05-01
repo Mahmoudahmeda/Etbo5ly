@@ -18,6 +18,7 @@ import com.example.etbo5ly.dashboard_screen.DashboardScreen
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
 import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
+import com.example.etbo5ly.settings.SettingsScreen
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -66,7 +67,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             SearchScreen(navController)
         }
         composable("Profile"){
-            SearchScreen(navController)
+            SettingsScreen(navController = navController)
         }
     }
 }

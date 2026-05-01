@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
@@ -28,9 +29,12 @@ import com.example.etbo5ly.ui.dashboard.BottomNavBar
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    userName: String = "Guest",
     navcontroller: NavController
 ) {
+    var userName by remember { mutableStateOf("Guest") }
+    val authRepo = AuthenticationRepo()
+    authRepo.getCurrentUserName().also { userName = it }
+
     // Networking Setup
     val apiService = ApiClient.service
     val remoteDataSource = RemoteDataSource(apiService)

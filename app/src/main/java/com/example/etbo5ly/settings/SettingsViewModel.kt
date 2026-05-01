@@ -1,67 +1,91 @@
 package com.example.etbo5ly.settings
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.data.local.SettingsManager
-import com.google.firebase.auth.FirebaseAuth
+import com.example.etbo5ly.notifications.NotificationHelper
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.File
 
-// Interface to allow Preview and testing
-interface ISettingsViewModel {
-    val isSyncEnabled: StateFlow<Boolean>
-    val isNotificationsEnabled: StateFlow<Boolean>
-    val isOfflineEnabled: StateFlow<Boolean>
-    fun toggleSync(enabled: Boolean)
-    fun toggleNotifications(enabled: Boolean)
-    fun toggleOffline(enabled: Boolean)
-    fun signOut()
-    fun getUserEmail(): String
-    fun getUserName(): String
-    fun getUserPhotoUrl(): String?
-}
+class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
-class SettingsViewModel(private val settingsManager: SettingsManager) : ViewModel(), ISettingsViewModel {
+    private val authRepo = AuthenticationRepo()
+    private val settingsManager = SettingsManager(application)
+    private val notificationHelper = NotificationHelper(application)
+    private val userId = authRepo.getCurrentUserUid()
 
-    private val auth = FirebaseAuth.getInstance()
-    private val userId = auth.currentUser?.uid ?: "guest"
-
-    // Expose flows from DataStore as StateFlow for Compose
-    override val isSyncEnabled: StateFlow<Boolean> = settingsManager.isSyncEnabled(userId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
-
-    override val isNotificationsEnabled: StateFlow<Boolean> = settingsManager.isNotificationsEnabled(userId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
-
-    override val isOfflineEnabled: StateFlow<Boolean> = settingsManager.isOfflineEnabled(userId)
+    val isNotificationsEnabled: StateFlow<Boolean> = settingsManager.isNotificationsEnabled(userId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
-    // UI Actions
-    override fun toggleSync(enabled: Boolean) {
-        viewModelScope.launch {
-            settingsManager.setSyncEnabled(userId, enabled)
+    val userPhotoUrl: StateFlow<String?> = settingsManager.getProfilePhoto(userId)
+        .map { localPhoto ->
+            localPhoto ?: authRepo.getCurrentUserPhotoUrl()
         }
-    }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), authRepo.getCurrentUserPhotoUrl())
 
-    override fun toggleNotifications(enabled: Boolean) {
+    fun toggleNotifications(enabled: Boolean) {
         viewModelScope.launch {
             settingsManager.setNotificationsEnabled(userId, enabled)
+            if (enabled) {
+                notificationHelper.showNotification(
+                    "Notifications Enabled",
+                    "You will now receive recipe alerts and meal reminders."
+                )
+            }
         }
     }
 
-    override fun toggleOffline(enabled: Boolean) {
+    fun updateProfilePhoto(uri: Uri) {
         viewModelScope.launch {
-            settingsManager.setOfflineEnabled(userId, enabled)
+            try {
+                // Create a local file to store the image
+                val fileName = "profile_${userId}.jpg"
+                val file = File(getApplication<Application>().filesDir, fileName)
+                
+                // Copy the image data from the Uri to the local file
+                getApplication<Application>().contentResolver.openInputStream(uri)?.use { input ->
+                    file.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+                
+                // Save the local file path to DataStore
+                settingsManager.setProfilePhoto(userId, file.absolutePath)
+            } catch (e: Exception) {
+                Log.e("SettingsViewModel", "Error saving profile photo: ${e.message}")
+            }
         }
     }
 
-    override fun signOut() {
-        auth.signOut()
+    fun signOut() {
+        authRepo.signOut()
     }
 
-    override fun getUserEmail() = auth.currentUser?.email ?: "No Email"
-    override fun getUserName() = auth.currentUser?.displayName ?: "User"
-    override fun getUserPhotoUrl() = auth.currentUser?.photoUrl?.toString()
+    fun getUserEmail() = authRepo.getCurrentUserEmail()
+    fun getUserName() = authRepo.getCurrentUserName()
+    
+    fun getAppVersion(): String {
+        return try {
+            val context = getApplication<Application>()
+            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getPackageInfo(context.packageName, PackageManager.PackageInfoFlags.of(0))
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            }
+            packageInfo.versionName ?: "1.0.0"
+        } catch (e: Exception) {
+            "1.0.0"
+        }
+    }
 }

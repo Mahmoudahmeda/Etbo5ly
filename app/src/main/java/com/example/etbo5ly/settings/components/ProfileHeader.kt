@@ -1,6 +1,7 @@
 package com.example.etbo5ly.settings.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,18 +23,19 @@ import coil.compose.AsyncImage
 import com.example.etbo5ly.ui.theme.*
 
 @Composable
-fun ProfileHeader(name: String, email: String, photoUrl: String?) {
+fun ProfileHeader(name: String, email: String, photoUrl: String?, clickOnPhoto: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
-            model = photoUrl ?: Icons.Default.Person,
+            model = photoUrl,
             contentDescription = "Profile Picture",
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(CardBottom),
+                .background(CardBottom)
+                .clickable(onClick = clickOnPhoto),
             contentScale = ContentScale.Crop,
             error = rememberVectorPainter(Icons.Default.Person),
-            fallback = rememberVectorPainter(Icons.Default.Person)
+            fallback = rememberVectorPainter(Icons.Default.Person),
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(name, color = ProductTitle, fontSize = 22.sp, fontWeight = FontWeight.Bold)
