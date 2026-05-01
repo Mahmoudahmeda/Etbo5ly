@@ -1,6 +1,5 @@
 package com.example.etbo5ly.dashboard_screen.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -66,7 +65,7 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
 
                 // Meal of the day label
                 Text(
-                    text = "Meal of the Day",
+                    text = stringResource(R.string.meal_of_the_day),
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colorScheme.primary,
@@ -126,7 +125,7 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
                         )
                 ) {
                     Text(
-                        text = "View Recipe",
+                        text = stringResource(R.string.view_recipe),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
