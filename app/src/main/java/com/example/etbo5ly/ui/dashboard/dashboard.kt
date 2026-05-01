@@ -41,7 +41,6 @@ fun DashboardScreen(modifier: Modifier = Modifier, navcontroller: NavController)
     ) {
         DashboardScreen(
             modifier = Modifier,
-            userName = "Guest",
             navcontroller = navcontroller
         )
         CategoriesSection(categories)

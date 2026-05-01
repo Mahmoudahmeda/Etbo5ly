@@ -1,16 +1,11 @@
 package com.example.etbo5ly.authentication
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.actionCodeSettings
 import kotlinx.coroutines.tasks.await
-import kotlin.Boolean
 
 class AuthenticationRepo() {
     private val auth by lazy { FirebaseAuth.getInstance() }
@@ -32,12 +27,44 @@ class AuthenticationRepo() {
         }
     }
 
+    fun getCurrentUserUid(): String = auth.currentUser?.uid ?: "guest"
+
+    fun getCurrentUserEmail(): String {
+        val user = auth.currentUser
+        // Try the main email first, then look through provider data (Google/Facebook)
+        val email = user?.email?.takeIf { it.isNotBlank() } 
+            ?: user?.providerData?.firstOrNull { !it.email.isNullOrBlank() }?.email
+            
+        return if (email.isNullOrBlank()) "No Email" else email!!
+    }
+
+    fun getCurrentUserName(): String {
+        val user = auth.currentUser
+        val name = user?.displayName?.takeIf { it.isNotBlank() }
+            ?: user?.providerData?.firstOrNull { !it.displayName.isNullOrBlank() }?.displayName
+            
+        return if (name.isNullOrBlank()) "Guest" else name!!
+    }
+
+    fun getCurrentUserPhotoUrl(): String? {
+        val user = auth.currentUser
+        return user?.photoUrl?.toString() 
+            ?: user?.providerData?.firstOrNull { it.photoUrl != null }?.photoUrl?.toString()
+    }
+
+    fun setCurrentUserPhotoUrl(url: String) {}
+
+    fun signOut() {
+        auth.signOut()
+    }
+
     val Username: String? = auth.currentUser?.displayName
     suspend fun EmailsignIn(email: String, pass: String): Boolean {
         return try {
             auth.signInWithEmailAndPassword(email, pass).await()
             true
         } catch (e: Exception) {
+            Log.e("AuthRepo", "Login Error: ${e.message}", e)
             false
         }
     }
@@ -93,11 +120,17 @@ class AuthenticationRepo() {
             false
         }
     }
-    suspend fun createUser(username:String ,email: String, pass: String): Boolean {
+    
+    suspend fun createUser(username: String, email: String, pass: String): Boolean {
         return try {
-            auth.createUserWithEmailAndPassword(email, pass).await()
+            val result = auth.createUserWithEmailAndPassword(email, pass).await()
+            val profileUpdates = com.google.firebase.auth.userProfileChangeRequest {
+                displayName = username
+            }
+            result.user?.updateProfile(profileUpdates)?.await()
             true
-        }catch (e: Exception){
+        } catch (e: Exception) {
+            Log.e("AuthRepo", "SignUp failed: ${e.message}")
             false
         }
     }
