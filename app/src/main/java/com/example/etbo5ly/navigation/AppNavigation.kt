@@ -16,37 +16,42 @@ import com.example.etbo5ly.dashboard_screen.DashboardScreen
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
 import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
+import com.example.etbo5ly.favourite.FavouritesScreen
+import com.example.etbo5ly.favourite.FavouritesScreen
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
-fun AppNavigation(modifier: Modifier,intent: Intent){
+fun AppNavigation(modifier: Modifier, intent: Intent) {
     val navController = rememberNavController()
     val repo = AuthenticationRepo()
     val data = intent.data
     val code = data?.getQueryParameter("oobCode")
-
     val destination = when {
         code != null -> "resetPassword/$code"
         repo.isLoggedIn() -> "home"
         else -> "login"
     }
+
     NavHost(
         navController = navController,
         startDestination = "splash"
     ) {
-        composable("splash"){
-            Food_factory(modifier,navController,destination)
+        composable("splash") {
+            Food_factory(modifier, navController, destination)
         }
-        composable("login"){
+        composable("login") {
             Signin_screen(Signin(), navController)
         }
-        composable("signup"){
-            SignUpScreen(SignUpViewModel(),navController)
+        composable("signup") {
+            SignUpScreen(SignUpViewModel(), navController)
         }
-        composable("home"){
+        composable("home") {
             DashboardScreen(navController = navController)
         }
-        composable("emailscreen"){
+        composable("favourites") {
+            FavouritesScreen(navController = navController)
+        }
+        composable("emailscreen") {
             EmailVerificationScreen()
         }
         composable("resetPassword/{Code}") { backStack ->

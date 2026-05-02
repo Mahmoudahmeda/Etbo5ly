@@ -65,7 +65,7 @@ fun DashboardAppBarComponent(
                 )
             }
 
-            // Favourite Icon — Right
+            // Favourite Icon
             IconButton(onClick = onFavouriteClick) {
                 Icon(
                     imageVector = Icons.Default.Favorite,

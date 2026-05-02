@@ -91,7 +91,7 @@ fun DashboardScreen(
                         scope.launch { drawerState.open() }
                     },
                     onFavouriteClick = {
-                        // will wire up when favourites screen is ready
+                        navController.navigate("favourites")
                     }
                 )
             },
