@@ -63,6 +63,10 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
         composable("Search"){
             MainSearch(navController)
         }
+        composable("Search/{filter}"){
+            val filter = it.arguments?.getString("filter") ?: "General"
+            MainSearch(navController, selectedfilter = filter)
+        }
         composable("searchResult/{filterType}/{selectedItem}"){
             val filterType = it.arguments?.getString("filterType")
             val selectedItem = it.arguments?.getString("selectedItem")

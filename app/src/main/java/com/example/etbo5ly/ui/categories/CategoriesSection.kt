@@ -51,7 +51,7 @@ fun CategoriesSection(
                 fontSize = 13.sp,
                 color = Color(0xFF51FBFB),
                 modifier = Modifier.clickable {
-                    navController.navigate("Search")
+                    navController.navigate("Search/Categories")
                 }
             )
         }

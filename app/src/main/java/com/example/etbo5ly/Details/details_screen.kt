@@ -1,10 +1,6 @@
 package com.example.etbo5ly
 
-import android.util.Log
-import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,21 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.Details.detailsScreenViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.example.etbo5ly.data.dto.MealX
+import android.util.Log
 
 // Inter font sizes — all in range 14-22sp
 private val TitleSize = 22.sp
@@ -137,8 +131,8 @@ fun RecipeDetailsScreen(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    TagChip(meal.strCategory)
-                    TagChip(meal.strArea)
+                    TagChip(meal.strCategory, navController, meal)
+                    TagChip(meal.strArea, navController, meal)
                 }
 
                 Spacer(Modifier.height(24.dp))
@@ -168,7 +162,7 @@ fun RecipeDetailsScreen(
 
                 // ── Ingredients List with Icons ─────────────────────────
                 meal.ingredients.forEach { (ingredient, amount) ->
-                    IngredientRow(ingredient = ingredient, amount = amount)
+                    IngredientRow(ingredient = ingredient, amount = amount, navController)
                 }
 
                 Spacer(Modifier.height(24.dp))
@@ -246,11 +240,14 @@ fun RecipeDetailsScreen(
 
 // ── Ingredient Row with API icon ────────────────────────────────────────────
 @Composable
-private fun IngredientRow(ingredient: String, amount: String) {
+private fun IngredientRow(ingredient: String, amount: String,navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .clickable{
+                navController.navigate("searchResult/ingredient/${ingredient}")
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -284,7 +281,7 @@ private fun IngredientRow(ingredient: String, amount: String) {
 
 // ── Tag Chip ────────────────────────────────────────────────────────────────
 @Composable
-private fun TagChip(label: String) {
+private fun TagChip(label: String,navController: NavController,meal: MealX) {
     Text(
         text = label,
         color = Color.Cyan,
@@ -295,7 +292,14 @@ private fun TagChip(label: String) {
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(horizontal = 12.dp, vertical = 4.dp)
-    )
+            .clickable{
+                if(label.equals(meal.strCategory)){
+                    navController.navigate("searchResult/category/${meal.strCategory}")
+                }else{
+                    navController.navigate("searchResult/country/${meal.strArea}")
+                }
+            }
+    )   
 }
 
 @Composable

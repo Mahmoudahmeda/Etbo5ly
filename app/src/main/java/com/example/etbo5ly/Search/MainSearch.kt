@@ -53,7 +53,8 @@ data class FilterOption(val name: String, val icon: ImageVector)
 @Composable
 fun MainSearch(
     navController: NavController,
-    viewModel: Search = viewModel()
+    viewModel: Search = viewModel(),
+    selectedfilter: String = "General"
 ) {
     val searchQ by viewModel.searchQ.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -64,7 +65,7 @@ fun MainSearch(
     val ingredients by viewModel.ingredients.collectAsState()
     val general by viewModel.general.collectAsState()
 
-    var selectedFilter by remember { mutableStateOf("General") }
+    var selectedFilter by remember { mutableStateOf(selectedfilter) }
     val filters = listOf(
         FilterOption("Categories", Icons.Default.Restaurant),
         FilterOption("Countries", Icons.Default.Public),
