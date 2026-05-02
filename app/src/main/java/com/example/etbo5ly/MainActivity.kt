@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Etbo5lyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavigation(Modifier.padding(innerPadding),intent)
+                    AppNavigation(Modifier.padding(innerPadding), intent)
                 }
             }
         }
