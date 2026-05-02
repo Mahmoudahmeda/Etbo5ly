@@ -1,23 +1,47 @@
 package com.example.etbo5ly.authentication.signup
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,29 +49,60 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.getString
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.etbo5ly.R
 import com.example.etbo5ly.authentication.State
+import com.example.etbo5ly.authentication.facebook_signup.facebookSignUp
+import com.example.etbo5ly.authentication.google_signup.googleSignUp
+import com.facebook.login.LoginManager
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel,
     navController: NavController
 ) {
-    val username by viewModel.username.collectAsState()
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val state by viewModel.status.collectAsState()
+    val username by viewModel.username.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
+    val state by viewModel.status.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    LaunchedEffect(state) {
-        when (state) {
-            is State.Success -> {
-                navController.navigate("home")
+    val credentialScope = rememberCoroutineScope()
+    val credentialManager = remember { CredentialManager.create(context) }
+
+    val facebookAuth = remember {
+        facebookSignUp { token -> viewModel.signUpWithFacebook(token) }
+    }
+    val facebookActivityLauncher = rememberLauncherForActivityResult(
+        contract = LoginManager.getInstance()
+            .createLogInActivityResultContract(facebookAuth.callbackManager),
+        onResult = {}
+    )
+    DisposableEffect(Unit) {
+        facebookAuth.registercallback()
+        onDispose { facebookAuth.unregistercallback() }
+    }
+
+    LaunchedEffect(Unit, key2 = state) {
+        viewModel.status.collect { currentState ->
+            when (currentState) {
+                is State.Success -> {
+                    navController.navigate("Home") {
+                        popUpTo("signup") { inclusive = true }
+                    }
+                }
+                is State.Fail -> {
+                    Toast.makeText(context, currentState.msg, Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
             }
-            is State.Fail -> {
-                Toast.makeText(context, (state as State.Fail).msg, Toast.LENGTH_SHORT).show()
-            }
-            else -> {}
         }
     }
 
@@ -72,9 +127,7 @@ fun SignUpScreen(
                 modifier = Modifier.weight(1f)
             )
             TextButton(
-                onClick = { navController.navigate("login"){
-                    popUpTo("signup") {inclusive= true  }
-                } },
+                onClick = { navController.navigate("login") },
                 modifier = Modifier
                     .background(Color(0xFF232832), CircleShape)
                     .padding(horizontal = 16.dp, vertical = 6.dp)
@@ -106,7 +159,7 @@ fun SignUpScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.chef),
-                    contentDescription = "Chef Illustration",
+                    contentDescription = stringResource(R.string.image_of_chef),
                     modifier = Modifier
                         .size(250.dp)
                         .padding(bottom = 16.dp)
@@ -134,14 +187,12 @@ fun SignUpScreen(
                     onValueChange = viewModel::onUsernameChange,
                     label = "Username"
                 )
-
                 CustomInputField(
                     value = email,
                     onValueChange = viewModel::onEmailChange,
                     label = "Email",
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
-
                 CustomInputField(
                     value = password,
                     onValueChange = viewModel::onPasswordChange,
@@ -153,16 +204,12 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = {
-                        viewModel.performSignUp()
-                    },
+                    onClick = { viewModel.performSignUp() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF00EDFF)
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00EDFF))
                 ) {
                     Text(
                         text = "Sign Up",
@@ -183,18 +230,92 @@ fun SignUpScreen(
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
 
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceEvenly
-//                ) {
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Google")
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Facebook")
-//                }
+                Row(
+                    Modifier.fillMaxWidth(),
+                    Arrangement.Center,
+                    Alignment.CenterVertically
+                ) {
+                    // Google Button (left)
+                    Button(
+                        onClick = {
+                            credentialScope.launch {
+                                try {
+                                    val googleIdOption = GetGoogleIdOption.Builder()
+                                        .setServerClientId(getString(context, R.string.default_web_client_id))
+                                        .setFilterByAuthorizedAccounts(false)
+                                        .build()
+                                    val request = GetCredentialRequest.Builder()
+                                        .addCredentialOption(googleIdOption)
+                                        .build()
+                                    val result = credentialManager.getCredential(context, request)
+                                    googleSignUp(result, viewModel)
+                                } catch (e: GetCredentialCancellationException) {
+                                    // user cancelled — do nothing
+                                } catch (e: NoCredentialException) {
+                                    Toast.makeText(context, "No Google account found on this device", Toast.LENGTH_SHORT).show()
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Google Sign Up Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        },
+                        content = {
+                            Row {
+                                Icon(
+                                    painter = painterResource(R.drawable.google_logo),
+                                    contentDescription = "Google Logo",
+                                    modifier = Modifier.padding(top = 6.dp, end = 15.dp)
+                                )
+                                Text(
+                                    text = "Google",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(start = 15.dp, end = 10.dp),
+                        border = BorderStroke(1.dp, color = Color.Gray),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Gray
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                    // Facebook Button (right)
+                    Button(
+                        onClick = {
+                            facebookActivityLauncher.launch(
+                                listOf("email", "public_profile")
+                            )
+                        },
+                        content = {
+                            Row {
+                                Icon(
+                                    painter = painterResource(R.drawable.facebook_logo),
+                                    contentDescription = "Facebook Logo",
+                                    modifier = Modifier.padding(top = 4.dp, end = 15.dp)
+                                )
+                                Text(
+                                    text = "Facebook",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(start = 10.dp),
+                        border = BorderStroke(1.dp, color = Color.Gray),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Gray
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 TextButton(
-                    onClick = {viewModel.LoginasgGuest()},
+                    onClick = { viewModel.signUpAsGuest() },
                     modifier = Modifier.padding(bottom = 8.dp)
                 ) {
                     Text(
@@ -220,7 +341,9 @@ fun CustomInputField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(label, color = Color.Gray, fontSize = 20.sp, fontWeight = FontWeight.SemiBold) },
+        placeholder = {
+            Text(label, color = Color.Gray, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
@@ -236,23 +359,4 @@ fun CustomInputField(
         keyboardOptions = keyboardOptions,
         textStyle = LocalTextStyle.current.copy(fontSize = 20.sp)
     )
-}
-
-@Composable
-fun SocialButton(iconId: Int, label: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .border(2.dp, Color.DarkGray, RoundedCornerShape(16.dp))
-            .padding(horizontal = 24.dp, vertical = 12.dp)
-    ) {
-        Image(
-            painter = painterResource(id = iconId),
-            contentDescription = label,
-            modifier = Modifier.size(24.dp),
-            colorFilter = ColorFilter.tint(Color.White)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = label, color = Color.Gray, fontSize = 16.sp)
-    }
 }

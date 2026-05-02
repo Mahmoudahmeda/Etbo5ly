@@ -10,15 +10,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.etbo5ly.RecipeDetailsScreen
 import com.example.etbo5ly.Search.MainSearch
 import com.example.etbo5ly.Search.SearchResult
+import com.example.etbo5ly.authentication.AuthenticationRepo
+import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
+import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
 import com.example.etbo5ly.authentication.signup.SignUpScreen
 import com.example.etbo5ly.authentication.signup.SignUpViewModel
-import com.example.etbo5ly.splash_screen.Food_factory
 import com.example.etbo5ly.dashboard_screen.DashboardScreen
-import com.example.etbo5ly.authentication.AuthenticationRepo
-import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
-import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
+import com.example.etbo5ly.splash_screen.Food_factory
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -30,7 +30,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
 
     val destination = when {
         code != null -> "resetPassword/$code"
-        repo.isLoggedIn() -> "home"
+        repo.isLoggedIn() -> "Home"
         else -> "login"
     }
     NavHost(
