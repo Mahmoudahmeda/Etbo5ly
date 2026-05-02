@@ -235,7 +235,6 @@ fun SignUpScreen(
                     Arrangement.Center,
                     Alignment.CenterVertically
                 ) {
-                    // Google Button (left)
                     Button(
                         onClick = {
                             credentialScope.launch {
@@ -250,7 +249,6 @@ fun SignUpScreen(
                                     val result = credentialManager.getCredential(context, request)
                                     googleSignUp(result, viewModel)
                                 } catch (e: GetCredentialCancellationException) {
-                                    // user cancelled — do nothing
                                 } catch (e: NoCredentialException) {
                                     Toast.makeText(context, "No Google account found on this device", Toast.LENGTH_SHORT).show()
                                 } catch (e: Exception) {
@@ -281,7 +279,7 @@ fun SignUpScreen(
                         shape = RoundedCornerShape(8.dp)
                     )
 
-                    // Facebook Button (right)
+
                     Button(
                         onClick = {
                             facebookActivityLauncher.launch(
