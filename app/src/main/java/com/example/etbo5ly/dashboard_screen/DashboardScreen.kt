@@ -11,9 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
@@ -103,7 +105,7 @@ fun DashboardScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = error ?: "Unknown error",
+                        text = error ?: stringResource(R.string.unknown_error),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -136,7 +138,7 @@ fun DashboardScreen(
                     item {
                         // Recipes Header
                         Text(
-                            text = "Recipes",
+                            text = stringResource(R.string.recipes),
                             color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(horizontal = 16.dp)

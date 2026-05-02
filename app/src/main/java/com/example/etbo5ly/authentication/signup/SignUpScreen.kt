@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,7 +66,7 @@ fun SignUpScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Account",
+                text = stringResource(R.string.account),
                 color = Color.White,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -78,7 +79,7 @@ fun SignUpScreen(
                     .padding(horizontal = 16.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = "Sign In",
+                    text = stringResource(R.string.sign_in),
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -104,20 +105,20 @@ fun SignUpScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.chef),
-                    contentDescription = "Chef Illustration",
+                    contentDescription = stringResource(R.string.chef_illustration),
                     modifier = Modifier
                         .size(250.dp)
                         .padding(bottom = 16.dp)
                 )
 
                 Text(
-                    text = "Welcome Chief !",
+                    text = stringResource(R.string.welcome_chief),
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.White
                 )
                 Text(
-                    text = "Discover your next favorite meal today",
+                    text = stringResource(R.string.discover_meal),
                     fontSize = 18.sp,
                     color = Color.Gray,
                     fontWeight = FontWeight.Medium,
@@ -130,20 +131,20 @@ fun SignUpScreen(
                 CustomInputField(
                     value = username,
                     onValueChange = viewModel::onUsernameChange,
-                    label = "Username"
+                    label = stringResource(R.string.username)
                 )
 
                 CustomInputField(
                     value = email,
                     onValueChange = viewModel::onEmailChange,
-                    label = "Email",
+                    label = stringResource(R.string.Email),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
 
                 CustomInputField(
                     value = password,
                     onValueChange = viewModel::onPasswordChange,
-                    label = "Password",
+                    label = stringResource(R.string.password),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
@@ -163,7 +164,7 @@ fun SignUpScreen(
                     )
                 ) {
                     Text(
-                        text = "Sign Up",
+                        text = stringResource(R.string.sign_up),
                         color = Color.Black,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Black
@@ -175,19 +176,11 @@ fun SignUpScreen(
                 Divider(color = Color.DarkGray)
 
                 Text(
-                    text = "OR CONTINUE WITH",
+                    text = stringResource(R.string.or_continue_with),
                     color = Color.Gray,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
-
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceEvenly
-//                ) {
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Google")
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Facebook")
-//                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -196,7 +189,7 @@ fun SignUpScreen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 ) {
                     Text(
-                        text = "Continue as Guest",
+                        text = stringResource(R.string.continue_as_guest),
                         color = Color(0xFF00BFCE),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp

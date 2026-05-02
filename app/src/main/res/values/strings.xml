@@ -9,4 +9,51 @@
     <string name="facebook_app_id">2996016137456438</string>
     <string name="fb_login_protocol_scheme">fb2996016137456438</string>
     <string name="facebook_client_token">8655e84b505c0468d3e4fd68501ea60c</string>
+
+    <!-- SignUpScreen -->
+    <string name="account">Account</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="welcome_chief">Welcome Chief !</string>
+    <string name="discover_meal">Discover your next favorite meal today</string>
+    <string name="username">Username</string>
+    <string name="or_continue_with">OR CONTINUE WITH</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="chef_illustration">Chef Illustration</string>
+
+    <!-- SigninScreen -->
+    <string name="signup">Signup</string>
+    <string name="forget_password">Forget Password ?</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="email_icon">Email icon</string>
+    <string name="password_field">Password Field</string>
+    <string name="google_logo">Google Logo</string>
+    <string name="facebook_logo">Facebook Logo</string>
+    <string name="continue_as_a_guest">Continue as a Guest</string>
+
+    <!-- EmailVerificationScreen -->
+    <string name="reset_password">Reset Password</string>
+    <string name="send_email">Send Email</string>
+    <string name="check_email_box">Check your Email Box</string>
+
+    <!-- ChangePasswordScreen -->
+    <string name="new_password">New Password</string>
+    <string name="change">Change</string>
+    <string name="password_updated">Password updated successfully!</string>
+
+    <!-- DashboardScreen -->
+    <string name="recipes">Recipes</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="hello_name">Hello %1$s 👋</string>
+    <string name="ready_to_cook">Ready to cook something delicious today?</string>
+    <string name="meal_of_the_day">Meal of the Day</string>
+    <string name="view_recipe">View Recipe</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- BottomNavBar -->
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="calendar">Calendar</string>
+    <string name="profile">Profile</string>
 </resources>

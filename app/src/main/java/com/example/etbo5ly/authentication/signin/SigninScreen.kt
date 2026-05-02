@@ -3,22 +3,15 @@ package com.example.etbo5ly.authentication.signin
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
-import com.example.etbo5ly.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -26,11 +19,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,13 +53,14 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
+import com.example.etbo5ly.authentication.State
 import com.example.etbo5ly.authentication.facebokk_login.facebook
 import com.example.etbo5ly.authentication.google_signin.google
 import com.facebook.login.LoginManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-import com.example.etbo5ly.authentication.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -112,12 +112,12 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
 
         TopAppBar(
             {
-                Text("Account", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.account), fontSize = 30.sp, fontWeight = FontWeight.Bold)
             },
             actions = {
                 Button(
                     { navController.navigate("signup") },
-                    content = { Text("Signup", fontSize = 15.sp, fontWeight = FontWeight.Bold) },
+                    content = { Text(stringResource(R.string.signup), fontSize = 15.sp, fontWeight = FontWeight.Bold) },
                     colors = buttoncolor
                 )
             }
@@ -161,7 +161,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Email,
-                    contentDescription = "Email icon",
+                    contentDescription = stringResource(R.string.email_icon),
                     tint = Color.Gray
                 )
             },
@@ -186,7 +186,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Password Field",
+                    contentDescription = stringResource(R.string.password_field),
                     tint = Color.Gray
                 )
             }
@@ -195,7 +195,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
 
         Button(
             { viewModel.LoginWithEmail(email, password) },
-            content = { Text("Sign In", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+            content = { Text(stringResource(R.string.sign_in), fontSize = 25.sp, fontWeight = FontWeight.Bold) },
             modifier = Modifier
                 .padding(
                     top = 7.dp,
@@ -210,7 +210,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
         TextButton(
             content = {
                 Text(
-                    text = "Forget Password ?",
+                    text = stringResource(R.string.forget_password),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.End,
@@ -236,7 +236,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             )
 
             Text(
-                "OR CONTINUE WITH",
+                stringResource(R.string.or_continue_with),
                 Modifier.padding(horizontal = 8.dp)
             )
 
@@ -271,11 +271,11 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     Row(Modifier) {
                         Icon(
                             painter = painterResource(R.drawable.google_logo),
-                            contentDescription = "Google Logo",
+                            contentDescription = stringResource(R.string.google_logo),
                             modifier = Modifier.padding(top = 6.dp, end = 15.dp)
                         )
                         Text(
-                            text = "Google",
+                            text = stringResource(R.string.google),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp
                         )
@@ -305,11 +305,11 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     Row(Modifier) {
                         Icon(
                             painter = painterResource(R.drawable.facebook_logo),
-                            contentDescription = "Facebook Logo",
+                            contentDescription = stringResource(R.string.facebook_logo),
                             modifier = Modifier.padding(top = 4.dp, end = 15.dp)
                         )
                         Text(
-                            text = "Facebook",
+                            text = stringResource(R.string.facebook),
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp
                         )
@@ -331,7 +331,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 TextButton(
                     content = {
                         Text(
-                            text = "Continue as a Guest",
+                            text = stringResource(R.string.continue_as_a_guest),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Cyan,

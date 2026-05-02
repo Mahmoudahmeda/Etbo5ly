@@ -1,10 +1,8 @@
 package com.example.etbo5ly.authentication.emailVerify
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.etbo5ly.R
 import com.example.etbo5ly.authentication.State
@@ -53,7 +50,7 @@ fun EmailVerificationScreen() {
         Log.d("Email","in launch State ${emailstate}")
         when(emailstate){
             is State.Success -> {
-                Toast.makeText(context,"Check your Email Box", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.check_email_box), Toast.LENGTH_SHORT).show()
                 Log.d("Email","in Slaunch State ${emailstate}")
             }
             is State.Fail-> {
@@ -68,7 +65,7 @@ fun EmailVerificationScreen() {
         TopAppBar(
             title = {
                 Text(
-                    "Reset Password",
+                    stringResource(R.string.reset_password),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 25.sp
                 )
@@ -92,7 +89,7 @@ fun EmailVerificationScreen() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,
-                            contentDescription = "Email icon",
+                            contentDescription = stringResource(R.string.email_icon),
                             tint = Color.Gray
                         )
                     },
@@ -100,7 +97,7 @@ fun EmailVerificationScreen() {
                 )
                 Button(
                     { emailVerify.sendEmail(email)},
-                    content = { Text("Send Email", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+                    content = { Text(stringResource(R.string.send_email), fontSize = 25.sp, fontWeight = FontWeight.Bold) },
                     modifier = Modifier
                         .padding(
                             top = 20.dp,
