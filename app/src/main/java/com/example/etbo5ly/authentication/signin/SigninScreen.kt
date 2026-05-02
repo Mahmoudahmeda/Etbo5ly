@@ -134,7 +134,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
         Text(
             stringResource(R.string.Signin_screen_text_1),
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Bold,   
             modifier = Modifier.padding(start = 130.dp, bottom = 5.dp)
         )
 

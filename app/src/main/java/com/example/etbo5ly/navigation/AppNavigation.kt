@@ -8,16 +8,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.etbo5ly.RecipeDetailsScreen
-import com.example.etbo5ly.Search.SearchScreen
+import com.example.etbo5ly.Search.MainSearch
+import com.example.etbo5ly.Search.SearchResult
+import com.example.etbo5ly.authentication.AuthenticationRepo
+import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
+import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
 import com.example.etbo5ly.authentication.signup.SignUpScreen
 import com.example.etbo5ly.authentication.signup.SignUpViewModel
-import com.example.etbo5ly.splash_screen.Food_factory
 import com.example.etbo5ly.dashboard_screen.DashboardScreen
-import com.example.etbo5ly.authentication.AuthenticationRepo
-import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
-import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
+import com.example.etbo5ly.splash_screen.Food_factory
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
@@ -29,7 +30,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
 
     val destination = when {
         code != null -> "resetPassword/$code"
-        repo.isLoggedIn() -> "home"
+        repo.isLoggedIn() -> "Home"
         else -> "login"
     }
     NavHost(
@@ -60,13 +61,22 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             RecipeDetailsScreen(navController, mealId)
         }
         composable("Search"){
-            SearchScreen(navController)
+            MainSearch(navController)
+        }
+        composable("Search/{filter}"){
+            val filter = it.arguments?.getString("filter") ?: "General"
+            MainSearch(navController, selectedfilter = filter)
+        }
+        composable("searchResult/{filterType}/{selectedItem}"){
+            val filterType = it.arguments?.getString("filterType")
+            val selectedItem = it.arguments?.getString("selectedItem")
+            SearchResult(navController, filterType, selectedItem)
         }
         composable("Calendar"){
-            SearchScreen(navController)
+            MainSearch(navController)
         }
         composable("Profile"){
-            SearchScreen(navController)
+            MainSearch(navController)
         }
     }
 }
