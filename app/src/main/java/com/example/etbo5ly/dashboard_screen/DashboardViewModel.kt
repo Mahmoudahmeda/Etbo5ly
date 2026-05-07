@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val repository: IMealRepository,
-    private val context: Context
+    context: Context
 ) : ViewModel() {
 
     private val favouritesDataStore = FavouritesDataStore(context)
@@ -96,12 +96,14 @@ class DashboardViewModel(
     fun getCategories() {
         viewModelScope.launch {
             try {
-                val response = ApiClient.mealApi.getCategories()
-                _categories.value = response.categories.map { dto ->
-                    Category(
-                        name = dto.strCategory,
-                        image = dto.strCategoryThumb
-                    )
+                val response = ApiClient.service.getCategories()
+                response.body()?.categories?.let{
+                    _categories.value = it.map { dto ->
+                        Category(
+                            name = dto.strCategory,
+                            image = dto.strCategoryThumb
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -4,17 +4,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.example.etbo5ly.settings.SettingsViewModel
+import com.example.etbo5ly.ui.theme.CardBottom
 
 @Composable
 fun DrawerContent(
@@ -22,6 +30,8 @@ fun DrawerContent(
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    val settingsViewModel: SettingsViewModel = viewModel()
+    val userPhotoUrl by settingsViewModel.userPhotoUrl.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -41,11 +51,16 @@ fun DrawerContent(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = userName.firstOrNull()?.uppercaseChar()?.toString() ?: "G",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
+            AsyncImage(
+                model = userPhotoUrl,
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .background(CardBottom),
+                contentScale = ContentScale.Crop,
+                error = rememberVectorPainter(Icons.Default.Person),
+                fallback = rememberVectorPainter(Icons.Default.Person)
             )
         }
 
@@ -76,7 +91,7 @@ fun DrawerContent(
 
         // Logout Item
         DrawerItem(
-            icon = Icons.Default.ExitToApp,
+            icon = Icons.AutoMirrored.Filled.ExitToApp,
             label = "Logout",
             tint = Color.Red,
             onClick = onLogoutClick

@@ -35,7 +35,7 @@ class AuthenticationRepo() {
         val email = user?.email?.takeIf { it.isNotBlank() } 
             ?: user?.providerData?.firstOrNull { !it.email.isNullOrBlank() }?.email
             
-        return if (email.isNullOrBlank()) "No Email" else email!!
+        return if (email.isNullOrBlank()) "No Email" else email
     }
 
     fun getCurrentUserName(): String {
@@ -43,7 +43,7 @@ class AuthenticationRepo() {
         val name = user?.displayName?.takeIf { it.isNotBlank() }
             ?: user?.providerData?.firstOrNull { !it.displayName.isNullOrBlank() }?.displayName
             
-        return if (name.isNullOrBlank()) "Guest" else name!!
+        return if (name.isNullOrBlank()) "Guest" else name
     }
 
     fun getCurrentUserPhotoUrl(): String? {
@@ -52,13 +52,9 @@ class AuthenticationRepo() {
             ?: user?.providerData?.firstOrNull { it.photoUrl != null }?.photoUrl?.toString()
     }
 
-    fun setCurrentUserPhotoUrl(url: String) {}
-
     fun signOut() {
         auth.signOut()
     }
-
-    val Username: String? = auth.currentUser?.displayName
     suspend fun EmailsignIn(email: String, pass: String): Boolean {
         return try {
             auth.signInWithEmailAndPassword(email, pass).await()
@@ -131,6 +127,15 @@ class AuthenticationRepo() {
             true
         } catch (e: Exception) {
             Log.e("AuthRepo", "SignUp failed: ${e.message}")
+            false
+        }
+    }
+    fun logout():Boolean{
+        return try {
+            auth.signOut()
+            true
+        }catch (e: Exception){
+            Log.d("Logout",e.printStackTrace().toString())
             false
         }
     }
