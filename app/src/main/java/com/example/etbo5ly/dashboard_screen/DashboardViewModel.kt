@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 class DashboardViewModel(
     private val repository: IMealRepository,
     private val calendarepo: CalendarRepository
+    context: Context,
+    private val isGuest: Boolean = false
 ) : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
@@ -42,11 +44,14 @@ class DashboardViewModel(
     private val _isLoggedOut = MutableStateFlow(false)
     val isLoggedOut: StateFlow<Boolean> = _isLoggedOut
 
+    private val _showGuestFavouriteDialog = MutableStateFlow(false)
+    val showGuestFavouriteDialog: StateFlow<Boolean> = _showGuestFavouriteDialog
+
     init {
         getRandomMeal()
         getRecipes()
         getCategories()
-        loadFavouriteIds()
+        if (!isGuest) loadFavouriteIds()
     }
 
     fun getRandomMeal() {
@@ -113,11 +118,22 @@ class DashboardViewModel(
         viewModelScope.launch {
             auth.currentUser?.let { calendarepo.getFavorites(it.uid) }?.collect { favorites ->
                 _favouriteIds.value = favorites.map { it.recipeId }.toSet()
+            favouritesDataStore.favouriteMeals.collect { jsonSet ->
+                _favouriteIds.value = jsonSet.mapNotNull { json ->
+                    runCatching {
+                        Gson().fromJson(json, Meal::class.java).idMeal
+                    }.getOrNull()
+                }.toSet()
             }
         }
     }
 
     fun onFavoriteClick(meal: MealX) {
+    fun onFavoriteClick(meal: Meal) {
+        if (isGuest) {
+            _showGuestFavouriteDialog.value = true
+            return
+        }
         viewModelScope.launch {
             if (_favouriteIds.value.contains(meal.idMeal)) {
                 auth.currentUser?.let { calendarepo.deleteFavorite(it.uid, meal.idMeal) }
@@ -136,6 +152,21 @@ class DashboardViewModel(
                 )) }
             }
         }
+    }
+
+    fun showGuestDialog() {
+        _showGuestFavouriteDialog.value = true
+    }
+
+    fun dismissGuestFavouriteDialog() {
+        _showGuestFavouriteDialog.value = false
+    }
+
+    fun retry() {
+        _error.value = null
+        getRandomMeal()
+        getRecipes()
+        getCategories()
     }
 
     fun logout() {
