@@ -48,7 +48,6 @@ import coil.compose.AsyncImage
 import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.local.entities.CalendarEntity
 import com.example.etbo5ly.data.repository.CalendarRepository
-import com.example.etbo5ly.data.repository.MealRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

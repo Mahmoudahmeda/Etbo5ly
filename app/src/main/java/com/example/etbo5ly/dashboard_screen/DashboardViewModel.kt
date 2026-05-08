@@ -3,16 +3,13 @@ package com.example.etbo5ly.dashboard_screen
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.data.dto.MealX
-import com.example.etbo5ly.data.local.FavouritesDataStore
 import com.example.etbo5ly.data.local.entities.FavoriteEntity
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.repository.CalendarRepository
 import com.example.etbo5ly.data.repository.IMealRepository
 import com.example.etbo5ly.ui.categories.Category
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,11 +17,9 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val repository: IMealRepository,
-    private val calendarepo: CalendarRepository,
-    context: Context
+    private val calendarepo: CalendarRepository
 ) : ViewModel() {
 
-    private val favouritesDataStore = FavouritesDataStore(context)
     private val auth = FirebaseAuth.getInstance()
 
     private val _meal = MutableStateFlow<MealX?>(null)

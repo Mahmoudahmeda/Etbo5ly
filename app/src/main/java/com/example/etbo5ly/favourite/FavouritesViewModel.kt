@@ -4,14 +4,11 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.data.local.FavouritesDataStore
 import com.example.etbo5ly.data.repository.CalendarRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class FavouritesViewModel(
@@ -20,7 +17,6 @@ class FavouritesViewModel(
 ) : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
-    private val dataStore = FavouritesDataStore(context)
     private val _favourites = MutableStateFlow<List<MealX>>(emptyList())
     val favourites = _favourites
 

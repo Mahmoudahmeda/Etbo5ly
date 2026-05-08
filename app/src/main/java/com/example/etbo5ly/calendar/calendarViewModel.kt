@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.local.entities.CalendarEntity
 import com.example.etbo5ly.data.repository.CalendarRepository
-import com.example.etbo5ly.data.repository.MealRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

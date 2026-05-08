@@ -1,34 +1,24 @@
 package com.example.etbo5ly.Details
 
 import android.app.Application
-import android.content.Intent
-import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.MealDetails
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.etbo5ly.data.dto.MealX
-import com.example.etbo5ly.data.local.Etbo5lyDataBase
-import com.example.etbo5ly.data.local.MealDao
 import com.example.etbo5ly.data.local.entities.CalendarEntity
 import com.example.etbo5ly.data.local.entities.FavoriteEntity
-import com.example.etbo5ly.data.repository.CalendarRepo
 import com.example.etbo5ly.data.repository.CalendarRepository
-import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.notifications.MealNotificationWorker
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.TimeUnit
-import kotlin.jvm.java
 
 class detailsScreenViewModel(
     application: Application,

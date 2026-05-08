@@ -16,7 +16,6 @@ import androidx.navigation.NavController
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.DrawerContent
-import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
 import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.network.ApiClient
