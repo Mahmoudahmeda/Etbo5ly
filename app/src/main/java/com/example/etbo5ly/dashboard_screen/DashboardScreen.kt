@@ -9,8 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.etbo5ly.authentication.AuthenticationRepo
@@ -22,26 +25,31 @@ import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
 import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.ui.categories.CategoriesSection
+import com.example.etbo5ly.ui.components.NoInternetScreen
 import com.example.etbo5ly.ui.dashboard.BottomNavBar
+import com.example.etbo5ly.utils.isInternetAvailable
+import com.example.etbo5ly.utils.observeNetworkConnectivity
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    userName: String = "Guest",
-    navController: NavController
+    navController: NavController,
+    isGuest: Boolean = false
 ) {
     val context = LocalContext.current
 
-    // Networking Setup
+    val isOnline by observeNetworkConnectivity(context)
+        .collectAsState(initial = isInternetAvailable(context))
+
     val apiService = ApiClient.service
     val remoteDataSource = RemoteDataSource(apiService)
     val repository = MealRepository(remoteDataSource)
     val authRepo = AuthenticationRepo()
 
     val viewModel: DashboardViewModel = viewModel(
-        factory = DashboardViewModelFactory(repository, context)
+        factory = DashboardViewModelFactory(repository, context, isGuest)
     )
 
     val meal by viewModel.meal.collectAsState()
@@ -51,23 +59,76 @@ fun DashboardScreen(
     val categories by viewModel.categories.collectAsState()
     val favouriteIds by viewModel.favouriteIds.collectAsState()
     val isLoggedOut by viewModel.isLoggedOut.collectAsState()
+    val showGuestFavouriteDialog by viewModel.showGuestFavouriteDialog.collectAsState()
 
-    // Drawer state
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    // Navbar state
     var selectedNavItem by remember { mutableStateOf("Home") }
     var userName by remember { mutableStateOf("Guest") }
-    authRepo.getCurrentUserName().also { userName = it }
+
+    if (!isGuest) {
+        authRepo.getCurrentUserName().also { userName = it }
+    }
+
+    // Auto retry when internet comes back
+    LaunchedEffect(isOnline) {
+        if (isOnline && (meal == null || recipes.isEmpty())) {
+            viewModel.retry()
+        }
+    }
 
     // Handle logout navigation
     LaunchedEffect(isLoggedOut) {
         if (isLoggedOut) {
             navController.navigate("login") {
-                popUpTo("home") { inclusive = true }
+                popUpTo("home?isGuest=false") { inclusive = true }
             }
         }
+    }
+
+    // Guest favourite dialog
+    if (showGuestFavouriteDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissGuestFavouriteDialog() },
+            containerColor = Color(0xFF1E2228),
+            title = {
+                Text(
+                    text = "Login Required",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            },
+            text = {
+                Text(
+                    text = "You need to login or signup to add recipes to your favourites.",
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissGuestFavouriteDialog()
+                        navController.navigate("login") {
+                            popUpTo("home?isGuest=true") { inclusive = true }
+                        }
+                    }
+                ) {
+                    Text(
+                        text = "Login",
+                        color = Color.Cyan,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.dismissGuestFavouriteDialog() }) {
+                    Text(text = "Cancel", color = Color.Gray)
+                }
+            }
+        )
     }
 
     ModalNavigationDrawer(
@@ -77,11 +138,23 @@ fun DashboardScreen(
                 userName = userName,
                 onProfileClick = {
                     scope.launch { drawerState.close() }
-                    navController.navigate("Profile")
+                    if (isGuest) {
+                        navController.navigate("login") {
+                            popUpTo("home?isGuest=true") { inclusive = true }
+                        }
+                    } else {
+                        navController.navigate("Profile")
+                    }
                 },
                 onLogoutClick = {
                     scope.launch { drawerState.close() }
-                    viewModel.logout()
+                    if (isGuest) {
+                        navController.navigate("login") {
+                            popUpTo("home?isGuest=true") { inclusive = true }
+                        }
+                    } else {
+                        viewModel.logout()
+                    }
                 }
             )
         }
@@ -89,31 +162,35 @@ fun DashboardScreen(
         Scaffold(
             modifier = modifier.fillMaxSize(),
             topBar = {
-                // Top App Bar
                 DashboardAppBarComponent(
                     name = userName,
-                    onMenuClick = {
-                        scope.launch { drawerState.open() }
-                    },
+                    onMenuClick = { scope.launch { drawerState.open() } },
                     onFavouriteClick = {
-                        navController.navigate("Favourite")
+                        if (isGuest) {
+                            viewModel.showGuestDialog()
+                        } else {
+                            navController.navigate("Favourite")
+                        }
                     }
                 )
             },
             bottomBar = {
-                // Bottom Navigation Bar
                 BottomNavBar(
                     selectedItem = selectedNavItem,
                     onItemClick = { selectedNavItem = it },
-                    navController= navController
+                    navController = navController
                 )
             }
         ) { innerPadding ->
 
-            when {
+            // Show no internet animation when offline
+            if (!isOnline) {
+                NoInternetScreen()
+                return@Scaffold
+            }
 
+            when {
                 isLoading && meal == null && recipes.isEmpty() -> {
-                    // Loading Indicator
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -124,8 +201,8 @@ fun DashboardScreen(
                     }
                 }
 
-                error != null -> {
-                    // Error Message
+                // Only show error when online
+                error != null && isOnline -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -146,10 +223,11 @@ fun DashboardScreen(
                             .padding(innerPadding)
                     ) {
                         item {
-                            // Meal of the Day Card
                             meal?.let { currentMeal ->
                                 MealOfDayCard(
-                                    onClick = { navController.navigate("details/${currentMeal.idMeal}") },
+                                    onClick = {
+                                        navController.navigate("details/${currentMeal.idMeal}")
+                                    },
                                     meal = currentMeal,
                                     modifier = Modifier
                                 )
@@ -157,7 +235,6 @@ fun DashboardScreen(
                         }
 
                         item {
-                            // Categories Section
                             Spacer(modifier = Modifier.height(12.dp))
                             CategoriesSection(
                                 categories,
@@ -167,7 +244,6 @@ fun DashboardScreen(
                         }
 
                         item {
-                            // Recipes Header
                             Text(
                                 text = "Recipes",
                                 color = MaterialTheme.colorScheme.onBackground,
@@ -178,20 +254,26 @@ fun DashboardScreen(
                         }
 
                         items(recipes) { recipe ->
-                            // Recipe Card
                             RecipeCard(
                                 onFavClick = {
                                     viewModel.onFavoriteClick(recipe)
-                                    val message = if (favouriteIds.contains(recipe.idMeal))
-                                        "Removed from favourites"
-                                    else
-                                        "Added to favourites"
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    if (!isGuest) {
+                                        val message =
+                                            if (favouriteIds.contains(recipe.idMeal))
+                                                "Removed from favourites"
+                                            else
+                                                "Added to favourites"
+                                        Toast.makeText(
+                                            context,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 },
                                 isFavorite = favouriteIds.contains(recipe.idMeal),
                                 modifier = Modifier,
                                 meal = recipe,
-                                navController= navController
+                                navController = navController
                             )
                         }
 

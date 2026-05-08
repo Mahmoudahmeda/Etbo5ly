@@ -4,27 +4,29 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.etbo5ly.RecipeDetailsScreen
 import com.example.etbo5ly.Search.MainSearch
 import com.example.etbo5ly.Search.SearchResult
+import com.example.etbo5ly.authentication.AuthenticationRepo
+import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
+import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
 import com.example.etbo5ly.authentication.signin.Signin
 import com.example.etbo5ly.authentication.signin.Signin_screen
 import com.example.etbo5ly.authentication.signup.SignUpScreen
 import com.example.etbo5ly.authentication.signup.SignUpViewModel
-import com.example.etbo5ly.splash_screen.Food_factory
 import com.example.etbo5ly.dashboard_screen.DashboardScreen
-import com.example.etbo5ly.authentication.AuthenticationRepo
-import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
-import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
 import com.example.etbo5ly.favourite.FavouritesScreen
 import com.example.etbo5ly.settings.SettingsScreen
+import com.example.etbo5ly.splash_screen.Food_factory
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
-fun AppNavigation(modifier: Modifier,intent: Intent){
+fun AppNavigation(modifier: Modifier, intent: Intent) {
     val navController = rememberNavController()
     val repo = AuthenticationRepo()
     val data = intent.data
@@ -32,55 +34,68 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
 
     val destination = when {
         code != null -> "resetPassword/$code"
-        repo.isLoggedIn() -> "home"
+        repo.isLoggedIn() -> "home?isGuest=false"
         else -> "login"
     }
+
     NavHost(
         navController = navController,
         startDestination = "splash"
     ) {
-        composable("splash"){
-            Food_factory(modifier,navController,destination)
+        composable("splash") {
+            Food_factory(modifier, navController, destination)
         }
-        composable("login"){
+        composable("login") {
             Signin_screen(Signin(), navController)
         }
-        composable("signup"){
-            SignUpScreen(SignUpViewModel(),navController)
+        composable("signup") {
+            SignUpScreen(SignUpViewModel(), navController)
         }
-        composable("Home"){
-            DashboardScreen(navController = navController)
+        composable(
+            route = "home?isGuest={isGuest}",
+            arguments = listOf(
+                navArgument("isGuest") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                }
+            )
+        ) { backStack ->
+            val isGuest = backStack.arguments?.getBoolean("isGuest") ?: false
+            DashboardScreen(
+                navController = navController,
+                isGuest = isGuest
+            )
         }
-        composable("emailscreen"){
+        composable("emailscreen") {
             EmailVerificationScreen()
         }
         composable("resetPassword/{Code}") { backStack ->
             val oobCode = backStack.arguments?.getString("Code")
             ChangePasswordScreen(navController, oobCode)
         }
-        composable("details/{Id}") { id ->
-            val mealId = id.arguments?.getString("Id")
+        composable("details/{Id}") { backStack ->
+            val mealId = backStack.arguments?.getString("Id")
             RecipeDetailsScreen(navController, mealId)
         }
-        composable("Search"){
+        composable("Search") {
             MainSearch(navController)
         }
-        composable("Search/{filter}"){
-            val filter = it.arguments?.getString("filter") ?: "General"
+        composable("Search/{filter}") { backStack ->
+            val filter = backStack.arguments?.getString("filter") ?: "General"
             MainSearch(navController, selectedfilter = filter)
         }
-        composable("searchResult/{filterType}/{selectedItem}"){
-            val filterType = it.arguments?.getString("filterType")
-            val selectedItem = it.arguments?.getString("selectedItem")
+        composable("searchResult/{filterType}/{selectedItem}") { backStack ->
+            val filterType = backStack.arguments?.getString("filterType")
+            val selectedItem = backStack.arguments?.getString("selectedItem")
             SearchResult(navController, filterType, selectedItem)
         }
-        composable("Calendar"){
+        composable("Calendar") {
             MainSearch(navController)
         }
-        composable("Profile"){
+        composable("Profile") {
             SettingsScreen(navController)
         }
-        composable("Favourite"){
+        composable("Favourite") {
             FavouritesScreen(navController)
         }
     }

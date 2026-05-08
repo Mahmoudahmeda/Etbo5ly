@@ -93,13 +93,23 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             .createLogInActivityResultContract(facebookAuth.callbackManager)){}
     val scroll = rememberScrollState()
 
-    LaunchedEffect(Unit, key2 = loginstate) {
-        viewModel.status.collect { state ->
-            if (state is State.Success || FirebaseAuth.getInstance().currentUser != null) {
-                navController.navigate("home") {
-                    popUpTo("login") { inclusive = true }
+    LaunchedEffect(loginstate) {
+        when (loginstate) {
+            is State.Guest -> {
+                navController.navigate("home?isGuest=true") {
+                    popUpTo("login") {
+                        inclusive = true
+                    }
                 }
             }
+            is State.Success -> {
+                navController.navigate("home?isGuest=false") {
+                    popUpTo("login") {
+                        inclusive = true
+                    }
+                }
+            }
+            else -> {}
         }
     }
     DisposableEffect(Unit) {

@@ -7,11 +7,12 @@ import com.example.etbo5ly.data.repository.IMealRepository
 
 class DashboardViewModelFactory(
     private val repository: IMealRepository,
-    private val context: Context
+    private val context: Context,
+    private val isGuest: Boolean = false
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
-            return DashboardViewModel(repository, context) as T
+            return DashboardViewModel(repository, context, isGuest) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

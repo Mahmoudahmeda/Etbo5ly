@@ -17,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val repository: IMealRepository,
-    context: Context
+    context: Context,
+    private val isGuest: Boolean = false
 ) : ViewModel() {
 
     private val favouritesDataStore = FavouritesDataStore(context)
@@ -44,11 +45,14 @@ class DashboardViewModel(
     private val _isLoggedOut = MutableStateFlow(false)
     val isLoggedOut: StateFlow<Boolean> = _isLoggedOut
 
+    private val _showGuestFavouriteDialog = MutableStateFlow(false)
+    val showGuestFavouriteDialog: StateFlow<Boolean> = _showGuestFavouriteDialog
+
     init {
         getRandomMeal()
         getRecipes()
         getCategories()
-        loadFavouriteIds()
+        if (!isGuest) loadFavouriteIds()
     }
 
     fun getRandomMeal() {
@@ -97,8 +101,8 @@ class DashboardViewModel(
         viewModelScope.launch {
             try {
                 val response = ApiClient.service.getCategories()
-                response.body()?.categories?.let{
-                    _categories.value = it.map { dto ->
+                response.body()?.categories?.let { list ->
+                    _categories.value = list.map { dto ->
                         Category(
                             name = dto.strCategory,
                             image = dto.strCategoryThumb
@@ -114,14 +118,20 @@ class DashboardViewModel(
     private fun loadFavouriteIds() {
         viewModelScope.launch {
             favouritesDataStore.favouriteMeals.collect { jsonSet ->
-                _favouriteIds.value = jsonSet.map { json ->
-                    Gson().fromJson(json, Meal::class.java).idMeal
+                _favouriteIds.value = jsonSet.mapNotNull { json ->
+                    runCatching {
+                        Gson().fromJson(json, Meal::class.java).idMeal
+                    }.getOrNull()
                 }.toSet()
             }
         }
     }
 
     fun onFavoriteClick(meal: Meal) {
+        if (isGuest) {
+            _showGuestFavouriteDialog.value = true
+            return
+        }
         viewModelScope.launch {
             if (_favouriteIds.value.contains(meal.idMeal)) {
                 favouritesDataStore.removeFavourite(meal)
@@ -129,6 +139,21 @@ class DashboardViewModel(
                 favouritesDataStore.addFavourite(meal)
             }
         }
+    }
+
+    fun showGuestDialog() {
+        _showGuestFavouriteDialog.value = true
+    }
+
+    fun dismissGuestFavouriteDialog() {
+        _showGuestFavouriteDialog.value = false
+    }
+
+    fun retry() {
+        _error.value = null
+        getRandomMeal()
+        getRecipes()
+        getCategories()
     }
 
     fun logout() {

@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,9 +45,12 @@ import com.example.etbo5ly.Search.components.IngredientCard
 import com.example.etbo5ly.Search.components.ResponseMealCard
 import com.example.etbo5ly.Search.components.SearchGrid
 import com.example.etbo5ly.ui.components.Etbo5lyAppBar
+import com.example.etbo5ly.ui.components.NoInternetScreen
 import com.example.etbo5ly.ui.theme.AppBarColor
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
+import com.example.etbo5ly.utils.isInternetAvailable
 import kotlinx.coroutines.delay
+import com.example.etbo5ly.utils.observeNetworkConnectivity
 
 data class FilterOption(val name: String, val icon: ImageVector)
 
@@ -56,10 +60,13 @@ fun MainSearch(
     viewModel: Search = viewModel(),
     selectedfilter: String = "General"
 ) {
+    val context = LocalContext.current
+    val isOnline by observeNetworkConnectivity(context)
+        .collectAsState(initial = isInternetAvailable(context))
+
     val searchQ by viewModel.searchQ.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
-    
     val categories by viewModel.categories.collectAsState()
     val areas by viewModel.areas.collectAsState()
     val ingredients by viewModel.ingredients.collectAsState()
@@ -72,7 +79,7 @@ fun MainSearch(
         FilterOption("Ingredients", Icons.Outlined.Egg)
     )
 
-    LaunchedEffect(selectedFilter,searchQ) {
+    LaunchedEffect(selectedFilter, searchQ) {
         when (selectedFilter) {
             "Categories" -> viewModel.fetchCategories()
             "Countries" -> viewModel.fetchAreas()
@@ -91,12 +98,18 @@ fun MainSearch(
             Etbo5lyAppBar(navController = navController, text = "Search")
         }
     ) { paddingValues ->
+
+        // Show no internet screen if offline
+        if (!isOnline) {
+            NoInternetScreen()
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(top = 16.dp)
         ) {
-            // 1. Custom Search Bar
             TextField(
                 value = searchQ,
                 onValueChange = { viewModel.onSearchQueryChange(it) },
@@ -105,7 +118,9 @@ fun MainSearch(
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 placeholder = { Text("What are you Looking For ?", color = Color.Gray) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray) },
+                leadingIcon = {
+                    Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
+                },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color(0xFF1C1C1E),
                     unfocusedContainerColor = Color(0xFF1C1C1E),
@@ -116,7 +131,6 @@ fun MainSearch(
                 singleLine = true
             )
 
-            // 2. Filter Buttons Row
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -128,7 +142,7 @@ fun MainSearch(
                     FilterButton(
                         option = filter,
                         isSelected = isSelected,
-                        onClick = { 
+                        onClick = {
                             selectedFilter = if (isSelected) "General" else filter.name
                         },
                         modifier = Modifier.weight(1f)
@@ -136,10 +150,12 @@ fun MainSearch(
                 }
             }
 
-            // 3. Conditional Content: Loading, Error, or Grid
             Box(modifier = Modifier.weight(1f)) {
                 if (error != null) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
                             text = error ?: "An error occurred",
                             color = Color.Gray,
@@ -148,10 +164,11 @@ fun MainSearch(
                         )
                     }
                 } else {
-                    // Dynamic Grid based on Selection with Local Filtering
                     when (selectedFilter) {
                         "Categories" -> {
-                            val filteredList = categories.filter { it.strCategory.contains(searchQ, ignoreCase = true) }
+                            val filteredList = categories.filter {
+                                it.strCategory.contains(searchQ, ignoreCase = true)
+                            }
                             if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
                                 EmptyState(searchQ)
                             } else {
@@ -163,7 +180,9 @@ fun MainSearch(
                             }
                         }
                         "Countries" -> {
-                            val filteredList = areas.filter { it.strArea.contains(searchQ, ignoreCase = true) }
+                            val filteredList = areas.filter {
+                                it.strArea.contains(searchQ, ignoreCase = true)
+                            }
                             if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
                                 EmptyState(searchQ)
                             } else {
@@ -175,7 +194,9 @@ fun MainSearch(
                             }
                         }
                         "Ingredients" -> {
-                            val filteredList = ingredients.filter { it.strIngredient.contains(searchQ, ignoreCase = true) }
+                            val filteredList = ingredients.filter {
+                                it.strIngredient.contains(searchQ, ignoreCase = true)
+                            }
                             if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
                                 EmptyState(searchQ)
                             } else {
@@ -188,7 +209,10 @@ fun MainSearch(
                         }
                         "General" -> {
                             if (isLoading) {
-                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
                                     CircularProgressIndicator(color = AppBarColor)
                                 }
                             } else if (general.isEmpty() && searchQ.isNotEmpty()) {
