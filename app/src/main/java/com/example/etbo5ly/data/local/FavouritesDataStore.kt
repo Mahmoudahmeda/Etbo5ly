@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.data.dto.MealX
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,11 +30,11 @@ class FavouritesDataStore(private val context: Context) {
         }
     }
 
-    suspend fun removeFavourite(meal: Meal) {
+    suspend fun removeFavourite(meal: MealX) {
         context.dataStore.edit { preferences ->
             val current = preferences[FAVOURITES_KEY] ?: emptySet()
             preferences[FAVOURITES_KEY] = current.filter { json ->
-                val saved = gson.fromJson(json, Meal::class.java)
+                val saved = gson.fromJson(json, MealX::class.java)
                 saved.idMeal != meal.idMeal
             }.toSet()
         }

@@ -1,6 +1,7 @@
 package com.example.etbo5ly
 
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,6 +32,18 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.example.etbo5ly.data.dto.MealX
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.etbo5ly.Details.DetailsViewModelFactory
+import com.example.etbo5ly.calendar.CalendarViewModel
+import com.example.etbo5ly.calendar.CalendarViewModelFactory
+import com.example.etbo5ly.data.local.Etbo5lyDataBase
+import com.example.etbo5ly.data.repository.CalendarRepository
+import java.util.Calendar
 
 // Inter font sizes — all in range 14-22sp
 private val TitleSize = 22.sp
@@ -42,14 +55,26 @@ private val SmallSize = 14.sp
 @Composable
 fun RecipeDetailsScreen(
     navController: NavController,
-    recipeId: String?,
-    viewmodel: detailsScreenViewModel = viewModel()
+    recipeId: String?
 ) {
-    val mealData by viewmodel.meal.collectAsState()
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+    val database = remember { Etbo5lyDataBase.getDataBase(context) }
+    val repository = remember { CalendarRepository(database.mealDao()) }
 
+    // Create the ViewModel with the factory to avoid RuntimeException
+    val viewmodel: detailsScreenViewModel = viewModel(
+        factory = DetailsViewModelFactory(application = application,repo=repository)
+    )
+    val mealData by viewmodel.meal.collectAsState()
 
     // Instructions expand/collapse state
     var instructionsExpanded by remember { mutableStateOf(false) }
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+    val favouriteIds by viewmodel.favouriteIds.collectAsState()
+
 
     LaunchedEffect(recipeId) {
         viewmodel.getMeal(recipeId)
@@ -115,15 +140,36 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // ── Meal Name ───────────────────────────────────────────
-                Text(
-                    text = meal.strMeal,
-                    color = Color.White,
-                    fontSize = TitleSize,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-
+                // ── Meal Name & Add to Plan ─────────────────────────────
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = meal.strMeal,
+                        color = Color.White,
+                        fontSize = TitleSize,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    AddToFavoriteSection(
+                        meal,
+                        onFavClick = {
+                            viewmodel.onFavoriteClick(meal)
+                            val message = if (favouriteIds.contains(meal.idMeal))
+                                "Removed from favourites"
+                            else
+                                "Added to favourites"
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        },
+                        isFavorite = favouriteIds.contains(meal.idMeal)
+                    )
+                    AddToCalendarSection(meal, viewModel = viewmodel){ selectedTimestamp ->
+                        viewmodel.scheduleMealNotification(meal.strMeal, selectedTimestamp)
+                        viewmodel.addToCalendar(meal, selectedTimestamp)
+                    }
+                }
+                
                 Spacer(Modifier.height(8.dp))
 
                 // ── Category + Area Tags ────────────────────────────────
@@ -229,7 +275,14 @@ fun RecipeDetailsScreen(
 
                 // ── Watch Recipe / YouTube ──────────────────────────────
                 if (!meal.strYoutube.isNullOrBlank()) {
-//                    val videoId = viewmodel.getVideoId(meal.strYoutube)
+                    Text(
+                        text = "Watch Tutorial",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = SectionSize,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                    Spacer(Modifier.height(12.dp))
                     YoutubePlayer(meal.strYoutube)
                 }
                 Spacer(Modifier.height(32.dp))
@@ -304,9 +357,12 @@ private fun TagChip(label: String,navController: NavController,meal: MealX) {
 
 @Composable
 fun YoutubePlayer(videoUrl: String) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val videoId = remember(videoUrl) {
         if (videoUrl.contains("v=")) {
             videoUrl.split("v=")[1].split("&")[0]
+        } else if (videoUrl.contains("youtu.be/")) {
+            videoUrl.split("/").last().split("?")[0]
         } else {
             videoUrl.split("/").last()
         }
@@ -315,16 +371,105 @@ fun YoutubePlayer(videoUrl: String) {
     AndroidView(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .height(220.dp)
             .clip(RoundedCornerShape(16.dp)),
         factory = { context ->
             YouTubePlayerView(context).apply {
+                lifecycleOwner.lifecycle.addObserver(this)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         youTubePlayer.cueVideo(videoId, 0f)
                     }
                 })
             }
+        },
+        onRelease = {
+            it.release()
         }
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddToCalendarSection(
+    recipe: MealX,
+    viewModel: detailsScreenViewModel,
+    onAddClicked: (Long) -> Unit
+) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
+    val timePickerState = rememberTimePickerState()
+    val datePickerState = rememberDatePickerState()
+
+    // 1. The Add Button
+    IconButton(
+        onClick = { showDatePicker = true },
+        modifier = Modifier.padding(10.dp),
+        colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF00BCD4)), // Cyan/Teal
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Icon(Icons.Default.DateRange, contentDescription = "Calendar")
+    }
+
+    // 2. The Material 3 Date Picker Dialog
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDatePicker = false
+                    showTimePicker = true
+                }) { Text("Next") }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+    if (showTimePicker) {
+        TimePickerDialog(
+            onDismissRequest = { showTimePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    val calendar = Calendar.getInstance()
+                    // Set Date first
+                    datePickerState.selectedDateMillis?.let {
+                        calendar.timeInMillis = it
+                    }
+                    // Immediately override with local time to fix the "3 AM" bug
+                    calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                    calendar.set(Calendar.MINUTE, timePickerState.minute)
+                    calendar.set(Calendar.SECOND, 0)
+                        // ONLY CALL THESE HERE (Once both Date and Time are ready)
+                    val finalTimestamp = calendar.timeInMillis
+                    viewModel.addToCalendar(recipe, finalTimestamp)
+                    viewModel.scheduleMealNotification(recipe.strMeal, finalTimestamp)
+                    showTimePicker = false
+                }) { Text("Schedule") } },
+            { Text("Schedule") }
+        ) { TimePicker(state = timePickerState) }
+    }
+}
+@Composable
+fun AddToFavoriteSection(
+    recipe: MealX,
+    onFavClick : ()-> Unit,
+    isFavorite : Boolean
+) {
+    // 1. The Add Button
+    IconButton(
+        onClick = {
+            onFavClick()
+        },
+        modifier = Modifier.padding(10.dp),
+        colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF00BCD4)), // Cyan/Teal
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Icon(
+            imageVector = if (isFavorite) Icons.Filled.Favorite
+            else Icons.Outlined.FavoriteBorder,
+            contentDescription = "Favorite",
+            tint = if (isFavorite) Color.Red else Color.White
+        )
+    }
+}
+

@@ -3,14 +3,16 @@ package com.example.etbo5ly.authentication.changePassword
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -24,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -65,10 +68,16 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             else -> {}
         }
     }
-    Column() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         TopAppBar(
-            { Text("New Password") }
+            title = { Text("New Password") }
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         TextField(
             value = password,
             onValueChange = { password = it },
@@ -79,7 +88,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 focusedIndicatorColor = Color.Transparent
             ),
             modifier = Modifier
-                .padding(start = 50.dp, top = 7.dp, end = 30.dp, bottom = 5.dp)
+                .padding(horizontal = 40.dp, vertical = 8.dp)
                 .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             leadingIcon = {
@@ -101,7 +110,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 focusedIndicatorColor = Color.Transparent
             ),
             modifier = Modifier
-                .padding(start = 50.dp, top = 7.dp, end = 30.dp, bottom = 5.dp)
+                .padding(horizontal = 40.dp, vertical = 8.dp)
                 .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
             leadingIcon = {
@@ -113,22 +122,21 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             }
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+
         Button(
-            { changePass.changePassword(code,password,repassword) },
-            content = { Text("Change", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+            onClick = { changePass.changePassword(code, password, repassword) },
             modifier = Modifier
-                .padding(
-                    top = 7.dp,
-                    start = 50.dp,
-                    end = 30.dp
-                )
+                .padding(horizontal = 40.dp)
                 .fillMaxWidth()
-                .size(50.dp),
-            colors = ButtonColors(Color.Cyan,
-                Color.Black,
-                Color.Cyan,
-                Color.Gray
-            )
-        )
+                .height(56.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Cyan,
+                contentColor = Color.Black
+            ),
+            shape = RoundedCornerShape(25.dp)
+        ) {
+            Text("Change", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
     }
 }

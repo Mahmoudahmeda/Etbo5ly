@@ -28,10 +28,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
+fun MealOfDayCard(onClick: ()-> Unit, meal: MealX, modifier: Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

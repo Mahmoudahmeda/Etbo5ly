@@ -21,21 +21,25 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.data.dto.MealX
+import com.example.etbo5ly.data.local.Etbo5lyDataBase
+import com.example.etbo5ly.data.repository.CalendarRepository
 
 @Composable
 fun FavouritesScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    val database = remember { Etbo5lyDataBase.getDataBase(context) }
+    val calendarRepo = CalendarRepository(database.mealDao())
     val viewModel: FavouritesViewModel = viewModel(
-        factory = FavouritesViewModelFactory(context)
+        factory = FavouritesViewModelFactory(context, calendarRepo)
     )
 
     val favourites by viewModel.favourites.collectAsState()
 
     // meal selected for removal confirmation dialog
-    var mealToRemove by remember { mutableStateOf<Meal?>(null) }
+    var mealToRemove by remember { mutableStateOf<MealX?>(null) }
 
     // Confirmation Dialog
     mealToRemove?.let { meal ->
@@ -177,7 +181,7 @@ fun FavouritesScreen(
 
 @Composable
 private fun FavouriteCard(
-    meal: Meal,
+    meal: MealX,
     onRemoveClick: () -> Unit,
     onCardClick: () -> Unit
 ) {

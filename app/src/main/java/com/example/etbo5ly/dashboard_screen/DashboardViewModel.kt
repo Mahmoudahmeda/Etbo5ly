@@ -4,8 +4,11 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.data.local.FavouritesDataStore
+import com.example.etbo5ly.data.local.entities.FavoriteEntity
 import com.example.etbo5ly.data.network.ApiClient
+import com.example.etbo5ly.data.repository.CalendarRepository
 import com.example.etbo5ly.data.repository.IMealRepository
 import com.example.etbo5ly.ui.categories.Category
 import com.google.firebase.auth.FirebaseAuth
@@ -17,17 +20,18 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val repository: IMealRepository,
+    private val calendarepo: CalendarRepository,
     context: Context
 ) : ViewModel() {
 
     private val favouritesDataStore = FavouritesDataStore(context)
     private val auth = FirebaseAuth.getInstance()
 
-    private val _meal = MutableStateFlow<Meal?>(null)
-    val meal: StateFlow<Meal?> = _meal
+    private val _meal = MutableStateFlow<MealX?>(null)
+    val meal: StateFlow<MealX?> = _meal
 
-    private val _recipes = MutableStateFlow<List<Meal>>(emptyList())
-    val recipes: StateFlow<List<Meal>> = _recipes
+    private val _recipes = MutableStateFlow<List<MealX>>(emptyList())
+    val recipes: StateFlow<List<MealX>> = _recipes
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -75,7 +79,7 @@ class DashboardViewModel(
             _isLoading.value = true
             _error.value = null
             try {
-                val mealsList = mutableListOf<Meal>()
+                val mealsList = mutableListOf<MealX>()
                 repeat(count) {
                     val response = repository.getAMeal()
                     if (response.isSuccessful) {
@@ -113,20 +117,29 @@ class DashboardViewModel(
 
     private fun loadFavouriteIds() {
         viewModelScope.launch {
-            favouritesDataStore.favouriteMeals.collect { jsonSet ->
-                _favouriteIds.value = jsonSet.map { json ->
-                    Gson().fromJson(json, Meal::class.java).idMeal
-                }.toSet()
+            auth.currentUser?.let { calendarepo.getFavorites(it.uid) }?.collect { favorites ->
+                _favouriteIds.value = favorites.map { it.recipeId }.toSet()
             }
         }
     }
 
-    fun onFavoriteClick(meal: Meal) {
+    fun onFavoriteClick(meal: MealX) {
         viewModelScope.launch {
             if (_favouriteIds.value.contains(meal.idMeal)) {
-                favouritesDataStore.removeFavourite(meal)
+                auth.currentUser?.let { calendarepo.deleteFavorite(it.uid, meal.idMeal) }
             } else {
-                favouritesDataStore.addFavourite(meal)
+                auth.currentUser?.let { calendarepo.insertFavorite(FavoriteEntity(
+                    userId = it.uid,
+                    recipeId = meal.idMeal,
+                    recipeName = meal.strMeal,
+                    recipeImage = meal.strMealThumb,
+                    recipeInstructions = meal.strInstructions,
+                    recipeIngredients = meal.ingredients.joinToString(","),
+                    recipeTags = meal.strTags ?: "",
+                    recipeCategory = meal.strCategory,
+                    recipeArea = meal.strArea,
+                    recipeYoutube = meal.strYoutube ?: ""
+                )) }
             }
         }
     }

@@ -18,8 +18,11 @@ import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.DrawerContent
 import com.example.etbo5ly.dashboard_screen.components.MealOfDayCard
 import com.example.etbo5ly.dashboard_screen.components.RecipeCard
+import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.network.ApiClient
 import com.example.etbo5ly.data.network.RemoteDataSource
+import com.example.etbo5ly.data.repository.CalendarRepo
+import com.example.etbo5ly.data.repository.CalendarRepository
 import com.example.etbo5ly.data.repository.MealRepository
 import com.example.etbo5ly.ui.categories.CategoriesSection
 import com.example.etbo5ly.ui.dashboard.BottomNavBar
@@ -39,9 +42,10 @@ fun DashboardScreen(
     val remoteDataSource = RemoteDataSource(apiService)
     val repository = MealRepository(remoteDataSource)
     val authRepo = AuthenticationRepo()
-
+    val database = remember { Etbo5lyDataBase.getDataBase(context) }
+    val calendarRepo = CalendarRepository(database.mealDao())
     val viewModel: DashboardViewModel = viewModel(
-        factory = DashboardViewModelFactory(repository, context)
+        factory = DashboardViewModelFactory(repository, calendarRepo,context)
     )
 
     val meal by viewModel.meal.collectAsState()
@@ -148,10 +152,19 @@ fun DashboardScreen(
                         item {
                             // Meal of the Day Card
                             meal?.let { currentMeal ->
-                                MealOfDayCard(
-                                    onClick = { navController.navigate("details/${currentMeal.idMeal}") },
+                                RecipeCard(
+                                    onFavClick = {
+                                        viewModel.onFavoriteClick(currentMeal)
+                                        val message = if (favouriteIds.contains(currentMeal.idMeal))
+                                            "Removed from favourites"
+                                        else
+                                            "Added to favourites"
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    },
+                                    isFavorite = favouriteIds.contains(currentMeal.idMeal),
+                                    modifier = Modifier,
                                     meal = currentMeal,
-                                    modifier = Modifier
+                                    navController= navController
                                 )
                             }
                         }

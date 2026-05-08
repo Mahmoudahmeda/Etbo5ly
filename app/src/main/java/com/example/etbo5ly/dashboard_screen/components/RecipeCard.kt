@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -28,20 +30,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: Meal, navController: NavController) {
+fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: MealX, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(280.dp)
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 24.dp)
+            .height(250.dp),
         shape = RoundedCornerShape(16.dp),
         onClick = { navController.navigate("details/${meal.idMeal}")}
     ) {
@@ -58,7 +62,7 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f))
+                    .background(Color.Black.copy(alpha = 0.4f))
             )
 
             //TOP RIGHT (Category)
@@ -75,70 +79,47 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier 
                 color = Color.White,
                 style = MaterialTheme.typography.labelSmall
             )
-
-            Box(
+            Spacer(modifier = Modifier.width(6.dp))
+            //BOTTOM CONTENT
+            Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary),
-            ){
-                //BOTTOM CONTENT
-                Column(
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = meal.strMeal,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    maxLines = 1
+                )
+                Row(
                     modifier = Modifier
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
-                ) {
-
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
                     Text(
-                        text = meal.strMeal,
-                        color = MaterialTheme.colorScheme.onTertiary,
-                        style = MaterialTheme.typography.titleMedium
+                        text = meal.strArea,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ){
-                        // Country
-                        Text(
-                            modifier = Modifier
-                                .padding(),
-                            text = meal.strArea,
-                            color = MaterialTheme.colorScheme.onTertiary,
-                            style = MaterialTheme.typography.bodySmall,
+                    // Favorite Icon Button
+                    IconButton(
+                        onClick = {
+                            onFavClick()
+                        },
+                        modifier = modifier.size(20.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite
+                            else Icons.Outlined.FavoriteBorder,
+                            contentDescription = "Favorite",
+                            tint = if (isFavorite) Color.Red else Color.White
                         )
-                        // Favorite Icon Button
-                        IconButton(
-                            onClick = {
-                                onFavClick()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = if (isFavorite) Icons.Filled.Favorite
-                                else Icons.Outlined.FavoriteBorder,
-                                contentDescription = "Favorite",
-                                tint = if (isFavorite) Color.Red else Color.White
-                            )
-                        }
                     }
                 }
+
             }
-
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewRecipeCard(){
-    Etbo5lyTheme {
-       // RecipeCard({},true)
     }
 }

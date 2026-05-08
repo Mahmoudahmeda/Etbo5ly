@@ -19,6 +19,7 @@ import com.example.etbo5ly.dashboard_screen.DashboardScreen
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.authentication.changePassword.ChangePasswordScreen
 import com.example.etbo5ly.authentication.emailVerify.EmailVerificationScreen
+import com.example.etbo5ly.calendar.CalendarScreen
 import com.example.etbo5ly.favourite.FavouritesScreen
 import com.example.etbo5ly.settings.SettingsScreen
 
@@ -75,7 +76,7 @@ fun AppNavigation(modifier: Modifier,intent: Intent){
             SearchResult(navController, filterType, selectedItem)
         }
         composable("Calendar"){
-            MainSearch(navController)
+            CalendarScreen()
         }
         composable("Profile"){
             SettingsScreen(navController)
