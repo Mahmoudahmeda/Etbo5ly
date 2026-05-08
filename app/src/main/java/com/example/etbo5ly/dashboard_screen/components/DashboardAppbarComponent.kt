@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.etbo5ly.R
 
 @Composable
 fun DashboardAppBarComponent(
@@ -41,7 +43,7 @@ fun DashboardAppBarComponent(
             IconButton(onClick = onMenuClick) {
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu",
+                    contentDescription = stringResource(R.string.menu_label),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -50,17 +52,17 @@ fun DashboardAppBarComponent(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 8.dp),
+                    .padding(horizontal = 8.dp),
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Hello $name 👋",
+                    text = stringResource(R.string.hello_user, name),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Ready to cook something delicious today?",
+                    text = stringResource(R.string.ready_to_cook),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -70,7 +72,7 @@ fun DashboardAppBarComponent(
             IconButton(onClick = onFavouriteClick) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Favourites",
+                    contentDescription = stringResource(R.string.favourites_title),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }

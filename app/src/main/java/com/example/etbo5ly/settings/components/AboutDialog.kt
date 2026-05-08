@@ -5,6 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.example.etbo5ly.R
 
 @Composable
 fun AboutDialog(
@@ -13,27 +15,25 @@ fun AboutDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface, // Uses dynamic surface color
+        containerColor = MaterialTheme.colorScheme.surface,
         title = {
             Text(
-                text = "About Etbo5ly", 
+                text = stringResource(R.string.about_title), 
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.headlineSmall
             )
         },
         text = {
             Text(
-                text = "Etbo5ly is your personal meal planning companion.\n\n" +
-                        "Version: $appVersion\n" +
-                        "Developed by the Etbo5ly Team.",
-                color = MaterialTheme.colorScheme.onSurfaceVariant // Uses muted hint color
+                text = stringResource(R.string.about_description, appVersion),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
                 Text(
-                    text = "Close",
-                    color = MaterialTheme.colorScheme.primary // Turquoise or Deep Red
+                    text = stringResource(R.string.close_action),
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

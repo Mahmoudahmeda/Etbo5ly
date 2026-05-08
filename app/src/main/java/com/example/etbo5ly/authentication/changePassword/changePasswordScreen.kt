@@ -34,7 +34,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
     LaunchedEffect(state) {
         when (state) {
             is State.Success -> {
-                Toast.makeText(context, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,R.string.password_updated_success, Toast.LENGTH_SHORT).show()
                 navController.navigate("login") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -51,7 +51,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             TopAppBar(
                 title = { 
                     Text(
-                        text = "New Password",
+                        text = stringResource(R.string.new_password),
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     ) 
@@ -95,7 +95,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Password Field",
+                        contentDescription = stringResource(R.string.password),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -124,7 +124,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Confirm Password Field",
+                        contentDescription = stringResource(R.string.repassword),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -134,7 +134,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 onClick = { changePass.changePassword(code, password, repassword) },
                 content = { 
                     Text(
-                        text = "Change", 
+                        text = stringResource(R.string.change_action),
                         fontSize = 20.sp, 
                         fontWeight = FontWeight.Bold 
                     ) 

@@ -19,6 +19,21 @@ class SettingsManager(private val context: Context) {
     private fun notifyKey(userId: String) = booleanPreferencesKey("${userId}_notifications")
     private fun photoKey(userId: String) = stringPreferencesKey("${userId}_photo_url")
     private fun themeKey(userId: String) = booleanPreferencesKey("${userId}_is_dark_theme")
+    private fun languageKey(userId: String) = stringPreferencesKey("${userId}_language")
+
+    fun getLanguage(userId: String): Flow<String> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences())
+            else throw exception
+        }.map { it[languageKey(userId)] ?: "en" }
+
+    suspend fun setLanguage(userId: String, languageCode: String) {
+        try {
+            context.dataStore.edit { it[languageKey(userId)] = languageCode }
+        } catch (e: IOException) {
+            Log.e("SettingsManager", "Error writing language data: ${e.message}")
+        }
+    }
 
     fun isNotificationsEnabled(userId: String): Flow<Boolean> = context.dataStore.data
         .catch { exception ->

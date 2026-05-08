@@ -1,0 +1,89 @@
+<resources>
+    <string name="image_of_chef">صورة الشيف</string>
+    <string name="Email">البريد الإلكتروني</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="password">كلمة المرور</string>
+    <string name="repassword">أعد إدخال كلمة المرور</string>
+
+    <!-- Authentication -->
+    <string name="welcome_chef">أهلاً بك أيها الشيف!</string>
+    <string name="discover_meal_today">اكتشف وجبتك القادمة اليوم</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="sign_up">إنشاء حساب</string>
+    <string name="account_label">الحساب</string>
+    <string name="or_continue_with">أو الاستمرار بواسطة</string>
+    <string name="continue_as_guest">المتابعة كضيف</string>
+    <string name="forget_password">نسيت كلمة المرور؟</string>
+    <string name="welcome_back">مرحباً بعودتك!</string>
+    <string name="login_continue">سجل الدخول لمواصلة رحلتك</string>
+    <string name="check_email">تحقق من بريدك الإلكتروني</string>
+    <string name="send_email">إرسال بريد إلكتروني</string>
+    <string name="reset_password">إعادة تعيين كلمة المرور</string>
+    <string name="new_password">كلمة مرور جديدة</string>
+    <string name="change_action">تغيير</string>
+    <string name="password_updated_success">تم تحديث كلمة المرور بنجاح!</string>
+    <string name="google_label">جوجل</string>
+    <string name="facebook_label">فيسبوك</string>
+
+    <!-- Dashboard -->
+    <string name="hello_user">أهلاً %1$s 👋</string>
+    <string name="ready_to_cook">هل أنت مستعد لطهي شيء لذيذ اليوم؟</string>
+    <string name="meal_of_the_day">وجبة اليوم</string>
+    <string name="categories">الأصناف</string>
+    <string name="view_all">عرض الكل</string>
+    <string name="recipes">الوصفات</string>
+    <string name="menu_label">القائمة</string>
+    <string name="guest">ضيف</string>
+    <string name="added_to_favourites">تمت الإضافة للمفضلات</string>
+    <string name="removed_from_favourites">تمت الإزالة من المفضلات</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_search">بحث</string>
+    <string name="nav_calendar">التقويم</string>
+    <string name="nav_profile">الملف الشخصي</string>
+
+    <!-- Search & Details -->
+    <string name="search_title">بحث</string>
+    <string name="search_placeholder">عما تبحث اليوم؟</string>
+    <string name="no_matches">لا توجد نتائج لـ \'%1$s\'</string>
+    <string name="recipe_details">تفاصيل الوصفة</string>
+    <string name="ingredients">المكونات</string>
+    <string name="items_count">%1$d أصناف</string>
+    <string name="instructions">التعليمات</string>
+    <string name="countries">البلاد</string>
+    <string name="error_occurred">حدث خطأ ما</string>
+    <string name="view_more">عرض المزيد ↓</string>
+    <string name="view_less">عرض أقل ↑</string>
+
+    <!-- Favourites & Settings -->
+    <string name="favourites_title">المفضلات</string>
+    <string name="no_favourites">لا توجد مفضلات بعد</string>
+    <string name="tap_heart_to_save">اضغط على أيقونة القلب في أي وصفة لحفظها</string>
+    <string name="remove_fav_confirm">إزالة من المفضلات؟</string>
+    <string name="remove_fav_message">هل أنت متأكد أنك تريد إزالة \"%1$s\" من مفضلاتك؟</string>
+    <string name="about_title">حول اتطبخيلي</string>
+    <string name="about_description">اتطبخيلي هو رفيقك الشخصي لتخطيط الوجبات.\n\nالإصدار: %1$s\nتم التطوير بواسطة فريق اتطبخيلي.</string>
+    <string name="close_action">إغلاق</string>
+    <string name="remove_action">إزالة</string>
+    <string name="cancel_action">إلغاء</string>
+    <string name="favorite_recipes">الوصفات المفضلة</string>
+    <string name="profile_title">الملف الشخصي</string>
+    <string name="recipes_saved">تم حفظ %1$d وصفة</string>
+    <string name="profile_pic_desc">الصورة الشخصية</string>
+
+    <!-- Settings New -->
+    <string name="settings_preferences">التفضيلات</string>
+    <string name="settings_communication">التواصل</string>
+    <string name="settings_app_info">معلومات التطبيق</string>
+    <string name="settings_session">الجلسة</string>
+    <string name="settings_notifications">الاشعارات</string>
+    <string name="settings_notifications_desc">اشعارارت الوصفات وتذكيرات الوجبات</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_logout">تسجيل الخروج</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية (Arabic)</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="light_mode">الوضع الفاتح</string>
+</resources>

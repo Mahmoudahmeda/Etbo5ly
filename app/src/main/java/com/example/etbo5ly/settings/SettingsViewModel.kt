@@ -10,35 +10,45 @@ import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.data.local.SettingsManager
 import com.example.etbo5ly.notifications.NotificationHelper
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val authRepo = AuthenticationRepo()
     private val settingsManager = SettingsManager(application)
     private val notificationHelper = NotificationHelper(application)
-    private val userId = authRepo.getCurrentUserUid()
 
-    val isNotificationsEnabled: StateFlow<Boolean> = settingsManager.isNotificationsEnabled(userId)
+    // Observe the userId reactively
+    private val userIdFlow = authRepo.getUserIdFlow()
+    private val currentUserId: String get() = authRepo.getCurrentUserUid()
+
+    val isNotificationsEnabled: StateFlow<Boolean> = userIdFlow
+        .flatMapLatest { uid -> settingsManager.isNotificationsEnabled(uid) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
-    val userPhotoUrl: StateFlow<String?> = settingsManager.getProfilePhoto(userId)
-        .map { localPhoto ->
-            localPhoto ?: authRepo.getCurrentUserPhotoUrl()
+    val userPhotoUrl: StateFlow<String?> = userIdFlow
+        .flatMapLatest { uid ->
+            settingsManager.getProfilePhoto(uid).map { localPhoto ->
+                localPhoto ?: authRepo.getCurrentUserPhotoUrl()
+            }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), authRepo.getCurrentUserPhotoUrl())
 
-    val isDarkTheme: StateFlow<Boolean> = settingsManager.isDarkTheme(userId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true) // Default to Dark mode
+    val isDarkTheme: StateFlow<Boolean> = userIdFlow
+        .flatMapLatest { uid -> settingsManager.isDarkTheme(uid) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
+    val currentLanguage: StateFlow<String> = userIdFlow
+        .flatMapLatest { uid -> settingsManager.getLanguage(uid) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "en")
 
     fun toggleNotifications(enabled: Boolean) {
         viewModelScope.launch {
-            settingsManager.setNotificationsEnabled(userId, enabled)
+            settingsManager.setNotificationsEnabled(currentUserId, enabled)
             if (enabled) {
                 notificationHelper.showNotification(
                     "Notifications Enabled",
@@ -50,26 +60,28 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun toggleTheme(isDark: Boolean) {
         viewModelScope.launch {
-            settingsManager.setDarkTheme(userId, isDark)
+            settingsManager.setDarkTheme(currentUserId, isDark)
+        }
+    }
+
+    fun setLanguage(languageCode: String) {
+        viewModelScope.launch {
+            settingsManager.setLanguage(currentUserId, languageCode)
         }
     }
 
     fun updateProfilePhoto(uri: Uri) {
         viewModelScope.launch {
             try {
-                // Create a local file to store the image
-                val fileName = "profile_${userId}.jpg"
+                val uid = currentUserId
+                val fileName = "profile_${uid}.jpg"
                 val file = File(getApplication<Application>().filesDir, fileName)
-                
-                // Copy the image data from the Uri to the local file
+
                 getApplication<Application>().contentResolver.openInputStream(uri)?.use { input ->
-                    file.outputStream().use { output ->
-                        input.copyTo(output)
-                    }
+                    file.outputStream().use { output -> input.copyTo(output) }
                 }
-                
-                // Save the local file path to DataStore
-                settingsManager.setProfilePhoto(userId, file.absolutePath)
+
+                settingsManager.setProfilePhoto(uid, file.absolutePath)
             } catch (e: Exception) {
                 Log.e("SettingsViewModel", "Error saving profile photo: ${e.message}")
             }
@@ -82,7 +94,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
 
     fun getUserEmail() = authRepo.getCurrentUserEmail()
     fun getUserName() = authRepo.getCurrentUserName()
-    
+
     fun getAppVersion(): String {
         return try {
             val context = getApplication<Application>()

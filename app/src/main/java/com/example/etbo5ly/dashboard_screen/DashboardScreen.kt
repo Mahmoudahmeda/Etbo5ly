@@ -10,9 +10,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.DrawerContent
@@ -57,8 +59,8 @@ fun DashboardScreen(
 
     // Navbar state
     var selectedNavItem by remember { mutableStateOf("Home") }
-    var userName by remember { mutableStateOf("Guest") }
-    authRepo.getCurrentUserName().also { userName = it }
+    val guestName = stringResource(R.string.guest)
+    val userName by remember { derivedStateOf { authRepo.getCurrentUserName() ?: guestName } }
 
     // Handle logout navigation
     LaunchedEffect(isLoggedOut) {
@@ -68,6 +70,10 @@ fun DashboardScreen(
             }
         }
     }
+
+    val addedMsg = stringResource(R.string.added_to_favourites)
+    val removedMsg = stringResource(R.string.removed_from_favourites)
+    val unknownErrorMsg = stringResource(R.string.unknown_error)
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -132,7 +138,7 @@ fun DashboardScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = error ?: "Unknown error",
+                            text = error ?: unknownErrorMsg,
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -167,7 +173,7 @@ fun DashboardScreen(
                         item {
                             // Recipes Header
                             Text(
-                                text = "Recipes",
+                                text = stringResource(R.string.recipes),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -181,9 +187,9 @@ fun DashboardScreen(
                                 onFavClick = {
                                     viewModel.onFavoriteClick(recipe)
                                     val message = if (favouriteIds.contains(recipe.idMeal))
-                                        "Removed from favourites"
+                                        removedMsg
                                     else
-                                        "Added to favourites"
+                                        addedMsg
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 },
                                 isFavorite = favouriteIds.contains(recipe.idMeal),

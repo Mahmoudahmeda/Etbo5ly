@@ -1,6 +1,5 @@
 package com.example.etbo5ly
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -49,7 +49,6 @@ fun RecipeDetailsScreen(
 ) {
     val mealData by viewmodel.meal.collectAsState()
 
-
     // Instructions expand/collapse state
     var instructionsExpanded by remember { mutableStateOf(false) }
 
@@ -73,7 +72,7 @@ fun RecipeDetailsScreen(
             topBar = {
                 Etbo5lyAppBar(
                     navController = navController,
-                    text = "Recipe Details"
+                    text = stringResource(R.string.recipe_details)
                 )
             },
             containerColor = MaterialTheme.colorScheme.background
@@ -133,14 +132,14 @@ fun RecipeDetailsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Ingredients",
+                        text = stringResource(R.string.ingredients),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "${meal.ingredients.size} items",
-                        color = MaterialTheme.colorScheme.primary, // Turquoise or Red
+                        text = stringResource(R.string.items_count, meal.ingredients.size),
+                        color = MaterialTheme.colorScheme.primary, 
                         fontSize = SmallSize
                     )
                 }
@@ -156,7 +155,7 @@ fun RecipeDetailsScreen(
 
                 // ── Instructions Header ─────────────────────────────────
                 Text(
-                    text = "Instructions",
+                    text = stringResource(R.string.instructions),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = SectionSize,
@@ -202,7 +201,7 @@ fun RecipeDetailsScreen(
                 // ── View More / View Less ───────────────────────────────
                 if (allSteps.size > 2) {
                     Text(
-                        text = if (instructionsExpanded) "View Less ↑" else "View More ↓",
+                        text = if (instructionsExpanded) stringResource(R.string.view_less) else stringResource(R.string.view_more),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = SmallSize,
                         fontWeight = FontWeight.Bold,

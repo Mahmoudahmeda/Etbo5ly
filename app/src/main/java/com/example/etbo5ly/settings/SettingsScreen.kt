@@ -11,14 +11,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.settings.components.*
 import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 import com.example.etbo5ly.ui.theme.*
@@ -30,6 +30,7 @@ fun SettingsScreen(
     val viewModel: SettingsViewModel = viewModel()
 
     val isNotificationsEnabled by viewModel.isNotificationsEnabled.collectAsState()
+    val currentLanguage by viewModel.currentLanguage.collectAsState()
     val userPhotoUrl by viewModel.userPhotoUrl.collectAsState()
     val scrollState = rememberScrollState()
 
@@ -63,7 +64,7 @@ fun SettingsScreen(
         topBar = {
             Etbo5lyAppBar(
                 navController = navController,
-                text = "Profile"
+                text = stringResource(R.string.profile_title)
             )
         }
     ) { paddingValues ->
@@ -85,11 +86,25 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            SettingsSectionTitle("COMMUNICATION")
+            // PREFERENCES SECTION
+            SettingsSectionTitle(stringResource(R.string.settings_preferences))
+            SettingsGroup {
+                SettingsClickableItem(
+                    title = stringResource(R.string.settings_language),
+                    subtitle = if (currentLanguage == "ar") stringResource(R.string.language_arabic) else stringResource(R.string.language_english),
+                    icon = Icons.Default.Language,
+                    onClick = {
+                        val newLang = if (currentLanguage == "en") "ar" else "en"
+                        viewModel.setLanguage(newLang)
+                    }
+                )
+            }
+
+            SettingsSectionTitle(stringResource(R.string.settings_communication))
             SettingsGroup {
                 SettingsToggleItem(
-                    title = "Notifications",
-                    subtitle = "Recipe alerts and meal reminders",
+                    title = stringResource(R.string.settings_notifications),
+                    subtitle = stringResource(R.string.settings_notifications_desc),
                     icon = Icons.Default.Notifications,
                     checked = isNotificationsEnabled,
                     onCheckedChange = { enabled ->
@@ -102,20 +117,20 @@ fun SettingsScreen(
                 )
             }
 
-            SettingsSectionTitle("APP INFORMATION")
+            SettingsSectionTitle(stringResource(R.string.settings_app_info))
             SettingsGroup {
                 SettingsClickableItem(
-                    title = "About Etbo5ly",
+                    title = stringResource(R.string.about_title),
                     subtitle = "Version ${viewModel.getAppVersion()}",
                     icon = Icons.Default.Info,
                     onClick = { showAboutDialog = true }
                 )
             }
 
-            SettingsSectionTitle("SESSION")
+            SettingsSectionTitle(stringResource(R.string.settings_session))
             SettingsGroup {
                 SettingsClickableItem(
-                    title = "Log Out",
+                    title = stringResource(R.string.settings_logout),
                     icon = Icons.Default.ExitToApp,
                     titleColor = Color.Red,
                     iconColor = Color.Red,

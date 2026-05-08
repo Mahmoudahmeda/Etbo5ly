@@ -1,13 +1,94 @@
 <resources>
-    <string name="app_name">Etbo5ly</string>
+    <string name="app_name" translatable="false">Etbo5ly</string>
     <string name="image_of_chef">Image of Chef</string>
-    <string name="Signin_screen_text_1">Welcome Chef!</string>
-    <string name="Signin_screen_text_2">Discover tour next meal today</string>
     <string name="Email">Email</string>
+    <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="repassword">re-enter Password</string>
-    <string name="facebook_app_id">2996016137456438</string>
-    <string name="fb_login_protocol_scheme">fb2996016137456438</string>
-    <string name="facebook_client_token">8655e84b505c0468d3e4fd68501ea60c</string>
-    <string name="default_web_client_id">539434407333-psmolt2k3ad67hspmqs7n187u1i4k1nh.apps.googleusercontent.com</string>
+    <string name="facebook_app_id" translatable="false">2996016137456438</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2996016137456438</string>
+    <string name="facebook_client_token" translatable="false">8655e84b505c0468d3e4fd68501ea60c</string>
+    <string name="default_web_client_id" translatable="false">539434407333-psmolt2k3ad67hspmqs7n187u1i4k1nh.apps.googleusercontent.com</string>
+
+    <!-- Authentication -->
+    <string name="welcome_chef">Welcome Chef!</string>
+    <string name="discover_meal_today">Discover your next favorite meal today</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="account_label">Account</string>
+    <string name="or_continue_with">OR CONTINUE WITH</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="login_continue">Log in to continue your journey</string>
+    <string name="check_email">Check your Email Box</string>
+    <string name="send_email">Send Email</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
+    <string name="change_action">Change</string>
+    <string name="password_updated_success">Password updated successfully!</string>
+    <string name="google_label">Google</string>
+    <string name="facebook_label">Facebook</string>
+
+    <!-- Dashboard -->
+    <string name="hello_user">Hello %1$s 👋</string>
+    <string name="ready_to_cook">Ready to cook something delicious today?</string>
+    <string name="meal_of_the_day">Meal of the Day</string>
+    <string name="categories">Categories</string>
+    <string name="view_all">View All</string>
+    <string name="recipes">Recipes</string>
+    <string name="menu_label">Menu</string>
+    <string name="guest">Guest</string>
+    <string name="added_to_favourites">Added to favourites</string>
+    <string name="removed_from_favourites">Removed from favourites</string>
+    <string name="unknown_error">Unknown error</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Search & Details -->
+    <string name="search_title">Search</string>
+    <string name="search_placeholder">What are you Looking For ?</string>
+    <string name="no_matches">No matches found for \'%1$s\'</string>
+    <string name="recipe_details">Recipe Details</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="items_count">%1$d items</string>
+    <string name="instructions">Instructions</string>
+    <string name="countries">Countries</string>
+    <string name="error_occurred">An error occurred</string>
+    <string name="view_more">View More ↓</string>
+    <string name="view_less">View Less ↑</string>
+
+    <!-- Favourites & Settings -->
+    <string name="favourites_title">Favourites</string>
+    <string name="no_favourites">No favourites yet</string>
+    <string name="tap_heart_to_save">Tap the heart icon on any recipe to save it</string>
+    <string name="remove_fav_confirm">Remove Favourite?</string>
+    <string name="remove_fav_message">Are you sure you want to remove \"%1$s\" from your favourites?</string>
+    <string name="about_title">About Etbo5ly</string>
+    <string name="about_description">Etbo5ly is your personal meal planning companion.\n\nVersion: %1$s\nDeveloped by the Etbo5ly Team.</string>
+    <string name="close_action">Close</string>
+    <string name="remove_action">Remove</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="favorite_recipes">Favorite Recipes</string>
+    <string name="profile_title">Profile</string>
+    <string name="recipes_saved">%1$d Recipes saved</string>
+    <string name="profile_pic_desc">Profile Picture</string>
+
+    <!-- Settings & Theme -->
+    <string name="settings_preferences">PREFERENCES</string>
+    <string name="settings_communication">COMMUNICATION</string>
+    <string name="settings_app_info">APP INFORMATION</string>
+    <string name="settings_session">SESSION</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_desc">Recipe alerts and meal reminders</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_logout">Log Out</string>
+    <string name="language_english">English</string>
+    <string name="language_arabic">العربية (Arabic)</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
 </resources>

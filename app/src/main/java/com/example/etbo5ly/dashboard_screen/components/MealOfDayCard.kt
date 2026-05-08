@@ -20,10 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.Meal
-import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
 fun MealOfDayCard(onClick: () -> Unit, meal: Meal, modifier: Modifier = Modifier) {
@@ -62,7 +63,7 @@ fun MealOfDayCard(onClick: () -> Unit, meal: Meal, modifier: Modifier = Modifier
 
                 // Meal of the day label
                 Text(
-                    text = "Meal of the Day",
+                    text = stringResource(R.string.meal_of_the_day),
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colorScheme.primary,
@@ -89,13 +90,12 @@ fun MealOfDayCard(onClick: () -> Unit, meal: Meal, modifier: Modifier = Modifier
                 )
             }
 
-            //BOTTOM LEFT (main content)
+            // BOTTOM LEFT (main content)
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {
-
                 Text(
                     text = meal.strMeal,
                     style = MaterialTheme.typography.titleLarge,

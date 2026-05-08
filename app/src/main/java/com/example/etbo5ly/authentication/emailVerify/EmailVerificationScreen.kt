@@ -3,7 +3,6 @@ package com.example.etbo5ly.authentication.emailVerify
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,18 +35,18 @@ fun EmailVerificationScreen() {
     val emailstate by emailVerify.status.collectAsState()
     val context = LocalContext.current
 
+    val success = stringResource(R.string.check_email)
+    val errorOccurred = stringResource(R.string.error_occurred)
+
     LaunchedEffect(emailstate) {
-        Log.d("Email","in launch State ${emailstate}")
         when(emailstate){
             is State.Success -> {
-                Toast.makeText(context,"Check your Email Box", Toast.LENGTH_SHORT).show()
-                Log.d("Email","in Slaunch State ${emailstate}")
+                Toast.makeText(context, success, Toast.LENGTH_SHORT).show()
             }
             is State.Fail-> {
-                Toast.makeText(context,(emailstate as State.Fail).msg, Toast.LENGTH_SHORT).show()
-                Log.d("Email","in Flaunch State ${emailstate}")
+                Toast.makeText(context,(emailstate as State.Fail).msg.ifEmpty { errorOccurred }, Toast.LENGTH_SHORT).show()
             }
-            else -> {Log.d("Email","in Elaunch State ${emailstate}")}
+            else -> {}
         }
     }
 
@@ -56,7 +55,7 @@ fun EmailVerificationScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Reset Password",
+                        text = stringResource(R.string.reset_password),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 25.sp,
                         color = MaterialTheme.colorScheme.onBackground
@@ -102,7 +101,7 @@ fun EmailVerificationScreen() {
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,
-                            contentDescription = "Email icon",
+                            contentDescription = stringResource(R.string.Email),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
@@ -113,7 +112,7 @@ fun EmailVerificationScreen() {
                     onClick = { emailVerify.sendEmail(email) },
                     content = { 
                         Text(
-                            text = "Send Email", 
+                            text = stringResource(R.string.send_email),
                             fontSize = 20.sp, 
                             fontWeight = FontWeight.Bold 
                         ) 

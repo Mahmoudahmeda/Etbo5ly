@@ -32,12 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.Search.components.CategoryCard
 import com.example.etbo5ly.Search.components.CountryCard
 import com.example.etbo5ly.Search.components.FilterButton
@@ -48,7 +50,8 @@ import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 import kotlinx.coroutines.delay
 
-data class FilterOption(val name: String, val icon: ImageVector)
+// Added 'tag' for logic and 'name' for display
+data class FilterOption(val tag: String, val name: String, val icon: ImageVector)
 
 @Composable
 fun MainSearch(
@@ -65,15 +68,16 @@ fun MainSearch(
     val ingredients by viewModel.ingredients.collectAsState()
     val general by viewModel.general.collectAsState()
 
-    var selectedFilter by remember { mutableStateOf(selectedfilter) }
+    var selectedFilterTag by remember { mutableStateOf(selectedfilter) }
+    
     val filters = listOf(
-        FilterOption("Categories", Icons.Default.Restaurant),
-        FilterOption("Countries", Icons.Default.Public),
-        FilterOption("Ingredients", Icons.Outlined.Egg)
+        FilterOption("Categories", stringResource(R.string.categories), Icons.Default.Restaurant),
+        FilterOption("Countries", stringResource(R.string.countries), Icons.Default.Public),
+        FilterOption("Ingredients", stringResource(R.string.ingredients), Icons.Outlined.Egg)
     )
 
-    LaunchedEffect(selectedFilter,searchQ) {
-        when (selectedFilter) {
+    LaunchedEffect(selectedFilterTag, searchQ) {
+        when (selectedFilterTag) {
             "Categories" -> viewModel.fetchCategories()
             "Countries" -> viewModel.fetchAreas()
             "Ingredients" -> viewModel.fetchIngredients()
@@ -88,9 +92,8 @@ fun MainSearch(
 
     Scaffold(
         topBar = {
-            Etbo5lyAppBar(navController = navController, text = "Search")
+            Etbo5lyAppBar(navController = navController, text = stringResource(R.string.search_title))
         },
-        //containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -107,7 +110,7 @@ fun MainSearch(
                     .clip(RoundedCornerShape(12.dp)),
                 placeholder = { 
                     Text(
-                        text = "What are you Looking For ?", 
+                        text = stringResource(R.string.search_placeholder), 
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     ) 
                 },
@@ -138,12 +141,12 @@ fun MainSearch(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 filters.forEach { filter ->
-                    val isSelected = selectedFilter == filter.name
+                    val isSelected = selectedFilterTag == filter.tag
                     FilterButton(
                         option = filter,
                         isSelected = isSelected,
                         onClick = { 
-                            selectedFilter = if (isSelected) "General" else filter.name
+                            selectedFilterTag = if (isSelected) "General" else filter.tag
                         },
                         modifier = Modifier.weight(1f)
                     )
@@ -155,15 +158,14 @@ fun MainSearch(
                 if (error != null) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            text = error ?: "An error occurred",
+                            text = error ?: stringResource(R.string.error_occurred),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
                         )
                     }
                 } else {
-                    // Dynamic Grid based on Selection with Local Filtering
-                    when (selectedFilter) {
+                    when (selectedFilterTag) {
                         "Categories" -> {
                             val filteredList = categories.filter { it.strCategory.contains(searchQ, ignoreCase = true) }
                             if (filteredList.isEmpty() && searchQ.isNotEmpty()) {
@@ -224,7 +226,7 @@ fun MainSearch(
 fun EmptyState(query: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            text = "No matches found for '$query'",
+            text = stringResource(R.string.no_matches, query),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(16.dp)

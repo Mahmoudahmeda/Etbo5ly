@@ -1,6 +1,7 @@
 package com.example.etbo5ly.ui.dashboard
 
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -14,10 +15,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
+
+data class BottomNavItem(
+    val route: String,
+    @StringRes val labelRes: Int,
+    val icon: ImageVector
+)
 
 @Composable
 fun BottomNavBar(
@@ -25,8 +35,14 @@ fun BottomNavBar(
     onItemClick: (String) -> Unit,
     navController: NavController
 ) {
-    val context = LocalContext.current
-    val items = listOf("Home", "Search", "Calendar", "Profile")
+    val navItems = remember {
+        listOf(
+            BottomNavItem("home", R.string.nav_home, Icons.Default.Home),
+            BottomNavItem("Search", R.string.nav_search, Icons.Default.Search),
+            BottomNavItem("Calendar", R.string.nav_calendar, Icons.Default.DateRange),
+            BottomNavItem("Profile", R.string.nav_profile, Icons.Default.Person)
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -45,34 +61,28 @@ fun BottomNavBar(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            items.forEach { item ->
-                val isSelected = item == selectedItem
+            navItems.forEach { item ->
+                val isSelected = item.route == selectedItem
+                val label = stringResource(item.labelRes)
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clickable {
-                            onItemClick(item)
-                            navController.navigate(item)
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                            onItemClick(item.route)
+                            navController.navigate(item.route)
                         }
                         .padding(horizontal = 8.dp)
                 ) {
                     Icon(
-                        imageVector = when (item) {
-                            "Home"     -> Icons.Default.Home
-                            "Search"   -> Icons.Default.Search
-                            "Calendar" -> Icons.Default.DateRange
-                            else       -> Icons.Default.Person
-                        },
-                        contentDescription = item,
-                        // Tint icons with primary color when selected, and onSurface when not.
+                        imageVector = item.icon,
+                        contentDescription = label,
                         tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = item,
+                        text = label,
                         fontSize = 12.sp,
                         // Match text color with icon color
                         color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface

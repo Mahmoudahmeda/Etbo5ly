@@ -18,7 +18,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,6 +41,8 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import com.example.etbo5ly.authentication.State
+import com.example.etbo5ly.util.LocalActivity
+import com.example.etbo5ly.util.LocaleUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,8 +52,17 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
     var password by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+    
+    // Attempt to get Activity from LocalActivity first (provided in MainActivity)
+    // Then fall back to searching the context chain
+    val activity = LocalActivity.current ?: remember(context) { LocaleUtils.findActivity(context) }
+    
+    // CredentialManager MUST have an Activity context to launch the UI
+    val credentialManager = remember(activity) { 
+        CredentialManager.create(activity ?: context.applicationContext) 
+    }
+    
     val loginstate by viewModel.status.collectAsStateWithLifecycle()
-    val credentialManager = CredentialManager.create(context)
     val credentialScope = rememberCoroutineScope()
     val facebookAuth = remember {
         facebook { token -> viewModel.LoginWithFacebook(token) }
@@ -93,7 +103,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Account",
+                text = stringResource(R.string.account_label),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -106,7 +116,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     .padding(horizontal = 8.dp)
             ) {
                 Text(
-                    text = "Signup",
+                    text = stringResource(R.string.sign_up),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -139,7 +149,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 )
 
                 Text(
-                    text = "Welcome Back!",
+                    text = stringResource(R.string.welcome_back),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -147,7 +157,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 )
 
                 Text(
-                    text = "Log in to continue your journey",
+                    text = stringResource(R.string.login_continue),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -159,7 +169,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 SigninInputField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Email",
+                    label = stringResource(R.string.Email),
                     icon = Icons.Outlined.Email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
@@ -167,7 +177,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 SigninInputField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Password",
+                    label = stringResource(R.string.password),
                     icon = Icons.Outlined.Lock,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
@@ -178,7 +188,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(
-                        text = "Forget Password?",
+                        text = stringResource(R.string.forget_password),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary
@@ -198,7 +208,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text("Sign In", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.sign_in), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -213,7 +223,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
                     )
                     Text(
-                        text = "OR CONTINUE WITH",
+                        text = stringResource(R.string.or_continue_with),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 10.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
@@ -234,24 +244,32 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     SocialSignInButton(
                         onClick = {
                             credentialScope.launch {
-                                val googleIdOption = GetGoogleIdOption.Builder()
-                                    .setServerClientId(getString(context, R.string.default_web_client_id))
-                                    .setFilterByAuthorizedAccounts(false)
-                                    .build()
-                                val request = GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
-                                val result = credentialManager.getCredential(context, request)
-                                google(result, viewModel)
+                                // Final safety check: must use an Activity context here
+                                val launchContext = activity ?: context
+                                
+                                try {
+                                    val googleIdOption = GetGoogleIdOption.Builder()
+                                        .setServerClientId(getString(context, R.string.default_web_client_id))
+                                        .setFilterByAuthorizedAccounts(false)
+                                        .build()
+                                    val request = GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
+                                    
+                                    val result = credentialManager.getCredential(launchContext, request)
+                                    google(result, viewModel)
+                                } catch (e: Exception) {
+                                    android.util.Log.e("SigninScreen", "CredentialManager Error: ${e.message}")
+                                }
                             }
                         },
                         iconId = R.drawable.google_logo,
-                        label = "Google",
+                        label = stringResource(R.string.google_label),
                         modifier = Modifier.weight(1f)
                     )
 
                     SocialSignInButton(
                         onClick = { facebookActivityLauncher.launch(listOf("email", "public_profile")) },
                         iconId = R.drawable.facebook_logo,
-                        label = "Facebook",
+                        label = stringResource(R.string.facebook_label),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -260,7 +278,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
 
                 TextButton(onClick = { viewModel.LoginasgGuest() }) {
                     Text(
-                        text = "Continue as Guest",
+                        text = stringResource(R.string.continue_as_guest),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp

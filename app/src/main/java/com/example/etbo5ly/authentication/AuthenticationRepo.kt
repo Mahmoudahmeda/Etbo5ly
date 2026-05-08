@@ -5,6 +5,9 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.actionCodeSettings
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class AuthenticationRepo() {
@@ -28,6 +31,19 @@ class AuthenticationRepo() {
     }
 
     fun getCurrentUserUid(): String = auth.currentUser?.uid ?: "guest"
+
+    /**
+     * Provides a Flow of the current user's UID.
+     * Emits "guest" if no user is logged in.
+     */
+    fun getUserIdFlow(): Flow<String> = callbackFlow {
+        val listener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+            val uid = firebaseAuth.currentUser?.uid ?: "guest"
+            trySend(uid)
+        }
+        auth.addAuthStateListener(listener)
+        awaitClose { auth.removeAuthStateListener(listener) }
+    }
 
     fun getCurrentUserEmail(): String {
         val user = auth.currentUser
