@@ -54,7 +54,7 @@ fun SignUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF13171F))
+            .background(MaterialTheme.colorScheme.background) // Uses dynamic theme background
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -66,7 +66,7 @@ fun SignUpScreen(
         ) {
             Text(
                 text = "Account",
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground, // Adapts to light/dark text
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
@@ -76,12 +76,12 @@ fun SignUpScreen(
                     popUpTo("signup") {inclusive= true  }
                 } },
                 modifier = Modifier
-                    .background(Color(0xFF232832), CircleShape)
-                    .padding(horizontal = 16.dp, vertical = 6.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape) // Uses variant for toggle background
+                    .padding(horizontal = 8.dp)
             ) {
                 Text(
                     text = "Sign In",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -93,8 +93,8 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(bottom = 16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFF13171F)),
-            elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), // Card pops against background
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
@@ -114,14 +114,14 @@ fun SignUpScreen(
 
                 Text(
                     text = "Welcome Chief !",
-                    fontSize = 36.sp,
+                    fontSize = 32.sp,
                     fontWeight = FontWeight.Black,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "Discover your next favorite meal today",
-                    fontSize = 18.sp,
-                    color = Color.Gray,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, // Muted description text
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -161,45 +161,47 @@ fun SignUpScreen(
                         .height(60.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF00EDFF)
+                        containerColor = MaterialTheme.colorScheme.primary, // Turquoise or Deep Red
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text(
                         text = "Sign Up",
-                        color = Color.Black,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Black
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                HorizontalDivider(color = Color.DarkGray)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
+                    )
+                    Text(
+                        text = "OR CONTINUE WITH",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 10.sp,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
+                    )
+                }
 
-                Text(
-                    text = "OR CONTINUE WITH",
-                    color = Color.Gray,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceEvenly
-//                ) {
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Google")
-//                    SocialButton(iconId = R.drawable.ic_launcher_foreground, label = "Facebook")
-//                }
-
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 TextButton(
-                    onClick = {viewModel.LoginasgGuest()},
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    onClick = { viewModel.LoginasgGuest() }
                 ) {
                     Text(
                         text = "Continue as Guest",
-                        color = Color(0xFF00BFCE),
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
@@ -220,21 +222,30 @@ fun CustomInputField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = { Text(label, color = Color.Gray, fontSize = 20.sp, fontWeight = FontWeight.SemiBold) },
+        placeholder = { 
+            Text(
+                text = label, 
+                color = MaterialTheme.colorScheme.onSurfaceVariant, 
+                fontSize = 16.sp, 
+                fontWeight = FontWeight.Medium
+            ) 
+        },
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color(0xFF232832),
-            unfocusedContainerColor = Color(0xFF232832),
-            unfocusedTextColor = Color.White,
-            focusedTextColor = Color.White,
-            cursorColor = Color.Cyan
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Toasted cream or Midnight Blue lighter
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = Color.Transparent
         ),
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
-        textStyle = LocalTextStyle.current.copy(fontSize = 20.sp)
+        textStyle = LocalTextStyle.current.copy(fontSize = 16.sp)
     )
 }
 

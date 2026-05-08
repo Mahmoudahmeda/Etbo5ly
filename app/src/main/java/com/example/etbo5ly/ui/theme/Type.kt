@@ -17,16 +17,16 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        color = ProductTitle
+        fontSize = 22.sp
+    ),
+    displayMedium = TextStyle(
+        fontSize = 18.sp
     ),
     bodyMedium = TextStyle(
-        fontSize = 16.sp,
-        color = Subtitle
+        fontSize = 16.sp
     ),
     labelSmall = TextStyle(
-        fontSize = 12.sp,
-        color = FrameGray
+        fontSize = 12.sp
     )
 
     /* Other default text styles to override

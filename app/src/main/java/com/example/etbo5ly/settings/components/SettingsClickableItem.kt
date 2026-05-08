@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,8 +25,8 @@ fun SettingsClickableItem(
     title: String,
     subtitle: String? = null,
     icon: ImageVector,
-    titleColor: Color = ProductTitle,
-    iconColor: Color = AppBarColor,
+    titleColor: Color = MaterialTheme.colorScheme.onSurface,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
     showChevron: Boolean = true,
     onClick: () -> Unit = {}
 ) {
@@ -40,23 +41,36 @@ fun SettingsClickableItem(
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(BackgroundDark),
+                // Uses surfaceVariant for a soft background behind the icon
+                .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = null, tint = iconColor)
+            Icon(
+                imageVector = icon, 
+                contentDescription = null, 
+                tint = iconColor
+            )
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = titleColor, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = title, 
+                color = titleColor, 
+                fontWeight = FontWeight.SemiBold
+            )
             if (subtitle != null) {
-                Text(subtitle, color = Subtitle, fontSize = 12.sp)
+                Text(
+                    text = subtitle, 
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, 
+                    fontSize = 12.sp
+                )
             }
         }
         if (showChevron) {
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = FrameGray
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

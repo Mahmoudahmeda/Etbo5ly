@@ -1,6 +1,5 @@
 package com.example.etbo5ly.dashboard_screen.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,18 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
+fun MealOfDayCard(onClick: () -> Unit, meal: Meal, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp)
             .height(250.dp),
@@ -49,7 +44,7 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
                 modifier = Modifier.fillMaxSize()
             )
 
-            //shade
+            // Shade to ensure text readability
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -112,17 +107,9 @@ fun MealOfDayCard(onClick: ()-> Unit, meal: Meal, modifier: Modifier) {
                 Text(
                     text = meal.strArea,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = Color.White.copy(alpha = 0.8f)
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewMealOfDayCard(){
-    Etbo5lyTheme {
-       // MealOfDayCard({})
     }
 }

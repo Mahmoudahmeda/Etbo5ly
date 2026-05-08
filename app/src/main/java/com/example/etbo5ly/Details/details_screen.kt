@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -31,6 +32,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.example.etbo5ly.data.dto.MealX
 import android.util.Log
+import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 
 // Inter font sizes — all in range 14-22sp
 private val TitleSize = 22.sp
@@ -69,39 +71,24 @@ fun RecipeDetailsScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFF13171F))
-                        .padding(horizontal = 8.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                    Text(
-                        text = "Recipe Details",
-                        color = Color.White,
-                        fontSize = SectionSize,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+                Etbo5lyAppBar(
+                    navController = navController,
+                    text = "Recipe Details"
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.background
         ) { paddingValues ->
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF13171F))
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
             ) {
 
-                // ── Meal Image ──────────────────────────────────────────
+                Spacer(Modifier.height(16.dp))
+
+                // Meal Image
                 AsyncImage(
                     model = meal.strMealThumb,
                     contentDescription = null,
@@ -118,7 +105,7 @@ fun RecipeDetailsScreen(
                 // ── Meal Name ───────────────────────────────────────────
                 Text(
                     text = meal.strMeal,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = TitleSize,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -147,13 +134,13 @@ fun RecipeDetailsScreen(
                 ) {
                     Text(
                         text = "Ingredients",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "${meal.ingredients.size} items",
-                        color = Color.Cyan,
+                        color = MaterialTheme.colorScheme.primary, // Turquoise or Red
                         fontSize = SmallSize
                     )
                 }
@@ -170,7 +157,7 @@ fun RecipeDetailsScreen(
                 // ── Instructions Header ─────────────────────────────────
                 Text(
                     text = "Instructions",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = SectionSize,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -187,16 +174,16 @@ fun RecipeDetailsScreen(
                         ),
                         verticalAlignment = Alignment.Top
                     ) {
-                        // Step number circle
+                        // Step number circle using Primary color
                         Box(
                             modifier = Modifier
-                                .size(24.dp)
-                                .background(Color.Cyan, CircleShape),
+                                .size(32.dp)
+                                .background(MaterialTheme.colorScheme.primary, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = (index + 1).toString(),
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = SmallSize,
                                 textAlign = TextAlign.Center
@@ -205,7 +192,7 @@ fun RecipeDetailsScreen(
                         Spacer(Modifier.width(12.dp))
                         Text(
                             text = step,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = BodySize,
                             lineHeight = 22.sp
                         )
@@ -216,9 +203,10 @@ fun RecipeDetailsScreen(
                 if (allSteps.size > 2) {
                     Text(
                         text = if (instructionsExpanded) "View Less ↑" else "View More ↓",
-                        color = Color.Cyan,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = SmallSize,
                         fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .clickable { instructionsExpanded = !instructionsExpanded }
@@ -229,7 +217,6 @@ fun RecipeDetailsScreen(
 
                 // ── Watch Recipe / YouTube ──────────────────────────────
                 if (!meal.strYoutube.isNullOrBlank()) {
-//                    val videoId = viewmodel.getVideoId(meal.strYoutube)
                     YoutubePlayer(meal.strYoutube)
                 }
                 Spacer(Modifier.height(32.dp))
@@ -263,17 +250,17 @@ private fun IngredientRow(ingredient: String, amount: String,navController: NavC
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF232832))
+                    .background(MaterialTheme.colorScheme.surfaceVariant) // Matches the warm/cool variant
             )
             Text(
                 text = ingredient,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = BodySize
             )
         }
         Text(
             text = amount,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, // Muted text color for measurements
             fontSize = SmallSize
         )
     }
@@ -284,11 +271,11 @@ private fun IngredientRow(ingredient: String, amount: String,navController: NavC
 private fun TagChip(label: String,navController: NavController,meal: MealX) {
     Text(
         text = label,
-        color = Color.Cyan,
+        color = MaterialTheme.colorScheme.primary,
         fontSize = SmallSize,
         modifier = Modifier
             .background(
-                color = Color.Cyan.copy(alpha = 0.15f),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(horizontal = 12.dp, vertical = 4.dp)

@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun DashboardScreen(
     modifier: Modifier = Modifier,
-    userName: String = "Guest",
     navController: NavController
 ) {
     val context = LocalContext.current
@@ -120,7 +119,7 @@ fun DashboardScreen(
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
                 }
 
@@ -150,8 +149,7 @@ fun DashboardScreen(
                             meal?.let { currentMeal ->
                                 MealOfDayCard(
                                     onClick = { navController.navigate("details/${currentMeal.idMeal}") },
-                                    meal = currentMeal,
-                                    modifier = Modifier
+                                    meal = currentMeal
                                 )
                             }
                         }
@@ -160,7 +158,7 @@ fun DashboardScreen(
                             // Categories Section
                             Spacer(modifier = Modifier.height(12.dp))
                             CategoriesSection(
-                                categories,
+                                categories = categories,
                                 navController = navController
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -189,7 +187,6 @@ fun DashboardScreen(
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 },
                                 isFavorite = favouriteIds.contains(recipe.idMeal),
-                                modifier = Modifier,
                                 meal = recipe,
                                 navController= navController
                             )

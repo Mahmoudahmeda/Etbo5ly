@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.data.dto.Meal
+import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 
 @Composable
 fun FavouritesScreen(
@@ -41,11 +42,12 @@ fun FavouritesScreen(
     mealToRemove?.let { meal ->
         AlertDialog(
             onDismissRequest = { mealToRemove = null },
-            containerColor = Color(0xFF1E2228),
+            // Using theme surface color for dialog background
+            containerColor = MaterialTheme.colorScheme.surface,
             title = {
                 Text(
                     text = "Remove Favourite?",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -53,7 +55,7 @@ fun FavouritesScreen(
             text = {
                 Text(
                     text = "Are you sure you want to remove \"${meal.strMeal}\" from your favourites?",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
             },
@@ -75,7 +77,7 @@ fun FavouritesScreen(
                 TextButton(onClick = { mealToRemove = null }) {
                     Text(
                         text = "Cancel",
-                        color = Color.Cyan
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -83,92 +85,78 @@ fun FavouritesScreen(
     }
 
     // Main Screen
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF13171F))
-    ) {
-
-        // Top Bar
-        Row(
+    Scaffold(
+        topBar = {
+            Etbo5lyAppBar(
+                navController = navController,
+                text = "Favourites"
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF1A9E9E))
-                .padding(horizontal = 8.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-            Text(
-                text = "Favourites",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        // Content
-        if (favourites.isEmpty()) {
-            // Empty State
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+            // Content
+            if (favourites.isEmpty()) {
+                // Empty State
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = null,
-                        tint = Color.Gray,
-                        modifier = Modifier.size(64.dp)
-                    )
-                    Text(
-                        text = "No favourites yet",
-                        color = Color.Gray,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Text(
-                        text = "Tap the heart icon on any recipe to save it",
-                        color = Color.Gray,
-                        fontSize = 14.sp
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(64.dp)
+                        )
+                        Text(
+                            text = "No favourites yet",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Tap the heart icon on any recipe to save it",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            fontSize = 14.sp
+                        )
+                    }
                 }
-            }
-        } else {
-            // Recipes count
-            Text(
-                text = "${favourites.size} Recipe${if (favourites.size > 1) "s" else ""} saved",
-                color = Color.White,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-            )
+            } else {
+                // Recipes count
+                Text(
+                    text = "${favourites.size} Recipe${if (favourites.size > 1) "s" else ""} saved",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                )
 
-            // Favourites List
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(favourites) { meal ->
-                    FavouriteCard(
-                        meal = meal,
-                        onRemoveClick = { mealToRemove = meal },
-                        onCardClick = {
-                            navController.navigate("details/${meal.idMeal}")
-                        }
-                    )
+                // Favourites List
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(favourites) { meal ->
+                        FavouriteCard(
+                            meal = meal,
+                            onRemoveClick = { mealToRemove = meal },
+                            onCardClick = {
+                                navController.navigate("details/${meal.idMeal}")
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -186,7 +174,7 @@ private fun FavouriteCard(
         shape = RoundedCornerShape(16.dp),
         onClick = onCardClick,
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1E2228)
+            containerColor = MaterialTheme.colorScheme.surface
         )
     ) {
         Column {
@@ -202,17 +190,17 @@ private fun FavouriteCard(
                         .height(200.dp)
                 )
 
-                // Category tag — top right
+                // Category tag — top right, using primary color
                 Text(
                     text = meal.strCategory,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(10.dp)
                         .background(
-                            color = Color(0xFF1A9E9E),
+                            color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(20.dp)
                         )
                         .padding(horizontal = 10.dp, vertical = 4.dp)
@@ -230,7 +218,7 @@ private fun FavouriteCard(
                 // Meal name
                 Text(
                     text = meal.strMeal,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)

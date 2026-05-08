@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,21 +26,27 @@ fun ResponseMealCard(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(0.8f),
-        shape = RoundedCornerShape(12),
-        onClick = {navcontroller.navigate("details/${meal.idMeal}")}
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        onClick = { navcontroller.navigate("details/${meal.idMeal}") }
     ) {
-        Column() {
+        Column {
             AsyncImage(
                 model = meal.strMealThumb,
                 contentDescription = meal.strMeal,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth()
             )
             Text(
                 text = meal.strMeal,
                 modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 2
             )
         }

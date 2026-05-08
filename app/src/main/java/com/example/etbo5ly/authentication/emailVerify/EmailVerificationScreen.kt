@@ -1,27 +1,14 @@
 package com.example.etbo5ly.authentication.emailVerify
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.etbo5ly.R
 import com.example.etbo5ly.authentication.State
@@ -49,6 +35,7 @@ fun EmailVerificationScreen() {
     val emailVerify: emailVerify = viewModel()
     val emailstate by emailVerify.status.collectAsState()
     val context = LocalContext.current
+
     LaunchedEffect(emailstate) {
         Log.d("Email","in launch State ${emailstate}")
         when(emailstate){
@@ -64,58 +51,83 @@ fun EmailVerificationScreen() {
         }
     }
 
-    Column(Modifier.fillMaxSize()) {
-        TopAppBar(
-            title = {
-                Text(
-                    "Reset Password",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 25.sp
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Reset Password",
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 25.sp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            }
-        )
-        Box(Modifier.padding(top = 20.dp, start = 50.dp)){
-            Column() {
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 24.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
                 TextField(
                     value = email,
                     onValueChange = { email = it },
                     placeholder = {
                         Text(
-                            text = stringResource(R.string.Email)
+                            text = stringResource(R.string.Email),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
                     shape = RoundedCornerShape(25.dp),
                     colors = TextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                         unfocusedIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent
+                        focusedIndicatorColor = Color.Transparent,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                     ),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Outlined.Email,
                             contentDescription = "Email icon",
-                            tint = Color.Gray
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     },
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxWidth()
                 )
+                
                 Button(
-                    { emailVerify.sendEmail(email)},
-                    content = { Text("Send Email", fontSize = 25.sp, fontWeight = FontWeight.Bold) },
+                    onClick = { emailVerify.sendEmail(email) },
+                    content = { 
+                        Text(
+                            text = "Send Email", 
+                            fontSize = 20.sp, 
+                            fontWeight = FontWeight.Bold 
+                        ) 
+                    },
                     modifier = Modifier
-                        .padding(
-                            top = 20.dp,
-                            end = 80.dp
-                        )
                         .fillMaxWidth()
-                        .size(50.dp),
-                    colors = ButtonColors(Color.Cyan,
-                        Color.Black,
-                        Color.Cyan,
-                        Color.Gray
-                    )
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    shape = RoundedCornerShape(25.dp)
                 )
             }
         }
-
     }
 }

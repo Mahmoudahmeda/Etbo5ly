@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import com.example.etbo5ly.ui.theme.AppBarColor
-import com.example.etbo5ly.ui.theme.AppBarColorShade
 
 @Composable
 fun DashboardAppBarComponent(
@@ -22,7 +20,10 @@ fun DashboardAppBarComponent(
     onFavouriteClick: () -> Unit
 ) {
     val gradient = Brush.verticalGradient(
-        colors = listOf(AppBarColor, AppBarColorShade)
+        colors = listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+        )
     )
 
     Box(

@@ -36,9 +36,15 @@ import com.example.etbo5ly.data.dto.Meal
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
 @Composable
-fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: Meal, navController: NavController) {
+fun RecipeCard(
+    onFavClick: () -> Unit,
+    isFavorite: Boolean,
+    modifier: Modifier = Modifier,
+    meal: Meal,
+    navController: NavController
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(280.dp)
             .padding(16.dp),
@@ -76,27 +82,24 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier 
                 style = MaterialTheme.typography.labelSmall
             )
 
+            // BOTTOM CONTENT BOX
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary),
-            ){
-                //BOTTOM CONTENT
+                    .background(color = MaterialTheme.colorScheme.tertiary),
+            ) {
                 Column(
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
                 ) {
 
                     Text(
                         text = meal.strMeal,
                         color = MaterialTheme.colorScheme.onTertiary,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 2
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -124,7 +127,7 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier 
                                 imageVector = if (isFavorite) Icons.Filled.Favorite
                                 else Icons.Outlined.FavoriteBorder,
                                 contentDescription = "Favorite",
-                                tint = if (isFavorite) Color.Red else Color.White
+                                tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary
                             )
                         }
                     }
@@ -132,13 +135,5 @@ fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier 
             }
 
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewRecipeCard(){
-    Etbo5lyTheme {
-       // RecipeCard({},true)
     }
 }
