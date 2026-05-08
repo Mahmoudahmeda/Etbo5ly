@@ -33,7 +33,7 @@ fun FavouritesScreen(
     val database = remember { Etbo5lyDataBase.getDataBase(context) }
     val calendarRepo = CalendarRepository(database.mealDao())
     val viewModel: FavouritesViewModel = viewModel(
-        factory = FavouritesViewModelFactory(context, calendarRepo)
+        factory = FavouritesViewModelFactory(calendarRepo)
     )
 
     val favourites by viewModel.favourites.collectAsState()

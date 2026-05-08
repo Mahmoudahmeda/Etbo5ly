@@ -44,7 +44,7 @@ fun DashboardScreen(
     val database = remember { Etbo5lyDataBase.getDataBase(context) }
     val calendarRepo = CalendarRepository(database.mealDao())
     val viewModel: DashboardViewModel = viewModel(
-        factory = DashboardViewModelFactory(repository, calendarRepo,context)
+        factory = DashboardViewModelFactory(repository, calendarRepo)
     )
 
     val meal by viewModel.meal.collectAsState()

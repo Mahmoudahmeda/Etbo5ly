@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.MealX
-import com.example.etbo5ly.data.local.FavouritesDataStore
 import com.example.etbo5ly.data.repository.CalendarRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class FavouritesViewModel(
-    context: Context,
     private val calendarepo: CalendarRepository,
 ) : ViewModel() {
 
@@ -59,13 +57,12 @@ class FavouritesViewModel(
 }
 
 class FavouritesViewModelFactory(
-    private val context: Context,
     private val calendarepo: CalendarRepository,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(FavouritesViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return FavouritesViewModel(context, calendarepo) as T
+                return FavouritesViewModel(calendarepo) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
