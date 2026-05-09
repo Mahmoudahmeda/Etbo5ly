@@ -11,11 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.authentication.AuthenticationRepo
 import com.example.etbo5ly.dashboard_screen.components.DashboardAppBarComponent
 import com.example.etbo5ly.dashboard_screen.components.DrawerContent
@@ -69,8 +71,8 @@ fun DashboardScreen(
     val scope = rememberCoroutineScope()
 
     // Navbar state
-    var selectedNavItem by remember { mutableStateOf("Home") }
-    var userName by remember { mutableStateOf("Guest") }
+    var selectedNavItem by remember { mutableStateOf(context.getString(R.string.home)) }
+    var userName by remember { mutableStateOf(context.getString(R.string.guest)) }
 
     if (!isGuest) {
         authRepo.getCurrentUserName().also { userName = it }
@@ -99,7 +101,7 @@ fun DashboardScreen(
             containerColor = Color(0xFF1E2228),
             title = {
                 Text(
-                    text = "Login Required",
+                    text = stringResource(R.string.login_required),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
@@ -107,7 +109,7 @@ fun DashboardScreen(
             },
             text = {
                 Text(
-                    text = "You need to login or signup to add recipes to your favourites.",
+                    text = stringResource(R.string.login_to_favorite_msg),
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
@@ -122,7 +124,7 @@ fun DashboardScreen(
                     }
                 ) {
                     Text(
-                        text = "Login",
+                        text = stringResource(R.string.login),
                         color = Color.Cyan,
                         fontWeight = FontWeight.Bold
                     )
@@ -130,7 +132,7 @@ fun DashboardScreen(
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.dismissGuestFavouriteDialog() }) {
-                    Text(text = "Cancel", color = Color.Gray)
+                    Text(text = stringResource(R.string.cancel), color = Color.Gray)
                 }
             }
         )
@@ -219,7 +221,7 @@ fun DashboardScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = error ?: "Unknown error",
+                            text = error ?: stringResource(R.string.unknown_error),
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -234,13 +236,15 @@ fun DashboardScreen(
                         item {
                             // Meal of the Day Card
                             meal?.let { currentMeal ->
+                                val removedMsg = stringResource(R.string.removed_from_favorites)
+                                val addedMsg = stringResource(R.string.added_to_favorites)
                                 RecipeCard(
                                     onFavClick = {
                                         viewModel.onFavoriteClick(currentMeal)
                                         val message = if (favouriteIds.contains(currentMeal.idMeal))
-                                            "Removed from favourites"
+                                            removedMsg
                                         else
-                                            "Added to favourites"
+                                            addedMsg
                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                     },
                                     isFavorite = favouriteIds.contains(currentMeal.idMeal),
@@ -264,7 +268,7 @@ fun DashboardScreen(
                         item {
                             // Recipes Header
                             Text(
-                                text = "Recipes",
+                                text = stringResource(R.string.recipes),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -274,13 +278,15 @@ fun DashboardScreen(
 
                         items(recipes) { recipe ->
                             // Recipe Card
+                            val removedMsg = stringResource(R.string.removed_from_favorites)
+                            val addedMsg = stringResource(R.string.added_to_favorites)
                             RecipeCard(
                                 onFavClick = {
                                     viewModel.onFavoriteClick(recipe)
                                     val message = if (favouriteIds.contains(recipe.idMeal))
-                                        "Removed from favourites"
+                                        removedMsg
                                     else
-                                        "Added to favourites"
+                                        addedMsg
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 },
                                 isFavorite = favouriteIds.contains(recipe.idMeal),

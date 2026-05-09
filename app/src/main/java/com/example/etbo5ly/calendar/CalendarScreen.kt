@@ -40,11 +40,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.local.entities.CalendarEntity
 import com.example.etbo5ly.data.repository.CalendarRepository
@@ -70,7 +72,7 @@ fun CalendarScreen(
         containerColor = Color(0xFF121212),
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Meal Calendar", color = Color.White) },
+                title = { Text(stringResource(R.string.meal_calendar), color = Color.White) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black,
                     scrolledContainerColor = Color.Unspecified,
@@ -164,7 +166,7 @@ fun TodayBadge() {
         shape = RoundedCornerShape(16.dp)
     ) {
         Text(
-            text = "Today",
+            text = stringResource(R.string.today),
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
             color = Color(0xFF4DB6AC), // Bright Teal text
             style = MaterialTheme.typography.labelMedium,
@@ -218,7 +220,7 @@ fun EmptyCalendarPlaceholder() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "No meals planned for this day",
+            text = stringResource(R.string.no_meals_planned),
             color = Color.Gray,
             style = MaterialTheme.typography.bodyLarge
         )
@@ -269,7 +271,7 @@ fun MealCard(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Planned for ${viewModel.formatTime(meal.date)}", // Helper to show time
+                    text = stringResource(R.string.planned_for, viewModel.formatTime(meal.date)), // Helper to show time
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
@@ -279,7 +281,7 @@ fun MealCard(
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
+                    contentDescription = stringResource(R.string.delete),
                     tint = Color(0xFFEF5350) // Soft Red
                 )
             }

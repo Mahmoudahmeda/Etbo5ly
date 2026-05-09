@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -45,7 +46,6 @@ import android.widget.Toast
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.etbo5ly.Details.DetailsViewModelFactory
 import com.example.etbo5ly.calendar.CalendarViewModel
@@ -104,10 +104,11 @@ fun RecipeDetailsScreen(
     }
 
     // Show snackbar when offline action attempted
+    val noInternetMsg = stringResource(R.string.no_internet)
     LaunchedEffect(showOfflineSnackbar) {
         if (showOfflineSnackbar) {
             snackbarHostState.showSnackbar(
-                message = "No internet connection",
+                message = noInternetMsg,
                 duration = SnackbarDuration.Short
             )
             showOfflineSnackbar = false
@@ -128,12 +129,12 @@ fun RecipeDetailsScreen(
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
                     Text(
-                        text = "Recipe Details",
+                        text = stringResource(R.string.recipe_details),
                         color = Color.White,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
@@ -182,12 +183,12 @@ fun RecipeDetailsScreen(
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
                     Text(
-                        text = "Recipe Details",
+                        text = stringResource(R.string.recipe_details),
                         color = Color.White,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
@@ -203,12 +204,12 @@ fun RecipeDetailsScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.WifiOff,
-                                contentDescription = "Offline",
+                                contentDescription = stringResource(R.string.offline),
                                 tint = Color.Cyan,
                                 modifier = Modifier.size(16.dp)
                             )
                             Text(
-                                text = "Offline",
+                                text = stringResource(R.string.offline),
                                 color = Color.Cyan,
                                 fontSize = SmallSize
                             )
@@ -256,14 +257,16 @@ fun RecipeDetailsScreen(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
+                    val removedMsg = stringResource(R.string.removed_from_favorites)
+                    val addedMsg = stringResource(R.string.added_to_favorites)
                     AddToFavoriteSection(
                         meal,
                         onFavClick = {
                             viewmodel.onFavoriteClick(meal)
                             val message = if (favouriteIds.contains(meal.idMeal))
-                                "Removed from favourites"
+                                removedMsg
                             else
-                                "Added to favourites"
+                                addedMsg
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         },
                         isFavorite = favouriteIds.contains(meal.idMeal)
@@ -308,13 +311,13 @@ fun RecipeDetailsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Ingredients",
+                        text = stringResource(R.string.ingredients),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "${meal.ingredients.size} items",
+                        text = stringResource(R.string.items_count, meal.ingredients.size),
                         color = MaterialTheme.colorScheme.primary, // Turquoise or Red
                         fontSize = SmallSize
                     )
@@ -337,7 +340,7 @@ fun RecipeDetailsScreen(
 
                 // ── Instructions Header ─────────────────────────────────
                 Text(
-                    text = "Instructions",
+                    text = stringResource(R.string.instructions),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = SectionSize,
@@ -383,7 +386,7 @@ fun RecipeDetailsScreen(
                 // ── View More / View Less ───────────────────────────────
                 if (allSteps.size > 2) {
                     Text(
-                        text = if (instructionsExpanded) "View Less ↑" else "View More ↓",
+                        text = if (instructionsExpanded) stringResource(R.string.view_less) else stringResource(R.string.view_more),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = SmallSize,
                         fontWeight = FontWeight.Bold,
@@ -401,7 +404,7 @@ fun RecipeDetailsScreen(
                 // YouTube only when online
                 if (isOnline && !meal.strYoutube.isNullOrBlank()) {
                     Text(
-                        text = "Watch Recipe",
+                        text = stringResource(R.string.watch_recipe),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = SectionSize,
@@ -432,7 +435,7 @@ fun RecipeDetailsScreen(
                                 modifier = Modifier.size(32.dp)
                             )
                             Text(
-                                text = "Video unavailable offline",
+                                text = stringResource(R.string.video_unavailable_offline),
                                 color = Color.Gray,
                                 fontSize = SmallSize,
                                 textAlign = TextAlign.Center
@@ -566,6 +569,7 @@ fun YoutubePlayer(videoUrl: String) {
             .clip(RoundedCornerShape(16.dp)),
         factory = { context ->
             YouTubePlayerView(context).apply {
+                lifecycleOwner.lifecycle.addObserver(this)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         youTubePlayer.cueVideo(videoId, 0f)
@@ -597,7 +601,7 @@ fun AddToCalendarSection(
         colors = IconButtonDefaults.iconButtonColors(containerColor = Color(0xFF00BCD4)), // Cyan/Teal
         shape = RoundedCornerShape(10.dp)
     ) {
-        Icon(Icons.Default.DateRange, contentDescription = "Calendar")
+        Icon(Icons.Default.DateRange, contentDescription = stringResource(R.string.calendar))
     }
 
     // 2. The Material 3 Date Picker Dialog
@@ -608,13 +612,14 @@ fun AddToCalendarSection(
                 TextButton(onClick = {
                     showDatePicker = false
                     showTimePicker = true
-                }) { Text("Next") }
+                }) { Text(stringResource(R.string.next)) }
             }
         ) {
             DatePicker(state = datePickerState)
         }
     }
     if (showTimePicker) {
+        val scheduleTxt = stringResource(R.string.schedule)
         TimePickerDialog(
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
@@ -633,8 +638,8 @@ fun AddToCalendarSection(
                     viewModel.addToCalendar(recipe, finalTimestamp)
                     viewModel.scheduleMealNotification(recipe.strMeal, finalTimestamp)
                     showTimePicker = false
-                }) { Text("Schedule") } },
-            { Text("Schedule") }
+                }) { Text(scheduleTxt) } },
+            { Text(scheduleTxt) }
         ) { TimePicker(state = timePickerState) }
     }
 }
@@ -656,9 +661,8 @@ fun AddToFavoriteSection(
         Icon(
             imageVector = if (isFavorite) Icons.Filled.Favorite
             else Icons.Outlined.FavoriteBorder,
-            contentDescription = "Favorite",
+            contentDescription = stringResource(R.string.favorite),
             tint = if (isFavorite) Color.Red else Color.White
         )
     }
 }
-

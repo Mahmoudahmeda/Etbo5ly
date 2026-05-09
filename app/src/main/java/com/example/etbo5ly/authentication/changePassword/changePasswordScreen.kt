@@ -3,32 +3,11 @@ package com.example.etbo5ly.authentication.changePassword
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,10 +32,11 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
     val state by changePass.status.collectAsState()
     val context = LocalContext.current
 
+    val successMsg = stringResource(R.string.password_updated)
     LaunchedEffect(state) {
         when (state) {
             is State.Success -> {
-                Toast.makeText(context, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, successMsg, Toast.LENGTH_SHORT).show()
                 navController.navigate("login") {
                     popUpTo("login") { inclusive = true }
                 }
@@ -73,7 +53,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             TopAppBar(
                 title = {
                     Text(
-                        text = "New Password",
+                        text = stringResource(R.string.new_password),
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -89,10 +69,11 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             TextField(
                 value = password,
@@ -117,127 +98,60 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Password Field",
+                        contentDescription = stringResource(R.string.password_field_desc),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             )
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TopAppBar(
-            title = { Text("New Password") }
-        )
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            placeholder = { Text(stringResource(R.string.password)) },
-            shape = RoundedCornerShape(25.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent
-            ),
-            modifier = Modifier
-                .padding(horizontal = 40.dp, vertical = 8.dp)
-                .fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Password Field",
-                    tint = Color.Gray
-                )
-            }
-        )
-
-        TextField(
-            value = repassword,
-            onValueChange = { repassword = it },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.repassword),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            shape = RoundedCornerShape(25.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Confirm Password Field",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        )
-        TextField(
-            value = repassword,
-            onValueChange = { repassword = it },
-            placeholder = { Text(stringResource(R.string.repassword)) },
-            shape = RoundedCornerShape(25.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent
-            ),
-            modifier = Modifier
-                .padding(horizontal = 40.dp, vertical = 8.dp)
-                .fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Lock,
-                    contentDescription = "Password Field",
-                    tint = Color.Gray
-                )
-            }
-        )
-    }
-            Button(
-                onClick = { changePass.changePassword(code, password, repassword) },
-                content = {
+            TextField(
+                value = repassword,
+                onValueChange = { repassword = it },
+                placeholder = {
                     Text(
-                        text = "Change",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        text = stringResource(R.string.repassword),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
+                shape = RoundedCornerShape(25.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                visualTransformation = PasswordVisualTransformation(),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Lock,
+                        contentDescription = stringResource(R.string.confirm_password_field_desc),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = { changePass.changePassword(code, password, repassword) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = Color.Cyan,
+                    contentColor = Color.Black
                 ),
                 shape = RoundedCornerShape(25.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { changePass.changePassword(code, password, repassword) },
-            modifier = Modifier
-                .padding(horizontal = 40.dp)
-                .fillMaxWidth()
-                .height(56.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Cyan,
-                contentColor = Color.Black
-            ),
-            shape = RoundedCornerShape(25.dp)
-        ) {
-            Text("Change", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            ) {
+                Text(
+                    text = stringResource(R.string.change),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }

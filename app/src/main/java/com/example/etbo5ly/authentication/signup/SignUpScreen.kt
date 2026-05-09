@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,7 +55,7 @@ fun SignUpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background) // Uses dynamic theme background
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -65,8 +66,8 @@ fun SignUpScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Account",
-                color = MaterialTheme.colorScheme.onBackground, // Adapts to light/dark text
+                text = stringResource(R.string.account),
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
@@ -76,11 +77,11 @@ fun SignUpScreen(
                     popUpTo("signup") {inclusive= true  }
                 } },
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape) // Uses variant for toggle background
+                    .background(MaterialTheme.colorScheme.surfaceVariant, CircleShape)
                     .padding(horizontal = 8.dp)
             ) {
                 Text(
-                    text = "Sign In",
+                    text = stringResource(R.string.sign_in),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -93,7 +94,7 @@ fun SignUpScreen(
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(bottom = 16.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), // Card pops against background
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
@@ -106,22 +107,22 @@ fun SignUpScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.chef),
-                    contentDescription = "Chef Illustration",
+                    contentDescription = stringResource(R.string.chef_illustration),
                     modifier = Modifier
                         .size(250.dp)
                         .padding(bottom = 16.dp)
                 )
 
                 Text(
-                    text = "Welcome Chief !",
+                    text = stringResource(R.string.welcome_chief),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Discover your next favorite meal today",
+                    text = stringResource(R.string.discover_meal),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant, // Muted description text
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -132,20 +133,20 @@ fun SignUpScreen(
                 CustomInputField(
                     value = username,
                     onValueChange = viewModel::onUsernameChange,
-                    label = "Username"
+                    label = stringResource(R.string.username)
                 )
 
                 CustomInputField(
                     value = email,
                     onValueChange = viewModel::onEmailChange,
-                    label = "Email",
+                    label = stringResource(R.string.Email),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
 
                 CustomInputField(
                     value = password,
                     onValueChange = viewModel::onPasswordChange,
-                    label = "Password",
+                    label = stringResource(R.string.password),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
@@ -161,12 +162,12 @@ fun SignUpScreen(
                         .height(60.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary, // Turquoise or Deep Red
+                        containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Text(
-                        text = "Sign Up",
+                        text = stringResource(R.string.sign_up),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -183,7 +184,7 @@ fun SignUpScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
                     )
                     Text(
-                        text = "OR CONTINUE WITH",
+                        text = stringResource(R.string.or_continue_with),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 10.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
@@ -200,7 +201,7 @@ fun SignUpScreen(
                     onClick = { viewModel.LoginasgGuest() }
                 ) {
                     Text(
-                        text = "Continue as Guest",
+                        text = stringResource(R.string.continue_as_guest),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
@@ -235,7 +236,7 @@ fun CustomInputField(
             .padding(vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Toasted cream or Midnight Blue lighter
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
             focusedTextColor = MaterialTheme.colorScheme.onSurface,

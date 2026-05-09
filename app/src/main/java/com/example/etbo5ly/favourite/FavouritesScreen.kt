@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.repository.CalendarRepository
@@ -50,7 +52,7 @@ fun FavouritesScreen(
             containerColor = Color(0xFF1E2228),
             title = {
                 Text(
-                    text = "Remove Favourite?",
+                    text = stringResource(R.string.remove_favourite_title),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
@@ -58,7 +60,7 @@ fun FavouritesScreen(
             },
             text = {
                 Text(
-                    text = "Are you sure you want to remove \"${meal.strMeal}\" from your favourites?",
+                    text = stringResource(R.string.remove_favourite_msg, meal.strMeal),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
@@ -71,7 +73,7 @@ fun FavouritesScreen(
                     }
                 ) {
                     Text(
-                        text = "Remove",
+                        text = stringResource(R.string.remove),
                         color = Color.Red,
                         fontWeight = FontWeight.Bold
                     )
@@ -80,7 +82,7 @@ fun FavouritesScreen(
             dismissButton = {
                 TextButton(onClick = { mealToRemove = null }) {
                     Text(
-                        text = "Cancel",
+                        text = stringResource(R.string.cancel),
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -93,7 +95,7 @@ fun FavouritesScreen(
         topBar = {
             Etbo5lyAppBar(
                 navController = navController,
-                text = "Favourites"
+                text = stringResource(R.string.favourites)
             )
         },
         containerColor = MaterialTheme.colorScheme.background
@@ -121,13 +123,13 @@ fun FavouritesScreen(
                             modifier = Modifier.size(64.dp)
                         )
                         Text(
-                            text = "No favourites yet",
+                            text = stringResource(R.string.no_favourites_yet),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Tap the heart icon on any recipe to save it",
+                            text = stringResource(R.string.tap_to_save_hint),
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             fontSize = 14.sp
                         )
@@ -136,7 +138,7 @@ fun FavouritesScreen(
             } else {
                 // Recipes count
                 Text(
-                    text = "${favourites.size} Recipe${if (favourites.size > 1) "s" else ""} saved",
+                    text = stringResource(R.string.recipes_saved_msg, favourites.size),
                     color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
@@ -233,7 +235,7 @@ fun FavouriteCard(
                 IconButton(onClick = onRemoveClick) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
-                        contentDescription = "Remove from favourites",
+                        contentDescription = stringResource(R.string.remove_from_favourites),
                         tint = Color.Red,
                         modifier = Modifier.size(24.dp)
                     )

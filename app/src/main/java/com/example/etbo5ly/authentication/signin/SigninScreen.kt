@@ -103,7 +103,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Account",
+                text = stringResource(R.string.account),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
@@ -116,7 +116,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     .padding(horizontal = 8.dp)
             ) {
                 Text(
-                    text = "Signup",
+                    text = stringResource(R.string.signup),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -149,7 +149,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 )
 
                 Text(
-                    text = "Welcome Back!",
+                    text = stringResource(R.string.welcome_back),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -157,7 +157,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 )
 
                 Text(
-                    text = "Log in to continue your journey",
+                    text = stringResource(R.string.login_journey),
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -169,7 +169,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 SigninInputField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Email",
+                    label = stringResource(R.string.Email),
                     icon = Icons.Outlined.Email,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
@@ -177,7 +177,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                 SigninInputField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Password",
+                    label = stringResource(R.string.password),
                     icon = Icons.Outlined.Lock,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
@@ -188,7 +188,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                     modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(
-                        text = "Forget Password?",
+                        text = stringResource(R.string.forget_password),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.primary
@@ -208,7 +208,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text("Sign In", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.sign_in), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -223,7 +223,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f)
                     )
                     Text(
-                        text = "OR CONTINUE WITH",
+                        text = stringResource(R.string.or_continue_with),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 10.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
@@ -254,14 +254,14 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
                             }
                         },
                         iconId = R.drawable.google_logo,
-                        label = "Google",
+                        label = stringResource(R.string.google),
                         modifier = Modifier.weight(1f)
                     )
 
                     SocialSignInButton(
                         onClick = { facebookActivityLauncher.launch(listOf("email", "public_profile")) },
                         iconId = R.drawable.facebook_logo,
-                        label = "Facebook",
+                        label = stringResource(R.string.facebook),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -270,7 +270,7 @@ fun Signin_screen(viewModel: Signin, navController: NavController) {
 
                 TextButton(onClick = { viewModel.LoginasgGuest() }) {
                     Text(
-                        text = "Continue as Guest",
+                        text = stringResource(R.string.continue_as_guest),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp

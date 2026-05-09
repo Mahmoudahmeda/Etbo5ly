@@ -10,4 +10,91 @@
     <string name="fb_login_protocol_scheme">fb2996016137456438</string>
     <string name="facebook_client_token">8655e84b505c0468d3e4fd68501ea60c</string>
     <string name="default_web_client_id">539434407333-psmolt2k3ad67hspmqs7n187u1i4k1nh.apps.googleusercontent.com</string>
+
+    <!-- Details Screen -->
+    <string name="no_internet">No internet connection</string>
+    <string name="back">Back</string>
+    <string name="recipe_details">Recipe Details</string>
+    <string name="offline">Offline</string>
+    <string name="removed_from_favorites">Removed from favourites</string>
+    <string name="added_to_favorites">Added to favourites</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="items_count">%1$d items</string>
+    <string name="instructions">Instructions</string>
+    <string name="view_less">View Less ↑</string>
+    <string name="view_more">View More ↓</string>
+    <string name="watch_recipe">Watch Recipe</string>
+    <string name="video_unavailable_offline">Video unavailable offline</string>
+    <string name="calendar">Calendar</string>
+    <string name="next">Next</string>
+    <string name="schedule">Schedule</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- Email Verification -->
+    <string name="check_email">Check your Email Box</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="email_icon_desc">Email icon</string>
+    <string name="send_email">Send Email</string>
+
+    <!-- Change Password -->
+    <string name="password_updated">Password updated successfully!</string>
+    <string name="new_password">New Password</string>
+    <string name="password_field_desc">Password Field</string>
+    <string name="confirm_password_field_desc">Confirm Password Field</string>
+    <string name="change">Change</string>
+
+    <!-- Sign In / Sign Up -->
+    <string name="account">Account</string>
+    <string name="signup">Signup</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="login_journey">Log in to continue your journey</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or_continue_with">OR CONTINUE WITH</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="username">Username</string>
+    <string name="chef_illustration">Chef Illustration</string>
+    <string name="welcome_chief">Welcome Chief !</string>
+    <string name="discover_meal">Discover your next favorite meal today</string>
+
+    <!-- Dashboard & Drawer -->
+    <string name="menu">Menu</string>
+    <string name="hello_user">Hello %1$s 👋</string>
+    <string name="ready_to_cook">Ready to cook something delicious today?</string>
+    <string name="favourites">Favourites</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="guest">Guest</string>
+    <string name="home">Home</string>
+    <string name="login_required">Login Required</string>
+    <string name="login_to_favorite_msg">You need to login or signup to add recipes to your favourites.</string>
+    <string name="login">Login</string>
+    <string name="cancel">Cancel</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="recipes">Recipes</string>
+
+    <!-- Favourites Screen -->
+    <string name="remove_favourite_title">Remove Favourite?</string>
+    <string name="remove_favourite_msg">Are you sure you want to remove \"%1$s\" from your favourites?</string>
+    <string name="remove">Remove</string>
+    <string name="no_favourites_yet">No favourites yet</string>
+    <string name="tap_to_save_hint">Tap the heart icon on any recipe to save it</string>
+    <string name="recipes_saved_msg">%1$d Recipes saved</string>
+    <string name="remove_from_favourites">Remove from favourites</string>
+
+    <!-- Navigation -->
+    <string name="search">Search</string>
+
+    <!-- Calendar Screen -->
+    <string name="meal_calendar">Meal Calendar</string>
+    <string name="today">Today</string>
+    <string name="no_meals_planned">No meals planned for this day</string>
+    <string name="planned_for">Planned for %1$s</string>
+    <string name="delete">Delete</string>
 </resources>

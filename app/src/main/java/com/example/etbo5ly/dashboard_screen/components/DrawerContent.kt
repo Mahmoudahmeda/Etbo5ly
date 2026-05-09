@@ -20,10 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.settings.SettingsViewModel
 
 @Composable
@@ -57,7 +59,7 @@ fun DrawerContent(
         ) {
             AsyncImage(
                 model = userPhotoUrl,
-                contentDescription = "Profile Picture",
+                contentDescription = stringResource(R.string.profile_picture),
                 modifier = Modifier
                     .size(56.dp)
                     .clip(CircleShape)
@@ -86,7 +88,7 @@ fun DrawerContent(
         // Profile Item
         DrawerItem(
             icon = Icons.Default.Person,
-            label = "Profile",
+            label = stringResource(R.string.profile),
             tint = MaterialTheme.colorScheme.onSurface,
             onClick = onProfileClick
         )
@@ -96,7 +98,7 @@ fun DrawerContent(
         // Logout Item
         DrawerItem(
             icon = Icons.AutoMirrored.Filled.ExitToApp,
-            label = "Logout",
+            label = stringResource(R.string.logout),
             tint = Color.Red,
             onClick = onLogoutClick
         )
@@ -122,7 +124,7 @@ fun DrawerContent(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = if (isDarkTheme) "Dark Mode" else "Light Mode",
+                    text = if (isDarkTheme) stringResource(R.string.dark_mode) else stringResource(R.string.light_mode),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Medium
