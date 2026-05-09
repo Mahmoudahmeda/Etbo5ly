@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,15 +31,24 @@ fun ProfileHeader(name: String, email: String, photoUrl: String?, clickOnPhoto: 
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(CardBottom)
+                .background(MaterialTheme.colorScheme.surfaceVariant)
                 .clickable(onClick = clickOnPhoto),
             contentScale = ContentScale.Crop,
             error = rememberVectorPainter(Icons.Default.Person),
             fallback = rememberVectorPainter(Icons.Default.Person),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(name, color = ProductTitle, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        Text(email, color = Subtitle, fontSize = 14.sp)
+        Text(
+            text = name, 
+            color = MaterialTheme.colorScheme.onBackground, 
+            fontSize = 22.sp, 
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = email, 
+            color = MaterialTheme.colorScheme.onSurfaceVariant, 
+            fontSize = 14.sp
+        )
         Spacer(modifier = Modifier.height(16.dp))
     }
 }

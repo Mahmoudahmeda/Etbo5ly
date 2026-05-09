@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
@@ -29,18 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.etbo5ly.settings.SettingsViewModel
-import com.example.etbo5ly.ui.theme.AppBarColor
-import com.example.etbo5ly.ui.theme.AppBarColorShade
-import com.example.etbo5ly.ui.theme.CardBottom
-
-// AppBar for the App screens takes
-// 1. modifier (optional)
-// 2. navController (required)
-// 3. text : screen name (required)
-// why use?
-// has the gradiant color same as Figma design
-// used in most of the screens of the app
-// has the user photo in the top right corner
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,17 +42,27 @@ fun Etbo5lyAppBar(
     val userPhotoUrl by viewModel.userPhotoUrl.collectAsState()
 
     val gradient = Brush.verticalGradient(
-        colors = listOf(AppBarColor, AppBarColorShade)
+        colors = listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.secondary
+        )
     )
 
     Box(modifier = modifier.background(gradient)) {
         TopAppBar(
-            title = { Text(text = text, color = Color.Black) },
+            title = { 
+                Text(
+                    text = text, 
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge
+                ) 
+            },
             navigationIcon = {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             },
@@ -75,9 +74,8 @@ fun Etbo5lyAppBar(
                         .padding(end = 12.dp)
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(CardBottom)
+                        .background(MaterialTheme.colorScheme.tertiary)
                         .clickable { 
-                            // Only navigate if we aren't already on the profile screen
                             if (navController.currentDestination?.route != "Profile") {
                                 navController.navigate("Profile")
                             }
@@ -89,10 +87,10 @@ fun Etbo5lyAppBar(
             },
             colors = TopAppBarColors(
                 containerColor = Color.Transparent,
-                titleContentColor = Color.Black,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
                 scrolledContainerColor = Color.Transparent,
-                navigationIconContentColor = Color.Black,
-                actionIconContentColor = Color.Black
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary
             )
         )
     }

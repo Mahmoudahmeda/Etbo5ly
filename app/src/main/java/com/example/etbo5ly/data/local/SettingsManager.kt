@@ -18,6 +18,7 @@ class SettingsManager(private val context: Context) {
 
     private fun notifyKey(userId: String) = booleanPreferencesKey("${userId}_notifications")
     private fun photoKey(userId: String) = stringPreferencesKey("${userId}_photo_url")
+    private fun themeKey(userId: String) = booleanPreferencesKey("${userId}_is_dark_theme")
 
     fun isNotificationsEnabled(userId: String): Flow<Boolean> = context.dataStore.data
         .catch { exception ->
@@ -44,6 +45,21 @@ class SettingsManager(private val context: Context) {
             context.dataStore.edit { it[photoKey(userId)] = url }
         } catch (e: IOException) {
             Log.e("SettingsManager", "Error writing data: ${e.message}")
+        }
+    }
+
+    // Theme Management
+    fun isDarkTheme(userId: String): Flow<Boolean> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences())
+            else throw exception
+        }.map { it[themeKey(userId)] ?: true } // Default to true (Dark Mode)
+
+    suspend fun setDarkTheme(userId: String, isDark: Boolean) {
+        try {
+            context.dataStore.edit { it[themeKey(userId)] = isDark }
+        } catch (e: IOException) {
+            Log.e("SettingsManager", "Error writing theme data: ${e.message}")
         }
     }
 }

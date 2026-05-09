@@ -33,10 +33,10 @@ fun BottomNavBar(
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xFF1E2228).copy(alpha = 0.8f))
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.95f))
             .border(
                 width = 1.dp,
-                color = Color.White.copy(alpha = 0.1f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(vertical = 10.dp)
@@ -66,14 +66,16 @@ fun BottomNavBar(
                             else       -> Icons.Default.Person
                         },
                         contentDescription = item,
-                        tint = if (isSelected) Color(0xFF51FBFB) else Color.White,
+                        // Tint icons with primary color when selected, and onSurface when not.
+                        tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = item,
                         fontSize = 12.sp,
-                        color = if (isSelected) Color(0xFF51FBFB) else Color.White
+                        // Match text color with icon color
+                        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

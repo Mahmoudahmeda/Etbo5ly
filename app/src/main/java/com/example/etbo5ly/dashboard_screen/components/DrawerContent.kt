@@ -3,8 +3,11 @@ package com.example.etbo5ly.dashboard_screen.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.etbo5ly.settings.SettingsViewModel
-import com.example.etbo5ly.ui.theme.CardBottom
 
 @Composable
 fun DrawerContent(
@@ -32,6 +34,8 @@ fun DrawerContent(
 ) {
     val settingsViewModel: SettingsViewModel = viewModel()
     val userPhotoUrl by settingsViewModel.userPhotoUrl.collectAsState()
+    val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -57,7 +61,7 @@ fun DrawerContent(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(CircleShape)
-                    .background(CardBottom),
+                    .background(MaterialTheme.colorScheme.tertiary),
                 contentScale = ContentScale.Crop,
                 error = rememberVectorPainter(Icons.Default.Person),
                 fallback = rememberVectorPainter(Icons.Default.Person)
@@ -75,7 +79,7 @@ fun DrawerContent(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        HorizontalDivider()
+        HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -96,6 +100,46 @@ fun DrawerContent(
             tint = Color.Red,
             onClick = onLogoutClick
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Theme Toggle at the bottom
+        HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
+        
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp, horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if (isDarkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = if (isDarkTheme) "Dark Mode" else "Light Mode",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = { settingsViewModel.toggleTheme(it) },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

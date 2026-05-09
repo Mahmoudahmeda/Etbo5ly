@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Egg
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -117,20 +118,32 @@ fun MainSearch(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(12.dp)),
-                placeholder = { Text("What are you Looking For ?", color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        text = "What are you Looking For ?",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray)
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 },
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xFF1C1C1E),
-                    unfocusedContainerColor = Color(0xFF1C1C1E),
-                    disabledContainerColor = Color(0xFF1C1C1E),
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 ),
                 singleLine = true
             )
 
+            // 2. Filter Buttons Row
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -158,7 +171,7 @@ fun MainSearch(
                     ) {
                         Text(
                             text = error ?: "An error occurred",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
                         )
@@ -209,11 +222,8 @@ fun MainSearch(
                         }
                         "General" -> {
                             if (isLoading) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(color = AppBarColor)
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                                 }
                             } else if (general.isEmpty() && searchQ.isNotEmpty()) {
                                 EmptyState(searchQ)
@@ -235,7 +245,7 @@ fun EmptyState(query: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
             text = "No matches found for '$query'",
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(16.dp)
         )

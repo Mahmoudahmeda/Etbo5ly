@@ -59,7 +59,7 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        containerColor = BackgroundDark,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Etbo5lyAppBar(
                 navController = navController,
@@ -82,6 +82,7 @@ fun SettingsScreen(
                 photoUrl = userPhotoUrl,
                 clickOnPhoto = { photoPickerLauncher.launch("image/*") }
             )
+
             Spacer(modifier = Modifier.height(32.dp))
 
             SettingsSectionTitle("COMMUNICATION")

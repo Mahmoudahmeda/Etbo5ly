@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -39,6 +40,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import android.util.Log
+import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 import android.widget.Toast
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
@@ -168,6 +170,12 @@ fun RecipeDetailsScreen(
                 }
             },
             topBar = {
+                Etbo5lyAppBar(
+                    navController = navController,
+                    text = "Recipe Details"
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.background
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,11 +224,13 @@ fun RecipeDetailsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF13171F))
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
             ) {
 
+                Spacer(Modifier.height(16.dp))
+
+                // Meal Image
                 // Meal image — Coil caches images so shows even offline
                 AsyncImage(
                     model = ImageRequest.Builder(context)
@@ -238,35 +248,14 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // ── Meal Name & Add to Plan ─────────────────────────────
-                Row(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = meal.strMeal,
-                        color = Color.White,
-                        fontSize = TitleSize,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f)
-                    )
-                    AddToFavoriteSection(
-                        meal,
-                        onFavClick = {
-                            viewmodel.onFavoriteClick(meal)
-                            val message = if (favouriteIds.contains(meal.idMeal))
-                                "Removed from favourites"
-                            else
-                                "Added to favourites"
-                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        },
-                        isFavorite = favouriteIds.contains(meal.idMeal)
-                    )
-                    AddToCalendarSection(meal, viewModel = viewmodel) { selectedTimestamp ->
-                        viewmodel.scheduleMealNotification(meal.strMeal, selectedTimestamp)
-                        viewmodel.addToCalendar(meal, selectedTimestamp)
-                    }
-                }
+                // ── Meal Name ───────────────────────────────────────────
+                Text(
+                    text = meal.strMeal,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = TitleSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
 
                 Spacer(Modifier.height(8.dp))
 
@@ -301,13 +290,13 @@ fun RecipeDetailsScreen(
                 ) {
                     Text(
                         text = "Ingredients",
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = SectionSize,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "${meal.ingredients.size} items",
-                        color = Color.Cyan,
+                        color = MaterialTheme.colorScheme.primary, // Turquoise or Red
                         fontSize = SmallSize
                     )
                 }
@@ -328,7 +317,7 @@ fun RecipeDetailsScreen(
 
                 Text(
                     text = "Instructions",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = SectionSize,
                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -346,13 +335,13 @@ fun RecipeDetailsScreen(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(24.dp)
-                                .background(Color.Cyan, CircleShape),
+                                .size(32.dp)
+                                .background(MaterialTheme.colorScheme.primary, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = (index + 1).toString(),
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = SmallSize,
                                 textAlign = TextAlign.Center
@@ -361,7 +350,7 @@ fun RecipeDetailsScreen(
                         Spacer(Modifier.width(12.dp))
                         Text(
                             text = step,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = BodySize,
                             lineHeight = 22.sp
                         )
@@ -371,9 +360,10 @@ fun RecipeDetailsScreen(
                 if (allSteps.size > 2) {
                     Text(
                         text = if (instructionsExpanded) "View Less ↑" else "View More ↓",
-                        color = Color.Cyan,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = SmallSize,
                         fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .clickable { instructionsExpanded = !instructionsExpanded }
@@ -472,29 +462,19 @@ fun IngredientRow(
                 error = androidx.compose.ui.res.painterResource(
                     id = android.R.drawable.ic_menu_gallery
                 )
+                    .background(MaterialTheme.colorScheme.surfaceVariant) // Matches the warm/cool variant
             )
             Text(
                 text = ingredient,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontSize = BodySize
             )
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = amount,
-                color = Color.Gray,
-                fontSize = SmallSize
-            )
-            // Small arrow indicator — grayed out when offline
-            Text(
-                text = "›",
-                color = if (isOnline) Color.Cyan else Color.Gray,
-                fontSize = BodySize
-            )
-        }
+        Text(
+            text = amount,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, // Muted text color for measurements
+            fontSize = SmallSize
+        )
     }
 }
 @Composable

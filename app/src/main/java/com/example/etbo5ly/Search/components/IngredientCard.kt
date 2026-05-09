@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +40,9 @@ fun IngredientCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1E))
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(8.dp),
@@ -57,13 +60,13 @@ fun IngredientCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(Color.DarkGray.copy(alpha = 0.5f))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                     .padding(vertical = 4.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = ingredient.strIngredient,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontFamily = FontFamily.Default,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

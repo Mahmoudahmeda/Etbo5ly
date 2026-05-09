@@ -33,6 +33,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), authRepo.getCurrentUserPhotoUrl())
 
+    val isDarkTheme: StateFlow<Boolean> = settingsManager.isDarkTheme(userId)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true) // Default to Dark mode
+
     fun toggleNotifications(enabled: Boolean) {
         viewModelScope.launch {
             settingsManager.setNotificationsEnabled(userId, enabled)
@@ -42,6 +45,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                     "You will now receive recipe alerts and meal reminders."
                 )
             }
+        }
+    }
+
+    fun toggleTheme(isDark: Boolean) {
+        viewModelScope.launch {
+            settingsManager.setDarkTheme(userId, isDark)
         }
     }
 

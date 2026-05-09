@@ -2,6 +2,7 @@ package com.example.etbo5ly.settings.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,7 +15,7 @@ import com.example.etbo5ly.ui.theme.Subtitle
 fun SettingsSectionTitle(title: String) {
     Text(
         text = title,
-        color = Subtitle,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier

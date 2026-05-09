@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.foundation.clickable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavController
 
 @Composable
@@ -44,15 +46,16 @@ fun CategoriesSection(
                 text = "Categories",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onBackground
             )
             Text(
                 text = "View All",
                 fontSize = 13.sp,
-                color = Color(0xFF51FBFB),
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline,
                 modifier = Modifier.clickable {
                     navController.navigate("Search/Categories")
-                }
+                },
             )
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -78,7 +81,7 @@ fun CategoriesSection(
                     Text(
                         text = category.name,
                         fontSize = 11.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onBackground // Adapts to light/dark
                     )
                 }
             }

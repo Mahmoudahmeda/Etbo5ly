@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +33,9 @@ fun CountryCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0E0E0)) // Light gray box as in screenshot
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -40,7 +43,7 @@ fun CountryCard(
         ) {
             Text(
                 text = area.strArea,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontFamily = FontFamily.Default,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,

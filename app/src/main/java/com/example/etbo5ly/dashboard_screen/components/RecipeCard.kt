@@ -35,7 +35,7 @@ import com.example.etbo5ly.data.dto.MealX
 @Composable
 fun RecipeCard(onFavClick : ()-> Unit, isFavorite : Boolean, modifier: Modifier , meal: MealX, navController: NavController) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 24.dp)
             .height(250.dp),
