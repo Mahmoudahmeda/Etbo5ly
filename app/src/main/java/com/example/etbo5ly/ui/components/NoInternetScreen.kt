@@ -12,10 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.etbo5ly.R
 
 @Composable
 fun NoInternetScreen() {
@@ -87,7 +89,7 @@ fun NoInternetScreen() {
                 ) {
                     Icon(
                         imageVector = Icons.Default.WifiOff,
-                        contentDescription = "No Internet",
+                        contentDescription = stringResource(R.string.no_internet_title),
                         tint = Color.Cyan,
                         modifier = Modifier.size(40.dp)
                     )
@@ -97,7 +99,7 @@ fun NoInternetScreen() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "No Internet Connection",
+                text = stringResource(R.string.no_internet_title),
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
@@ -105,7 +107,7 @@ fun NoInternetScreen() {
             )
 
             Text(
-                text = "Connect to the internet to browse\nrecipes and search for meals",
+                text = stringResource(R.string.no_internet_subtitle),
                 color = Color.Gray,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -115,7 +117,7 @@ fun NoInternetScreen() {
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Your favourites are still available offline",
+                text = stringResource(R.string.offline_favourites_msg),
                 color = Color.Cyan,
                 fontSize = 13.sp,
                 textAlign = TextAlign.Center

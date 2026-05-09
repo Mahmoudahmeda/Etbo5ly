@@ -4,9 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -20,7 +20,7 @@ import com.example.etbo5ly.navigation.AppNavigation
 import com.example.etbo5ly.settings.SettingsViewModel
 import com.example.etbo5ly.ui.theme.Etbo5lyTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
             // Get the theme preference from the ViewModel
             val settingsViewModel: SettingsViewModel = viewModel()
             val isDarkTheme by settingsViewModel.isDarkTheme.collectAsState()
-
             Etbo5lyTheme(darkTheme = isDarkTheme) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppNavigation(Modifier.padding(innerPadding), intent)

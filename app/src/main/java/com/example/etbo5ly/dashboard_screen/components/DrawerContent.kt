@@ -7,8 +7,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -91,6 +93,12 @@ fun DrawerContent(
             label = stringResource(R.string.profile),
             tint = MaterialTheme.colorScheme.onSurface,
             onClick = onProfileClick
+        )
+        DrawerItem(
+            icon = Icons.Outlined.Language,
+            label = stringResource(R.string.language),
+            tint = MaterialTheme.colorScheme.onSurface,
+            onClick = { settingsViewModel.changeLanguage() }
         )
 
         Spacer(modifier = Modifier.height(8.dp))

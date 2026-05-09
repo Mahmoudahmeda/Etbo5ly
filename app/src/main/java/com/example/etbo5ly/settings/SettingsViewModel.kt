@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.File
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -36,6 +39,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     val isDarkTheme: StateFlow<Boolean> = settingsManager.isDarkTheme(userId)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true) // Default to Dark mode
 
+    private val _Language = MutableStateFlow("en")
+    val language = _Language
     fun toggleNotifications(enabled: Boolean) {
         viewModelScope.launch {
             settingsManager.setNotificationsEnabled(userId, enabled)
@@ -95,6 +100,23 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             packageInfo.versionName ?: "1.0.0"
         } catch (e: Exception) {
             "1.0.0"
+        }
+    }
+    fun changeLanguage() {
+        viewModelScope.launch {
+            try {
+                val language = if (_Language.value == "en") {
+                    _Language.value = "ar"
+                    "ar"
+                } else {
+                    _Language.value = "en"
+                    "en"
+                }
+                val currentLocale = LocaleListCompat.forLanguageTags(language)
+                AppCompatDelegate.setApplicationLocales(currentLocale)
+            }catch (e: Exception){
+                Log.e("SettingsViewModel", "Error changing language: ${e.message}")
+            }
         }
     }
 }

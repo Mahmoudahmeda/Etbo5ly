@@ -2,14 +2,14 @@
     <string name="app_name">Etbo5ly</string>
     <string name="image_of_chef">Image of Chef</string>
     <string name="Signin_screen_text_1">Welcome Chef!</string>
-    <string name="Signin_screen_text_2">Discover tour next meal today</string>
+    <string name="Signin_screen_text_2">Discover your next meal today</string>
     <string name="Email">Email</string>
     <string name="password">Password</string>
     <string name="repassword">re-enter Password</string>
-    <string name="facebook_app_id">2996016137456438</string>
-    <string name="fb_login_protocol_scheme">fb2996016137456438</string>
-    <string name="facebook_client_token">8655e84b505c0468d3e4fd68501ea60c</string>
-    <string name="default_web_client_id">539434407333-psmolt2k3ad67hspmqs7n187u1i4k1nh.apps.googleusercontent.com</string>
+    <string name="facebook_app_id" translatable="false">2996016137456438</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2996016137456438</string>
+    <string name="facebook_client_token" translatable="false">8655e84b505c0468d3e4fd68501ea60c</string>
+    <string name="default_web_client_id" translatable="false">539434407333-psmolt2k3ad67hspmqs7n187u1i4k1nh.apps.googleusercontent.com</string>
 
     <!-- Details Screen -->
     <string name="no_internet">No internet connection</string>
@@ -97,4 +97,45 @@
     <string name="no_meals_planned">No meals planned for this day</string>
     <string name="planned_for">Planned for %1$s</string>
     <string name="delete">Delete</string>
+
+    <!-- Settings & About -->
+    <string name="about_etbo5ly">About Etbo5ly</string>
+    <string name="about_desc">Etbo5ly is your personal meal planning companion.\n\nDeveloped by the Etbo5ly Team.</string>
+    <string name="version_format">Version: %1$s</string>
+    <string name="close">Close</string>
+    <string name="communication">COMMUNICATION</string>
+    <string name="notifications">Notifications</string>
+    <string name="notifications_subtitle">Recipe alerts and meal reminders</string>
+    <string name="app_information">APP INFORMATION</string>
+    <string name="session">SESSION</string>
+    <string name="log_out">Log Out</string>
+
+    <!-- UI Components -->
+    <string name="no_internet_title">No Internet Connection</string>
+    <string name="no_internet_subtitle">Connect to the internet to browse\nrecipes and search for meals</string>
+    <string name="offline_favourites_msg">Your favourites are still available offline</string>
+    <string name="view_all">View All</string>
+    <string name="categories">Categories</string>
+    <string name="search_hint">What are you Looking For ?</string>
+    <string name="no_matches_found">No matches found for \'%1$s\'</string>
+    <string name="favorite_recipes">Favorite Recipes</string>
+    <string name="an_error_occurred">An error occurred</string>
+
+    <!-- Filter Options -->
+    <string name="filter_categories">Categories</string>
+    <string name="filter_countries">Countries</string>
+    <string name="filter_ingredients">Ingredients</string>
+    <string name="filter_general">General</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Recipe Alerts</string>
+    <string name="notification_channel_desc">Notifications for recipe updates and meal reminders</string>
+    <string name="notifications_enabled">Notifications Enabled</string>
+    <string name="notifications_enabled_msg">You will now receive recipe alerts and meal reminders.</string>
+
+    <!-- Error Messages -->
+    <string name="error_failed_to_load_meal">Failed to load meal</string>
+    <string name="error_prefix">Error: %1$s</string>
+    <string name="language">Language</string>
+    <string name="email_icon">email Icon</string>
 </resources>

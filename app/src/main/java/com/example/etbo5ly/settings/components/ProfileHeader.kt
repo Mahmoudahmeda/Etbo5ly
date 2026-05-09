@@ -16,10 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.ui.theme.*
 
 @Composable
@@ -27,7 +29,7 @@ fun ProfileHeader(name: String, email: String, photoUrl: String?, clickOnPhoto: 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
             model = photoUrl,
-            contentDescription = "Profile Picture",
+            contentDescription = stringResource(R.string.profile_picture),
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)

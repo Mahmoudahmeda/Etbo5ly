@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.etbo5ly.R
 
 @Composable
 fun FavRecipesNumBox(number: Int){
@@ -34,7 +36,7 @@ fun FavRecipesNumBox(number: Int){
                 fontSize = 18.sp
             )
             Text(
-                text = "Favorite Recipes", 
+                text = stringResource(R.string.favorite_recipes),
                 color = MaterialTheme.colorScheme.onSurfaceVariant, 
                 fontSize = 12.sp
             )

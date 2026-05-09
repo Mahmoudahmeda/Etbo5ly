@@ -16,9 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.settings.components.*
 import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 import com.example.etbo5ly.ui.theme.*
@@ -63,7 +65,7 @@ fun SettingsScreen(
         topBar = {
             Etbo5lyAppBar(
                 navController = navController,
-                text = "Profile"
+                text = stringResource(R.string.profile)
             )
         }
     ) { paddingValues ->
@@ -85,11 +87,11 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            SettingsSectionTitle("COMMUNICATION")
+            SettingsSectionTitle(stringResource(R.string.communication))
             SettingsGroup {
                 SettingsToggleItem(
-                    title = "Notifications",
-                    subtitle = "Recipe alerts and meal reminders",
+                    title = stringResource(R.string.notifications),
+                    subtitle = stringResource(R.string.notifications_subtitle),
                     icon = Icons.Default.Notifications,
                     checked = isNotificationsEnabled,
                     onCheckedChange = { enabled ->
@@ -102,20 +104,20 @@ fun SettingsScreen(
                 )
             }
 
-            SettingsSectionTitle("APP INFORMATION")
+            SettingsSectionTitle(stringResource(R.string.app_information))
             SettingsGroup {
                 SettingsClickableItem(
-                    title = "About Etbo5ly",
-                    subtitle = "Version ${viewModel.getAppVersion()}",
+                    title = stringResource(R.string.about_etbo5ly),
+                    subtitle = stringResource(R.string.version_format, viewModel.getAppVersion()),
                     icon = Icons.Default.Info,
                     onClick = { showAboutDialog = true }
                 )
             }
 
-            SettingsSectionTitle("SESSION")
+            SettingsSectionTitle(stringResource(R.string.session))
             SettingsGroup {
                 SettingsClickableItem(
-                    title = "Log Out",
+                    title = stringResource(R.string.log_out),
                     icon = Icons.Default.ExitToApp,
                     titleColor = Color.Red,
                     iconColor = Color.Red,

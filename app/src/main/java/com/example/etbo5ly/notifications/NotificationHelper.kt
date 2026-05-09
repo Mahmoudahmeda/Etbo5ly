@@ -19,10 +19,10 @@ class NotificationHelper(private val context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "Recipe Alerts",
+                context.getString(R.string.notification_channel_name),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "Notifications for recipe updates and meal reminders"
+                description = context.getString(R.string.notification_channel_desc)
             }
             notificationManager.createNotificationChannel(channel)
         }

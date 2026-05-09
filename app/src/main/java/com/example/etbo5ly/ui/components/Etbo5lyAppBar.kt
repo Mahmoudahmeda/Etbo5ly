@@ -25,10 +25,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.etbo5ly.R
 import com.example.etbo5ly.settings.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +63,7 @@ fun Etbo5lyAppBar(
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
@@ -69,7 +71,7 @@ fun Etbo5lyAppBar(
             actions = {
                 AsyncImage(
                     model = userPhotoUrl,
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier
                         .padding(end = 12.dp)
                         .size(40.dp)

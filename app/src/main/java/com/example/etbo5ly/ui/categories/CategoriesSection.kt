@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.navigation.NavController
+import com.example.etbo5ly.R
 
 @Composable
 fun CategoriesSection(
@@ -43,13 +45,13 @@ fun CategoriesSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "Categories",
+                text = stringResource(R.string.categories),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "View All",
+                text = stringResource(R.string.view_all),
                 fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.primary,
                 textDecoration = TextDecoration.Underline,

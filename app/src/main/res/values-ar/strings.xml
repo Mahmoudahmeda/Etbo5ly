@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">إطبخلي</string>
+    <string name="image_of_chef">صورة الشيف</string>
+    <string name="Signin_screen_text_1">أهلاً بك أيها الشيف!</string>
+    <string name="Signin_screen_text_2">اكتشف وجبتك التالية اليوم</string>
+    <string name="Email">البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="repassword">إعادة إدخال كلمة المرور</string>
+
+    <!-- Details Screen -->
+    <string name="no_internet">لا يوجد اتصال بالإنترنت</string>
+    <string name="back">رجوع</string>
+    <string name="recipe_details">تفاصيل الوصفة</string>
+    <string name="offline">غير متصل</string>
+    <string name="removed_from_favorites">تمت الإزالة من المفضلة</string>
+    <string name="added_to_favorites">تمت الإضافة إلى المفضلة</string>
+    <string name="ingredients">المكونات</string>
+    <string name="items_count">%1$d عناصر</string>
+    <string name="instructions">التعليمات</string>
+    <string name="view_less">عرض أقل ↑</string>
+    <string name="view_more">عرض المزيد ↓</string>
+    <string name="watch_recipe">مشاهدة الوصفة</string>
+    <string name="video_unavailable_offline">الفيديو غير متاح بدون إنترنت</string>
+    <string name="calendar">التقويم</string>
+    <string name="next">التالي</string>
+    <string name="schedule">جدولة</string>
+    <string name="favorite">المفضلة</string>
+
+    <!-- Email Verification -->
+    <string name="check_email">افحص صندوق بريدك الإلكتروني</string>
+    <string name="reset_password">إعادة تعيين كلمة المرور</string>
+    <string name="email_icon_desc">أيقونة البريد الإلكتروني</string>
+    <string name="send_email">إرسال البريد الإلكتروني</string>
+
+    <!-- Change Password -->
+    <string name="password_updated">تم تحديث كلمة المرور بنجاح!</string>
+    <string name="new_password">كلمة مرور جديدة</string>
+    <string name="password_field_desc">حقل كلمة المرور</string>
+    <string name="confirm_password_field_desc">حقل تأكيد كلمة المرور</string>
+    <string name="change">تغيير</string>
+
+    <!-- Sign In / Sign Up -->
+    <string name="account">الحساب</string>
+    <string name="signup">إنشاء حساب</string>
+    <string name="welcome_back">مرحباً بعودتك!</string>
+    <string name="login_journey">سجل الدخول لمتابعة رحلتك</string>
+    <string name="forget_password">هل نسيت كلمة المرور؟</string>
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="sign_up">إنشاء حساب</string>
+    <string name="or_continue_with">أو المتابعة باستخدام</string>
+    <string name="google">جوجل</string>
+    <string name="facebook">فيسبوك</string>
+    <string name="continue_as_guest">المتابعة كضيف</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="chef_illustration">توضيح الشيف</string>
+    <string name="welcome_chief">أهلاً بك أيها الشيف!</string>
+    <string name="discover_meal">اكتشف وجبتك المفضلة التالية اليوم</string>
+
+    <!-- Dashboard & Drawer -->
+    <string name="menu">القائمة</string>
+    <string name="hello_user">مرحباً %1$s 👋</string>
+    <string name="ready_to_cook">هل أنت مستعد لطبخ شيء لذيذ اليوم؟</string>
+    <string name="favourites">المفضلة</string>
+    <string name="profile_picture">صورة الملف الشخصي</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="light_mode">الوضع الفاتح</string>
+    <string name="guest">ضيف</string>
+    <string name="home">الرئيسية</string>
+    <string name="login_required">تسجيل الدخول مطلوب</string>
+    <string name="login_to_favorite_msg">يجب عليك تسجيل الدخول أو إنشاء حساب لإضافة الوصفات إلى مفضلتك.</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="cancel">إلغاء</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+    <string name="recipes">الوصفات</string>
+
+    <!-- Favourites Screen -->
+    <string name="remove_favourite_title">إزالة من المفضلة؟</string>
+    <string name="remove_favourite_msg">هل أنت متأكد أنك تريد إزالة \"%1$s\" من مفضلتك؟</string>
+    <string name="remove">إزالة</string>
+    <string name="no_favourites_yet">لا توجد مفضلات بعد</string>
+    <string name="tap_to_save_hint">اضغط على أيقونة القلب في أي وصفة لحفظها</string>
+    <string name="recipes_saved_msg">تم حفظ %1$d وصفات</string>
+    <string name="remove_from_favourites">إزالة من المفضلة</string>
+
+    <!-- Navigation -->
+    <string name="search">بحث</string>
+
+    <!-- Calendar Screen -->
+    <string name="meal_calendar">تقويم الوجبات</string>
+    <string name="today">اليوم</string>
+    <string name="no_meals_planned">لا توجد وجبات مخططة لهذا اليوم</string>
+    <string name="planned_for">مخطط لـ %1$s</string>
+    <string name="delete">حذف</string>
+
+    <!-- Settings & About -->
+    <string name="about_etbo5ly">حول إطبخلي</string>
+    <string name="about_desc">إطبخلي هو رفيقك الشخصي لتخطيط الوجبات.\n\nتم تطويره بواسطة فريق إطبخلي.</string>
+    <string name="version_format">الإصدار: %1$s</string>
+    <string name="close">إغلاق</string>
+    <string name="communication">التواصل</string>
+    <string name="notifications">التنبيهات</string>
+    <string name="notifications_subtitle">تنبيهات الوصفات وتذكيرات الوجبات</string>
+    <string name="app_information">معلومات التطبيق</string>
+    <string name="session">الجلسة</string>
+    <string name="log_out">تسجيل الخروج</string>
+
+    <!-- UI Components -->
+    <string name="no_internet_title">لا يوجد اتصال بالإنترنت</string>
+    <string name="no_internet_subtitle">اتصل بالإنترنت لتصفح الوصفات والبحث عن الوجبات</string>
+    <string name="offline_favourites_msg">مفضلاتك لا تزال متاحة بدون إنترنت</string>
+    <string name="view_all">عرض الكل</string>
+    <string name="categories">الفئات</string>
+    <string name="search_hint">عما تبحث؟</string>
+    <string name="no_matches_found">لا توجد نتائج مطابقة لـ \'%1$s\'</string>
+    <string name="favorite_recipes">الوصفات المفضلة</string>
+    <string name="an_error_occurred">حدث خطأ ما</string>
+
+    <!-- Filter Options -->
+    <string name="filter_categories">الفئات</string>
+    <string name="filter_countries">الدول</string>
+    <string name="filter_ingredients">المكونات</string>
+    <string name="filter_general">عام</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">تنبيهات الوصفات</string>
+    <string name="notification_channel_desc">تنبيهات لتحديثات الوصفات وتذكيرات الوجبات</string>
+
+    <!-- Error Messages -->
+    <string name="error_failed_to_load_meal">فشل تحميل الوجبة</string>
+    <string name="error_prefix">خطأ: %1$s</string>
+    <string name="language">اللغة\n</string>
+    <string name="email_icon">لوجو الايميل</string>
+</resources>

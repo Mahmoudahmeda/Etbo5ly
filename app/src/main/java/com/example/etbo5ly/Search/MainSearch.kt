@@ -33,12 +33,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.etbo5ly.R
 import com.example.etbo5ly.Search.components.CategoryCard
 import com.example.etbo5ly.Search.components.CountryCard
 import com.example.etbo5ly.Search.components.FilterButton
@@ -53,7 +55,7 @@ import com.example.etbo5ly.utils.isInternetAvailable
 import kotlinx.coroutines.delay
 import com.example.etbo5ly.utils.observeNetworkConnectivity
 
-data class FilterOption(val name: String, val icon: ImageVector)
+data class FilterOption(val id: String, val nameRes: Int, val icon: ImageVector)
 
 @Composable
 fun MainSearch(
@@ -74,11 +76,13 @@ fun MainSearch(
     val general by viewModel.general.collectAsState()
 
     var selectedFilter by remember { mutableStateOf(selectedfilter) }
-    val filters = listOf(
-        FilterOption("Categories", Icons.Default.Restaurant),
-        FilterOption("Countries", Icons.Default.Public),
-        FilterOption("Ingredients", Icons.Outlined.Egg)
-    )
+    val filters = remember {
+        listOf(
+            FilterOption("Categories", R.string.filter_categories, Icons.Default.Restaurant),
+            FilterOption("Countries", R.string.filter_countries, Icons.Default.Public),
+            FilterOption("Ingredients", R.string.filter_ingredients, Icons.Outlined.Egg)
+        )
+    }
 
     LaunchedEffect(selectedFilter, searchQ) {
         when (selectedFilter) {
@@ -96,7 +100,7 @@ fun MainSearch(
 
     Scaffold(
         topBar = {
-            Etbo5lyAppBar(navController = navController, text = "Search")
+            Etbo5lyAppBar(navController = navController, text = stringResource(R.string.search))
         }
     ) { paddingValues ->
 
@@ -120,7 +124,7 @@ fun MainSearch(
                     .clip(RoundedCornerShape(12.dp)),
                 placeholder = {
                     Text(
-                        text = "What are you Looking For ?",
+                        text = stringResource(R.string.search_hint),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -151,12 +155,12 @@ fun MainSearch(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 filters.forEach { filter ->
-                    val isSelected = selectedFilter == filter.name
+                    val isSelected = selectedFilter == filter.id
                     FilterButton(
-                        option = filter,
+                        option = filter.copy(id = stringResource(filter.nameRes)), // FilterButton seems to use option.name, keeping id for logic
                         isSelected = isSelected,
                         onClick = {
-                            selectedFilter = if (isSelected) "General" else filter.name
+                            selectedFilter = if (isSelected) "General" else filter.id
                         },
                         modifier = Modifier.weight(1f)
                     )
@@ -170,7 +174,7 @@ fun MainSearch(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = error ?: "An error occurred",
+                            text = error ?: stringResource(R.string.an_error_occurred),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -244,7 +248,7 @@ fun MainSearch(
 fun EmptyState(query: String) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            text = "No matches found for '$query'",
+            text = stringResource(R.string.no_matches_found, query),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(16.dp)
