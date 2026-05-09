@@ -1,5 +1,6 @@
 package com.example.etbo5ly.dashboard_screen
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.etbo5ly.data.dto.MealX
@@ -16,8 +17,7 @@ import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val repository: IMealRepository,
-    private val calendarepo: CalendarRepository
-    context: Context,
+    private val calendarepo: CalendarRepository,
     private val isGuest: Boolean = false
 ) : ViewModel() {
 
@@ -118,18 +118,11 @@ class DashboardViewModel(
         viewModelScope.launch {
             auth.currentUser?.let { calendarepo.getFavorites(it.uid) }?.collect { favorites ->
                 _favouriteIds.value = favorites.map { it.recipeId }.toSet()
-            favouritesDataStore.favouriteMeals.collect { jsonSet ->
-                _favouriteIds.value = jsonSet.mapNotNull { json ->
-                    runCatching {
-                        Gson().fromJson(json, Meal::class.java).idMeal
-                    }.getOrNull()
-                }.toSet()
             }
         }
     }
 
     fun onFavoriteClick(meal: MealX) {
-    fun onFavoriteClick(meal: Meal) {
         if (isGuest) {
             _showGuestFavouriteDialog.value = true
             return

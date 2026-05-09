@@ -1,5 +1,6 @@
 package com.example.etbo5ly.favourite
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -170,7 +171,9 @@ fun FavouritesScreen(
                         meal = meal,
                         onRemoveClick = { mealToRemove = meal },
                         onCardClick = {
+                            Log.d("FavouriteCard", "Meal ID: ${meal.idMeal}")
                             navController.navigate("details/${meal.idMeal}")
+
                         }
                     )
                 }

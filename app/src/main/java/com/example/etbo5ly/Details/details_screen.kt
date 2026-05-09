@@ -38,7 +38,6 @@ import com.example.etbo5ly.utils.observeNetworkConnectivity
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import com.example.etbo5ly.data.dto.MealX
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.material.icons.filled.DateRange
@@ -62,10 +61,12 @@ private val SmallSize = 14.sp
 @Composable
 fun RecipeDetailsScreen(
     navController: NavController,
-    recipeId: String?
     recipeId: String?,
     viewmodel: detailsScreenViewModel = viewModel(
-        factory = detailsScreenViewModelFactory(LocalContext.current)
+        factory =detailsScreenViewModelFactory(
+            application = LocalContext.current.applicationContext as Application,
+            repo = CalendarRepository(Etbo5lyDataBase.getDataBase(LocalContext.current).mealDao())
+        )
     )
 ) {
     val context = LocalContext.current
@@ -75,9 +76,8 @@ fun RecipeDetailsScreen(
 
     // Create the ViewModel with the factory to avoid RuntimeException
     val viewmodel: detailsScreenViewModel = viewModel(
-        factory = DetailsViewModelFactory(application = application,repo=repository)
+        factory = DetailsViewModelFactory(application = application, repo = repository)
     )
-    val context = LocalContext.current
     val isOnline by observeNetworkConnectivity(context)
         .collectAsState(initial = isInternetAvailable(context))
 
@@ -262,7 +262,7 @@ fun RecipeDetailsScreen(
                         },
                         isFavorite = favouriteIds.contains(meal.idMeal)
                     )
-                    AddToCalendarSection(meal, viewModel = viewmodel){ selectedTimestamp ->
+                    AddToCalendarSection(meal, viewModel = viewmodel) { selectedTimestamp ->
                         viewmodel.scheduleMealNotification(meal.strMeal, selectedTimestamp)
                         viewmodel.addToCalendar(meal, selectedTimestamp)
                     }
@@ -383,15 +383,7 @@ fun RecipeDetailsScreen(
                 Spacer(Modifier.height(24.dp))
 
                 // ── Watch Recipe / YouTube ──────────────────────────────
-                if (!meal.strYoutube.isNullOrBlank()) {
-                    Text(
-                        text = "Watch Tutorial",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = SectionSize,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                    Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(12.dp))
                 // YouTube only when online
                 if (isOnline && !meal.strYoutube.isNullOrBlank()) {
                     Text(
@@ -434,15 +426,13 @@ fun RecipeDetailsScreen(
                         }
                     }
                 }
-
                 Spacer(Modifier.height(32.dp))
             }
         }
     }
 }
-
 @Composable
-private fun IngredientRow(
+fun IngredientRow(
     ingredient: String,
     amount: String,
     navController: NavController,
@@ -458,8 +448,7 @@ private fun IngredientRow(
                     navController.navigate("searchResult/ingredient/$ingredient")
                 } else {
                     onOfflineClick()
-                }
-            },
+                } },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -508,9 +497,8 @@ private fun IngredientRow(
         }
     }
 }
-
 @Composable
-private fun TagChip(
+fun TagChip(
     label: String,
     navController: NavController,
     meal: MealX,
