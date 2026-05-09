@@ -150,11 +150,13 @@ fun RecipeDetailsScreen(
 
     mealData?.meals?.firstOrNull()?.let { meal ->
 
+        // Parse instructions into clean steps
         val allSteps = meal.strInstructions
             .split("\r\n", "\n")
             .map { it.trim() }
             .filter { it.isNotBlank() && !it.startsWith("step", ignoreCase = true) }
 
+        // Show only first 2 steps when collapsed
         val visibleSteps = if (instructionsExpanded) allSteps else allSteps.take(2)
 
         Scaffold(
@@ -170,12 +172,6 @@ fun RecipeDetailsScreen(
                 }
             },
             topBar = {
-                Etbo5lyAppBar(
-                    navController = navController,
-                    text = "Recipe Details"
-                )
-            },
-            containerColor = MaterialTheme.colorScheme.background
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -221,6 +217,7 @@ fun RecipeDetailsScreen(
                 }
             }
         ) { paddingValues ->
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -231,7 +228,6 @@ fun RecipeDetailsScreen(
                 Spacer(Modifier.height(16.dp))
 
                 // Meal Image
-                // Meal image — Coil caches images so shows even offline
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data(meal.strMealThumb)
@@ -248,17 +244,39 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // ── Meal Name ───────────────────────────────────────────
-                Text(
-                    text = meal.strMeal,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = TitleSize,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                // ── Meal Name & Add to Plan ─────────────────────────────
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = meal.strMeal,
+                        color = Color.White,
+                        fontSize = TitleSize,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f)
+                    )
+                    AddToFavoriteSection(
+                        meal,
+                        onFavClick = {
+                            viewmodel.onFavoriteClick(meal)
+                            val message = if (favouriteIds.contains(meal.idMeal))
+                                "Removed from favourites"
+                            else
+                                "Added to favourites"
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        },
+                        isFavorite = favouriteIds.contains(meal.idMeal)
+                    )
+                    AddToCalendarSection(meal, viewModel = viewmodel) { selectedTimestamp ->
+                        viewmodel.scheduleMealNotification(meal.strMeal, selectedTimestamp)
+                        viewmodel.addToCalendar(meal, selectedTimestamp)
+                    }
+                }
 
                 Spacer(Modifier.height(8.dp))
 
+                // ── Category + Area Tags ────────────────────────────────
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -281,6 +299,7 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(24.dp))
 
+                // ── Ingredients Header ──────────────────────────────────
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -303,6 +322,7 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(12.dp))
 
+                // ── Ingredients List with Icons ─────────────────────────
                 meal.ingredients.forEach { (ingredient, amount) ->
                     IngredientRow(
                         ingredient = ingredient,
@@ -315,6 +335,7 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(24.dp))
 
+                // ── Instructions Header ─────────────────────────────────
                 Text(
                     text = "Instructions",
                     color = MaterialTheme.colorScheme.onBackground,
@@ -325,6 +346,7 @@ fun RecipeDetailsScreen(
 
                 Spacer(Modifier.height(12.dp))
 
+                // ── Instructions Steps ──────────────────────────────────
                 visibleSteps.forEachIndexed { index, step ->
                     Row(
                         modifier = Modifier.padding(
@@ -333,6 +355,7 @@ fun RecipeDetailsScreen(
                         ),
                         verticalAlignment = Alignment.Top
                     ) {
+                        // Step number circle using Primary color
                         Box(
                             modifier = Modifier
                                 .size(32.dp)
@@ -357,6 +380,7 @@ fun RecipeDetailsScreen(
                     }
                 }
 
+                // ── View More / View Less ───────────────────────────────
                 if (allSteps.size > 2) {
                     Text(
                         text = if (instructionsExpanded) "View Less ↑" else "View More ↓",
@@ -462,19 +486,29 @@ fun IngredientRow(
                 error = androidx.compose.ui.res.painterResource(
                     id = android.R.drawable.ic_menu_gallery
                 )
-                    .background(MaterialTheme.colorScheme.surfaceVariant) // Matches the warm/cool variant
             )
             Text(
                 text = ingredient,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = Color.White,
                 fontSize = BodySize
             )
         }
-        Text(
-            text = amount,
-            color = MaterialTheme.colorScheme.onSurfaceVariant, // Muted text color for measurements
-            fontSize = SmallSize
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = amount,
+                color = Color.Gray,
+                fontSize = SmallSize
+            )
+            // Small arrow indicator — grayed out when offline
+            Text(
+                text = "›",
+                color = if (isOnline) Color.Cyan else Color.Gray,
+                fontSize = BodySize
+            )
+        }
     }
 }
 @Composable
@@ -487,7 +521,7 @@ fun TagChip(
 ) {
     Text(
         text = label,
-        color = if (isOnline) Color.Cyan else Color.Gray,
+        color = MaterialTheme.colorScheme.primary,
         fontSize = SmallSize,
         modifier = Modifier
             .background(
@@ -509,7 +543,7 @@ fun TagChip(
                     onOfflineClick()
                 }
             }
-    )
+    )   
 }
 
 @Composable
@@ -528,13 +562,10 @@ fun YoutubePlayer(videoUrl: String) {
     AndroidView(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
             .height(220.dp)
-            .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp)),
         factory = { context ->
             YouTubePlayerView(context).apply {
-                lifecycleOwner.lifecycle.addObserver(this)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         youTubePlayer.cueVideo(videoId, 0f)

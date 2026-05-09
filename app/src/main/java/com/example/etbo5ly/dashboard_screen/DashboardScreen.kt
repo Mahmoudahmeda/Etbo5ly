@@ -234,9 +234,6 @@ fun DashboardScreen(
                         item {
                             // Meal of the Day Card
                             meal?.let { currentMeal ->
-                                MealOfDayCard(
-                                    onClick = { navController.navigate("details/${currentMeal.idMeal}") },
-                                    meal = currentMeal
                                 RecipeCard(
                                     onFavClick = {
                                         viewModel.onFavoriteClick(currentMeal)
@@ -288,7 +285,8 @@ fun DashboardScreen(
                                 },
                                 isFavorite = favouriteIds.contains(recipe.idMeal),
                                 meal = recipe,
-                                navController = navController
+                                navController = navController,
+                                modifier = Modifier
                             )
                         }
 

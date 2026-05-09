@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.example.etbo5ly.data.dto.MealX
 import com.example.etbo5ly.data.local.Etbo5lyDataBase
 import com.example.etbo5ly.data.repository.CalendarRepository
+import com.example.etbo5ly.ui.components.Etbo5lyAppBar
 
 @Composable
 fun FavouritesScreen(
@@ -141,34 +142,34 @@ fun FavouritesScreen(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
 
-            // Favourites List
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 16.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(favourites) { meal ->
-                    FavouriteCard(
-                        meal = meal,
-                        onRemoveClick = { mealToRemove = meal },
-                        onCardClick = {
-                            Log.d("FavouriteCard", "Meal ID: ${meal.idMeal}")
-                            navController.navigate("details/${meal.idMeal}")
+                // Favourites List
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(favourites) { meal ->
+                        FavouriteCard(
+                            meal = meal,
+                            onRemoveClick = { mealToRemove = meal },
+                            onCardClick = {
+                                Log.d("FavouriteCard", "Meal ID: ${meal.idMeal}")
+                                navController.navigate("details/${meal.idMeal}")
 
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
             }
         }
     }
 }
-
 @Composable
-private fun FavouriteCard(
+fun FavouriteCard(
     meal: MealX,
     onRemoveClick: () -> Unit,
     onCardClick: () -> Unit

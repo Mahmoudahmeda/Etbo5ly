@@ -154,34 +154,34 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
             }
         )
 
-            TextField(
-                value = repassword,
-                onValueChange = { repassword = it },
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.repassword),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                },
-                shape = RoundedCornerShape(25.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
-                ),
-                modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Lock,
-                        contentDescription = "Confirm Password Field",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            )
+        TextField(
+            value = repassword,
+            onValueChange = { repassword = it },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.repassword),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            shape = RoundedCornerShape(25.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            visualTransformation = PasswordVisualTransformation(),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Lock,
+                    contentDescription = "Confirm Password Field",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        )
         TextField(
             value = repassword,
             onValueChange = { repassword = it },
@@ -203,7 +203,7 @@ fun ChangePasswordScreen(navController: NavController, code: String?){
                 )
             }
         )
-
+    }
             Button(
                 onClick = { changePass.changePassword(code, password, repassword) },
                 content = {
